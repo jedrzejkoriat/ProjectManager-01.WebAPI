@@ -5,6 +5,6 @@
         // ID
         public int Id { get; set; }
         // STRING
-        public string Name { get; init; }
+        public string Name { get; set; }
     }
 }

@@ -4,10 +4,10 @@
     {
         // ID
         public int Id { get; set; }
-        public int TicketId { get; init; }
+        public int TicketId { get; set; }
         // STRING
-        public string Content { get; init; }
+        public string Content { get; set; }
         // DATE
-        public DateTime CreatedAt { get; init; }
+        public DateTime CreatedAt { get; set; }
     }
 }

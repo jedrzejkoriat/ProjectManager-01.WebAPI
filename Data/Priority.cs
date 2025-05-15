@@ -1,12 +1,12 @@
 ﻿namespace ProjectManager_01.WebAPI.Data
 {
-    internal sealed class Priority
+    public sealed class Priority
     {
         // ID
         public int Id { get; set; }
         // STRING
-        public string Name { get; init; }
+        public string Name { get; set; }
         // NUMBER
-        public int Level { get; init; }
+        public int Level { get; set; }
     }
 }

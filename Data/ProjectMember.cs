@@ -1,13 +1,13 @@
 ﻿namespace ProjectManager_01.WebAPI.Data
 {
-    internal sealed class ProjectMember
+    public sealed class ProjectMember
     {
         // ID
         public int Id { get; set; }
-        public int UserId { get; init; }
-        public int ProjectId { get; init; }
-        public int RoleId { get; init; }
+        public int UserId { get; set; }
+        public int ProjectId { get; set; }
+        public int RoleId { get; set; }
         // DATE
-        public DateTime JoinDate { get; init; }
+        public DateTime JoinDate { get; set; }
     }
 }
