@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectManager_01.WebAPI.Data;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ProjectManager_01.WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -25,7 +23,7 @@ namespace ProjectManager_01.WebAPI.Controllers
 
         // GET api/projects
         [HttpGet("{id}")]
-        public ActionResult<Project> GetProject(int id)
+        public ActionResult<Project> GetProject([FromRoute] int id)
         {
             Project project = projects.FirstOrDefault(p => p.Id == id);
             if (project == null)
@@ -61,7 +59,7 @@ namespace ProjectManager_01.WebAPI.Controllers
 
         // DELETE api/projects
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete([FromRoute] int id)
         {
             Project project = projects.FirstOrDefault(p => p.Id == id);
             if (project == null)

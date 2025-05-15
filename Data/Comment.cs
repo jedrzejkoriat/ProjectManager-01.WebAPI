@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager_01.WebAPI.Data
 {
-    internal sealed class Comment
+    public sealed class Comment
     {
         // ID
         public int Id { get; set; }
