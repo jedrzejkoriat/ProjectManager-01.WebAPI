@@ -28,9 +28,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             }
         };
 
+        // GET: api/tickets
+        /// <summary>
+        /// Get all tickets
+        /// </summary>
+        /// <returns>All tickets</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Ticket>> GetTickets() => Ok(tickets);
+        public ActionResult<IEnumerable<Ticket>> GetTickets()
+        {
+            return Ok(tickets);
+        }
 
+        // GET: api/tickets/{id}
+        /// <summary>
+        /// Get a ticket by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Ticket by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<Ticket> GetTicket(int id)
         {
@@ -39,6 +53,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(ticket);
         }
 
+        // POST: api/tickets
+        /// <summary>
+        /// Create a new ticket
+        /// </summary>
+        /// <param name="ticket"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Ticket ticket)
         {
@@ -47,6 +67,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
         }
 
+        // PUT: api/tickets/{id}
+        /// <summary>
+        /// Update an existing ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedTicket"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Ticket updatedTicket)
         {
@@ -69,6 +96,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE: api/tickets/{id}
+        /// <summary>
+        /// Delete a ticket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

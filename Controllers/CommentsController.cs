@@ -15,9 +15,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Comment { Id = 2, TicketId = 2, Content = "Second comment", CreatedAt = DateTime.Now }
         };
 
+        // GET: api/comments
+        /// <summary>
+        /// Get all comments
+        /// </summary>
+        /// <returns>All comments</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Comment>> GetComments() => Ok(comments);
+        public ActionResult<IEnumerable<Comment>> GetComments()
+        {
+            return Ok(comments);
+        }
 
+        // GET api/comments/{id}
+        /// <summary>
+        /// Get a comment by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Comment by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<Comment> GetComment(int id)
         {
@@ -26,6 +40,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(comment);
         }
 
+        // POST api/comments
+        /// <summary>
+        /// Create a new comment
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Comment comment)
         {
@@ -34,6 +54,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetComment), new { id = comment.Id }, comment);
         }
 
+        // PUT api/comments/{id}
+        /// <summary>
+        /// Update an existing comment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedComment"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Comment updatedComment)
         {
@@ -46,6 +73,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE api/comments/{id}
+        /// <summary>
+        /// Delete a comment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

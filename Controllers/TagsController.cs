@@ -14,9 +14,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Tag { Id = 2, Name = "Feature" }
         };
 
+        // GET: api/tags
+        /// <summary>
+        /// Get all tags
+        /// </summary>
+        /// <returns>All tags</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Tag>> GetTags() => Ok(tags);
+        public ActionResult<IEnumerable<Tag>> GetTags()
+        {
+            return Ok(tags);
+        }
 
+        // GET: api/tags/{id}
+        /// <summary>
+        /// Get a tag by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public ActionResult<Tag> GetTag(int id)
         {
@@ -25,6 +39,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(tag);
         }
 
+        // POST: api/tags
+        /// <summary>
+        /// Create a new tag
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Tag tag)
         {
@@ -33,6 +53,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tag);
         }
 
+        // PUT: api/tags/{id}
+        /// <summary>
+        /// Update an existing tag
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedTag"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Tag updatedTag)
         {
@@ -43,6 +70,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE: api/tags/{id}
+        /// <summary>
+        /// Delete a tag
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

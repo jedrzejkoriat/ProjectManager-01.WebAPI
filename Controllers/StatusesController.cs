@@ -14,9 +14,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Status { Id = 2, Name = "Closed" }
         };
 
+        // GET: api/statuses
+        /// <summary>
+        /// Get all statuses
+        /// </summary>
+        /// <returns>All statuses</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Status>> GetStatuses() => Ok(statuses);
+        public ActionResult<IEnumerable<Status>> GetStatuses()
+        {
+            return Ok(statuses);
+        }
 
+        // GET: api/statuses/{id}
+        /// <summary>
+        /// Get a status by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public ActionResult<Status> GetStatus(int id)
         {
@@ -25,6 +39,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(status);
         }
 
+        // POST: api/statuses
+        /// <summary>
+        /// Create a new status
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Status status)
         {
@@ -33,6 +53,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetStatus), new { id = status.Id }, status);
         }
 
+        // PUT: api/statuses/{id}
+        /// <summary>
+        /// Update an existing status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedStatus"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Status updatedStatus)
         {
@@ -43,6 +70,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE: api/statuses/{id}
+        /// <summary>
+        /// Delete a status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

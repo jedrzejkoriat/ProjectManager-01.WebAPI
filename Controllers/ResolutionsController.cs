@@ -14,10 +14,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Resolution { Id = 1, Name = "Fixed" },
             new Resolution { Id = 2, Name = "Won't Fix" }
         };
-
+        // GET api/resolutions
+        /// <summary>
+        /// Get all resolutions
+        /// </summary>
+        /// <returns>All resolutions</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Resolution>> GetResolutions() => Ok(resolutions);
+        public ActionResult<IEnumerable<Resolution>> GetResolutions() 
+        {
+            return Ok(resolutions);
+        }
 
+        // GET api/resolutions/{id}
+        /// <summary>
+        /// Get a resolution by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Resolution by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<Resolution> GetResolution(int id)
         {
@@ -26,6 +39,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(resolution);
         }
 
+        // POST api/resolutions
+        /// <summary>
+        /// Create a new resolution
+        /// </summary>
+        /// <param name="resolution"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Resolution resolution)
         {
@@ -34,6 +53,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetResolution), new { id = resolution.Id }, resolution);
         }
 
+        // PUT api/resolutions/{id}
+        /// <summary>
+        /// Update an existing resolution
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedResolution"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Resolution updatedResolution)
         {
@@ -44,6 +70,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE api/resolutions/{id}
+        /// <summary>
+        /// Delete a resolution
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

@@ -13,8 +13,11 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Project { Id = 2, Name = "Project 2", CreatedAt = DateTime.Now}
         };
 
-
         // GET: api/projects
+        /// <summary>
+        /// Get all projects
+        /// </summary>
+        /// <returns>All projects</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Project>> GetProjects()
         {
@@ -22,18 +25,25 @@ namespace ProjectManager_01.WebAPI.Controllers
         }
 
         // GET api/projects
+        /// <summary>
+        /// Get a project by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Project by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<Project> GetProject([FromRoute] int id)
         {
             Project project = projects.FirstOrDefault(p => p.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+            if (project == null) return NotFound();
             return Ok(project);
         }
 
         // POST api/projects
+        /// <summary>
+        /// Create a new project
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Project project)
         {
@@ -43,14 +53,17 @@ namespace ProjectManager_01.WebAPI.Controllers
         }
 
         // PUT api/projects
+        /// <summary>
+        /// Update an existing project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedProject"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put([FromRoute] int id, [FromBody] Project updatedProject)
         {
             Project project = projects.FirstOrDefault(p => p.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+            if (project == null) return NotFound();
 
             project.Name = updatedProject.Name;
             project.CreatedAt = updatedProject.CreatedAt;
@@ -58,14 +71,16 @@ namespace ProjectManager_01.WebAPI.Controllers
         }
 
         // DELETE api/projects
+        /// <summary>
+        /// Delete a project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             Project project = projects.FirstOrDefault(p => p.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+            if (project == null) return NotFound();
 
             projects.Remove(project);
             return NoContent();

@@ -15,9 +15,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new User { Id = 2, UserName = "user", Email = "user@example.com", Password = "hashed_password" }
         };
 
+        // GET: api/users
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <returns>All urses</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUsers() => Ok(users);
+        public ActionResult<IEnumerable<User>> GetUsers()
+        {
+            return Ok(users);
+        }
 
+        // GET: api/users/{id}
+        /// <summary>
+        /// Get a user by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>User by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<User> GetUser(int id)
         {
@@ -26,6 +40,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(user);
         }
 
+        // POST: api/users
+        /// <summary>
+        /// Create a new user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] User user)
         {
@@ -34,6 +54,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
+        // PUT: api/users/{id}
+        /// <summary>
+        /// Update an existing user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedUser"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] User updatedUser)
         {
@@ -46,6 +73,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE: api/users/{id}
+        /// <summary>
+        /// Delete a user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

@@ -14,9 +14,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new ProjectMember { Id = 2, UserId = 2, ProjectId = 1, RoleId = 2, JoinDate = DateTime.Now }
         };
 
+        // GET api/projectmembers
+        /// <summary>
+        /// Get all project members
+        /// </summary>
+        /// <returns>All project members</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<ProjectMember>> GetProjectMembers() => Ok(projectMembers);
+        public ActionResult<IEnumerable<ProjectMember>> GetProjectMembers()
+        {
+            return Ok(projectMembers);
+        }
 
+        // GET api/projectmembers/{id}
+        /// <summary>
+        /// Get a project member by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Project member by id</returns>
         [HttpGet("{id}")]
         public ActionResult<ProjectMember> GetProjectMember(int id)
         {
@@ -25,6 +39,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(pm);
         }
 
+        // POST api/projectmembers
+        /// <summary>
+        /// Create a new project member
+        /// </summary>
+        /// <param name="projectMember"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] ProjectMember projectMember)
         {
@@ -33,6 +53,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
         }
 
+        // PUT api/projectmembers/{id}
+        /// <summary>
+        /// Update an existing project member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedProjectMember"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] ProjectMember updatedProjectMember)
         {
@@ -46,6 +73,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE api/projectmembers/{id}
+        /// <summary>
+        /// Delete a project member
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

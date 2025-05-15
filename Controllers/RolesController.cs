@@ -14,9 +14,23 @@ namespace ProjectManager_01.WebAPI.Controllers
             new Role { Id = 2, Name = "User" }
         };
 
+        // GET: api/roles
+        /// <summary>
+        /// Get all roles
+        /// </summary>
+        /// <returns>All roles</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Role>> GetRoles() => Ok(roles);
+        public ActionResult<IEnumerable<Role>> GetRoles()
+        {
+            return Ok(roles);
+        }
 
+        // GET: api/roles/{id}
+        /// <summary>
+        /// Get a role by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Role by its id</returns>
         [HttpGet("{id}")]
         public ActionResult<Role> GetRole(int id)
         {
@@ -25,6 +39,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return Ok(role);
         }
 
+        // POST: api/roles
+        /// <summary>
+        /// Create a new role
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] Role role)
         {
@@ -33,6 +53,13 @@ namespace ProjectManager_01.WebAPI.Controllers
             return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
         }
 
+        // PUT: api/roles/{id}
+        /// <summary>
+        /// Update an existing role
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedRole"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Role updatedRole)
         {
@@ -43,6 +70,12 @@ namespace ProjectManager_01.WebAPI.Controllers
             return NoContent();
         }
 
+        // DELETE: api/roles/{id}
+        /// <summary>
+        /// Delete a role
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

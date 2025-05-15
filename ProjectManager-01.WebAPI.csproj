@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ProjectManager_01.WebAPI</RootNamespace>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWanr>$(NoWanr);1591</NoWanr>
   </PropertyGroup>
 
   <ItemGroup>
