@@ -9,8 +9,8 @@ public class CommentsController : ControllerBase
 {
     private static List<Comment> comments = new List<Comment>
         {
-            new Comment { Id = 1, TicketId = 1, Content = "First comment", CreatedAt = DateTime.Now },
-            new Comment { Id = 2, TicketId = 2, Content = "Second comment", CreatedAt = DateTime.Now }
+            new Comment { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
+            new Comment { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
         };
 
     // GET: api/comments
@@ -31,7 +31,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Comment by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Comment> GetComment(int id)
+    public ActionResult<Comment> GetComment(Guid id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
@@ -50,7 +50,7 @@ public class CommentsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Comment comment)
     {
-        comment.Id = comments.Max(c => c.Id) + 1;
+        comment.Id = Guid.NewGuid();
         comments.Add(comment);
 
         return CreatedAtAction(nameof(GetComment), new { id = comment.Id }, comment);
@@ -64,7 +64,7 @@ public class CommentsController : ControllerBase
     /// <param name="updatedComment"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] Comment updatedComment)
+    public ActionResult Put(Guid id, [FromBody] Comment updatedComment)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
@@ -85,7 +85,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 

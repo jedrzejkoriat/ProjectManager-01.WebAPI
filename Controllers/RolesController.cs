@@ -10,8 +10,8 @@ public class RolesController : ControllerBase
 {
     private static List<Role> roles = new List<Role>
         {
-            new Role { Id = 1, Name = "Admin" },
-            new Role { Id = 2, Name = "User" }
+            new Role { Id = Guid.NewGuid(), Name = "Admin" },
+            new Role { Id = Guid.NewGuid(), Name = "User" }
         };
 
     // GET: api/roles
@@ -32,7 +32,7 @@ public class RolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Role> GetRole(int id)
+    public ActionResult<Role> GetRole(Guid id)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
@@ -51,7 +51,7 @@ public class RolesController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Role role)
     {
-        role.Id = roles.Max(r => r.Id) + 1;
+        role.Id = Guid.NewGuid();
         roles.Add(role);
 
         return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
@@ -65,7 +65,7 @@ public class RolesController : ControllerBase
     /// <param name="updatedRole"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] Role updatedRole)
+    public ActionResult Put(Guid id, [FromBody] Role updatedRole)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
@@ -84,7 +84,7 @@ public class RolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 

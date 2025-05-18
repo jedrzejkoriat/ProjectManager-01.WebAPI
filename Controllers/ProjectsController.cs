@@ -9,8 +9,8 @@ public class ProjectsController : ControllerBase
 {
     private static List<Project> projects = new List<Project>
         {
-            new Project { Id = 1, Name = "Project 1", CreatedAt = DateTime.Now },
-            new Project { Id = 2, Name = "Project 2", CreatedAt = DateTime.Now}
+            new Project { Id = Guid.NewGuid(), Name = "Project 1", CreatedAt = DateTime.Now },
+            new Project { Id = Guid.NewGuid(), Name = "Project 2", CreatedAt = DateTime.Now}
         };
 
     // GET: api/projects
@@ -31,7 +31,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Project> GetProject([FromRoute] int id)
+    public ActionResult<Project> GetProject(Guid id)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
 
@@ -50,7 +50,7 @@ public class ProjectsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Project project)
     {
-        project.Id = projects.Max(p => p.Id) + 1;
+        project.Id = Guid.NewGuid();
         projects.Add(project);
 
         return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
@@ -64,7 +64,7 @@ public class ProjectsController : ControllerBase
     /// <param name="updatedProject"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put([FromRoute] int id, [FromBody] Project updatedProject)
+    public ActionResult Put(Guid id, [FromBody] Project updatedProject)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
 
@@ -84,7 +84,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete([FromRoute] int id)
+    public ActionResult Delete(Guid id)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
 

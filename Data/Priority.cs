@@ -2,7 +2,7 @@
 
 public sealed class Priority
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public int Level { get; set; }
 }

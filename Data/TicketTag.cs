@@ -2,7 +2,7 @@
 
 public class TicketTag
 {
-    public int Id { get; set; }
-    public int TicketId { get; set; }
-    public int TagId { get; set; }
+    public Guid Id { get; set; }
+    public Guid TicketId { get; set; }
+    public Guid TagId { get; set; }
 }

@@ -8,8 +8,8 @@ public class TicketTagsController : ControllerBase
 {
     private static List<TicketTag> ticketTags = new List<TicketTag>
     {
-        new TicketTag { Id = 1, TicketId = 1, TagId = 1 },
-        new TicketTag { Id = 2, TicketId = 1, TagId = 2 },
+        new TicketTag { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
+        new TicketTag { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
     };
 
     // GET: api/tickettags
@@ -30,7 +30,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Ticket tag by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Ticket> GetTicket(int id)
+    public ActionResult<Ticket> GetTicket(Guid id)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
 
@@ -49,7 +49,7 @@ public class TicketTagsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] TicketTag ticketTag)
     {
-        ticketTag.Id = ticketTags.Max(t => t.Id) + 1;
+        ticketTag.Id = Guid.NewGuid();
         ticketTags.Add(ticketTag);
 
         return CreatedAtAction(nameof(GetTicket), new { id = ticketTag.Id }, ticketTag);
@@ -63,7 +63,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="updatedTicketTag"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] TicketTag updatedTicketTag)
+    public ActionResult Put(Guid id, [FromBody] TicketTag updatedTicketTag)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
 
@@ -84,7 +84,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
 

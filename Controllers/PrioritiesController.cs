@@ -9,8 +9,8 @@ public class PrioritiesController : ControllerBase
 {
     private static List<Priority> priorities = new List<Priority>
         {
-            new Priority { Id = 1, Name = "Low", Level = 1 },
-            new Priority { Id = 2, Name = "High", Level = 5 }
+            new Priority { Id = Guid.NewGuid(), Name = "Low", Level = 1 },
+            new Priority { Id = Guid.NewGuid(), Name = "High", Level = 5 }
         };
 
     // GET api/priorities
@@ -31,7 +31,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Priority by id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Priority> GetPriority(int id)
+    public ActionResult<Priority> GetPriority(Guid id)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 
@@ -50,7 +50,7 @@ public class PrioritiesController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Priority priority)
     {
-        priority.Id = priorities.Max(p => p.Id) + 1;
+        priority.Id = Guid.NewGuid();
         priorities.Add(priority);
 
         return CreatedAtAction(nameof(GetPriority), new { id = priority.Id }, priority);
@@ -64,7 +64,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="updatedPriority"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] Priority updatedPriority)
+    public ActionResult Put(Guid id, [FromBody] Priority updatedPriority)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 
@@ -84,7 +84,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 

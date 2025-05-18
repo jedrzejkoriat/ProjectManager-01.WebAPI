@@ -2,9 +2,9 @@
 
 public sealed class ProjectMember
 {
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public int ProjectId { get; set; }
-    public int RoleId { get; set; }
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public Guid ProjectId { get; set; }
+    public Guid RoleId { get; set; }
     public DateTimeOffset JoinDate { get; set; }
 }

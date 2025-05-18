@@ -12,11 +12,11 @@ public class TicketsController : ControllerBase
         {
             new Ticket
             {
-                Id = 1,
-                ProjectId = 1,
-                PriorityId = 1,
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                PriorityId = Guid.NewGuid(),
                 AssigneeId = null,
-                ReporterId = 1,
+                ReporterId = Guid.NewGuid(),
                 Resolution = Enums.Resolution.Unresolved,
                 Status = Enums.Status.Open,
                 TicketType = Enums.TicketType.Bug,
@@ -45,7 +45,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Ticket by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Ticket> GetTicket(int id)
+    public ActionResult<Ticket> GetTicket(Guid id)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
@@ -64,7 +64,7 @@ public class TicketsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Ticket ticket)
     {
-        ticket.Id = tickets.Max(t => t.Id) + 1;
+        ticket.Id = Guid.NewGuid();
         tickets.Add(ticket);
 
         return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
@@ -78,7 +78,7 @@ public class TicketsController : ControllerBase
     /// <param name="updatedTicket"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] Ticket updatedTicket)
+    public ActionResult Put(Guid id, [FromBody] Ticket updatedTicket)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
@@ -107,7 +107,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 

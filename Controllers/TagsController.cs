@@ -10,8 +10,8 @@ public class TagsController : ControllerBase
 {
     private static List<Tag> tags = new List<Tag>
         {
-            new Tag { Id = 1, Name = "Bug" },
-            new Tag { Id = 2, Name = "Feature" }
+            new Tag { Id = Guid.NewGuid(), Name = "Bug" },
+            new Tag { Id = Guid.NewGuid(), Name = "Feature" }
         };
 
     // GET: api/tags
@@ -32,7 +32,7 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<Tag> GetTag(int id)
+    public ActionResult<Tag> GetTag(Guid id)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
@@ -51,7 +51,7 @@ public class TagsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] Tag tag)
     {
-        tag.Id = tags.Max(t => t.Id) + 1;
+        tag.Id = Guid.NewGuid();
         tags.Add(tag);
 
         return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tag);
@@ -65,7 +65,7 @@ public class TagsController : ControllerBase
     /// <param name="updatedTag"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] Tag updatedTag)
+    public ActionResult Put(Guid id, [FromBody] Tag updatedTag)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
@@ -84,7 +84,7 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 

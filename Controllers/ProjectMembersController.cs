@@ -10,8 +10,8 @@ public class ProjectMembersController : ControllerBase
 {
     private static List<ProjectMember> projectMembers = new List<ProjectMember>
         {
-            new ProjectMember { Id = 1, UserId = 1, ProjectId = 1, RoleId = 1, JoinDate = DateTime.Now },
-            new ProjectMember { Id = 2, UserId = 2, ProjectId = 1, RoleId = 2, JoinDate = DateTime.Now }
+            new ProjectMember { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), RoleId = Guid.NewGuid(), JoinDate = DateTime.Now },
+            new ProjectMember { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), RoleId = Guid.NewGuid(), JoinDate = DateTime.Now }
         };
 
     // GET api/projectmembers
@@ -32,7 +32,7 @@ public class ProjectMembersController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project member by id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectMember> GetProjectMember(int id)
+    public ActionResult<ProjectMember> GetProjectMember(Guid id)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
@@ -51,7 +51,7 @@ public class ProjectMembersController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] ProjectMember projectMember)
     {
-        projectMember.Id = projectMembers.Max(p => p.Id) + 1;
+        projectMember.Id = Guid.NewGuid();
         projectMembers.Add(projectMember);
 
         return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
@@ -65,7 +65,7 @@ public class ProjectMembersController : ControllerBase
     /// <param name="updatedProjectMember"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] ProjectMember updatedProjectMember)
+    public ActionResult Put(Guid id, [FromBody] ProjectMember updatedProjectMember)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
@@ -87,7 +87,7 @@ public class ProjectMembersController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 

@@ -9,8 +9,8 @@ public class UsersController : ControllerBase
 {
     private static List<User> users = new List<User>
         {
-            new User { Id = 1, UserName = "admin", Email = "admin@example.com", Password = "hashed_password" },
-            new User { Id = 2, UserName = "user", Email = "user@example.com", Password = "hashed_password" }
+            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", Password = "hashed_password" },
+            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", Password = "hashed_password" }
         };
 
     // GET: api/users
@@ -31,7 +31,7 @@ public class UsersController : ControllerBase
     /// <param name="id"></param>
     /// <returns>User by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<User> GetUser(int id)
+    public ActionResult<User> GetUser(Guid id)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
@@ -50,7 +50,7 @@ public class UsersController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] User user)
     {
-        user.Id = users.Max(u => u.Id) + 1;
+        user.Id = Guid.NewGuid();
         users.Add(user);
 
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
     /// <param name="updatedUser"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] User updatedUser)
+    public ActionResult Put(Guid id, [FromBody] User updatedUser)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
@@ -85,7 +85,7 @@ public class UsersController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
+    public ActionResult Delete(Guid id)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
