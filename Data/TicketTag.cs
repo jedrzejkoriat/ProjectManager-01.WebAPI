@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Controllers;
+﻿namespace ProjectManager_01.WebAPI.Data;
 
 public class TicketTag
 {
