@@ -1,5 +1,5 @@
-﻿namespace ProjectManager_01.WebAPI.Data
-{
+﻿namespace ProjectManager_01.WebAPI.Data;
+
     public sealed class Ticket
     {
         public int Id { get; set; }
@@ -16,4 +16,3 @@
         public string? Version { get; set; }
         public DateTime CreatedAt { get; set; }
     }
-}

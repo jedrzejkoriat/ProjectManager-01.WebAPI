@@ -1,8 +1,7 @@
-﻿namespace ProjectManager_01.WebAPI.Data
-{
+﻿namespace ProjectManager_01.WebAPI.Data;
+
     public sealed class Tag
     {
         public int Id { get; set; }
         public string Name { get; set; }
     }
-}

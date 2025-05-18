@@ -2,91 +2,90 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectManager_01.WebAPI.Data;
 
-namespace ProjectManager_01.WebAPI.Controllers
+namespace ProjectManager_01.WebAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProjectMembersController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProjectMembersController : ControllerBase
-    {
-        private static List<ProjectMember> projectMembers = new List<ProjectMember>
+    private static List<ProjectMember> projectMembers = new List<ProjectMember>
         {
             new ProjectMember { Id = 1, UserId = 1, ProjectId = 1, RoleId = 1, JoinDate = DateTime.Now },
             new ProjectMember { Id = 2, UserId = 2, ProjectId = 1, RoleId = 2, JoinDate = DateTime.Now }
         };
 
-        // GET api/projectmembers
-        /// <summary>
-        /// Get all project members
-        /// </summary>
-        /// <returns>All project members</returns>
-        [HttpGet]
-        public ActionResult<IEnumerable<ProjectMember>> GetProjectMembers()
-        {
-            return Ok(projectMembers);
-        }
+    // GET api/projectmembers
+    /// <summary>
+    /// Get all project members
+    /// </summary>
+    /// <returns>All project members</returns>
+    [HttpGet]
+    public ActionResult<IEnumerable<ProjectMember>> GetProjectMembers()
+    {
+        return Ok(projectMembers);
+    }
 
-        // GET api/projectmembers/{id}
-        /// <summary>
-        /// Get a project member by ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Project member by id</returns>
-        [HttpGet("{id}")]
-        public ActionResult<ProjectMember> GetProjectMember(int id)
-        {
-            var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-            if (pm == null) return NotFound();
-            return Ok(pm);
-        }
+    // GET api/projectmembers/{id}
+    /// <summary>
+    /// Get a project member by ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Project member by id</returns>
+    [HttpGet("{id}")]
+    public ActionResult<ProjectMember> GetProjectMember(int id)
+    {
+        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
+        if (pm == null) return NotFound();
+        return Ok(pm);
+    }
 
-        // POST api/projectmembers
-        /// <summary>
-        /// Create a new project member
-        /// </summary>
-        /// <param name="projectMember"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult Post([FromBody] ProjectMember projectMember)
-        {
-            projectMember.Id = projectMembers.Max(p => p.Id) + 1;
-            projectMembers.Add(projectMember);
-            return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
-        }
+    // POST api/projectmembers
+    /// <summary>
+    /// Create a new project member
+    /// </summary>
+    /// <param name="projectMember"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public ActionResult Post([FromBody] ProjectMember projectMember)
+    {
+        projectMember.Id = projectMembers.Max(p => p.Id) + 1;
+        projectMembers.Add(projectMember);
+        return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
+    }
 
-        // PUT api/projectmembers/{id}
-        /// <summary>
-        /// Update an existing project member
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="updatedProjectMember"></param>
-        /// <returns></returns>
-        [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ProjectMember updatedProjectMember)
-        {
-            var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-            if (pm == null) return NotFound();
+    // PUT api/projectmembers/{id}
+    /// <summary>
+    /// Update an existing project member
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="updatedProjectMember"></param>
+    /// <returns></returns>
+    [HttpPut("{id}")]
+    public ActionResult Put(int id, [FromBody] ProjectMember updatedProjectMember)
+    {
+        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
+        if (pm == null) return NotFound();
 
-            pm.UserId = updatedProjectMember.UserId;
-            pm.ProjectId = updatedProjectMember.ProjectId;
-            pm.RoleId = updatedProjectMember.RoleId;
-            pm.JoinDate = updatedProjectMember.JoinDate;
-            return NoContent();
-        }
+        pm.UserId = updatedProjectMember.UserId;
+        pm.ProjectId = updatedProjectMember.ProjectId;
+        pm.RoleId = updatedProjectMember.RoleId;
+        pm.JoinDate = updatedProjectMember.JoinDate;
+        return NoContent();
+    }
 
-        // DELETE api/projectmembers/{id}
-        /// <summary>
-        /// Delete a project member
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
-        {
-            var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-            if (pm == null) return NotFound();
+    // DELETE api/projectmembers/{id}
+    /// <summary>
+    /// Delete a project member
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public ActionResult Delete(int id)
+    {
+        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
+        if (pm == null) return NotFound();
 
-            projectMembers.Remove(pm);
-            return NoContent();
-        }
+        projectMembers.Remove(pm);
+        return NoContent();
     }
 }
