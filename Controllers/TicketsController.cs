@@ -18,7 +18,7 @@ public class TicketsController : ControllerBase
                 PriorityId = 1,
                 AssigneeId = null,
                 ReporterId = 1,
-                ResolutionId = 1,
+                Resolution = Enums.Resolution.Unresolved,
                 Status = Enums.Status.Open,
                 Title = "Sample Ticket",
                 Description = "Description here",
@@ -85,7 +85,7 @@ public class TicketsController : ControllerBase
         ticket.Status = updatedTicket.Status;
         ticket.AssigneeId = updatedTicket.AssigneeId;
         ticket.ReporterId = updatedTicket.ReporterId;
-        ticket.ResolutionId = updatedTicket.ResolutionId;
+        ticket.Resolution = updatedTicket.Resolution;
         ticket.Title = updatedTicket.Title;
         ticket.Description = updatedTicket.Description;
         ticket.Version = updatedTicket.Version;
