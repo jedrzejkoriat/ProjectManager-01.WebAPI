@@ -2,7 +2,6 @@
 {
     public sealed class Ticket
     {
-        // ID
         public int Id { get; set; }
         public int ProjectId { get; set; }
         public int? TagId { get; set; }
@@ -12,11 +11,9 @@
         public int? AssigneeId { get; set; }
         public int ReporterId { get; set; }
         public int ResolutionId { get; set; }
-        // STRING
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? Version { get; set; }
-        // DATE
         public DateTime CreatedAt { get; set; }
     }
 }

@@ -2,9 +2,7 @@
 {
     public sealed class Status
     {
-        // ID
         public int Id { get; set; }
-        // STRING
         public string Name { get; set; }
     }
 }

@@ -2,9 +2,7 @@
 {
     public sealed class Tag
     {
-        // ID
         public int Id { get; set; }
-        // STRING
         public string Name { get; set; }
     }
 }
