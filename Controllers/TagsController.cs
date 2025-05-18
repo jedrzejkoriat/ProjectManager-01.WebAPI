@@ -35,7 +35,10 @@ public class TagsController : ControllerBase
     public ActionResult<Tag> GetTag(int id)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
-        if (tag == null) return NotFound();
+
+        if (tag == null) 
+            return NotFound();
+
         return Ok(tag);
     }
 
@@ -50,6 +53,7 @@ public class TagsController : ControllerBase
     {
         tag.Id = tags.Max(t => t.Id) + 1;
         tags.Add(tag);
+
         return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tag);
     }
 
@@ -64,9 +68,12 @@ public class TagsController : ControllerBase
     public ActionResult Put(int id, [FromBody] Tag updatedTag)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
-        if (tag == null) return NotFound();
+
+        if (tag == null) 
+            return NotFound();
 
         tag.Name = updatedTag.Name;
+
         return NoContent();
     }
 
@@ -80,9 +87,12 @@ public class TagsController : ControllerBase
     public ActionResult Delete(int id)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
-        if (tag == null) return NotFound();
+
+        if (tag == null) 
+            return NotFound();
 
         tags.Remove(tag);
+
         return NoContent();
     }
 }

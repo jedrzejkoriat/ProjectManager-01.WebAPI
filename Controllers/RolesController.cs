@@ -35,7 +35,10 @@ public class RolesController : ControllerBase
     public ActionResult<Role> GetRole(int id)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
-        if (role == null) return NotFound();
+
+        if (role == null) 
+            return NotFound();
+
         return Ok(role);
     }
 
@@ -50,6 +53,7 @@ public class RolesController : ControllerBase
     {
         role.Id = roles.Max(r => r.Id) + 1;
         roles.Add(role);
+
         return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
     }
 
@@ -64,9 +68,12 @@ public class RolesController : ControllerBase
     public ActionResult Put(int id, [FromBody] Role updatedRole)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
-        if (role == null) return NotFound();
+
+        if (role == null) 
+            return NotFound();
 
         role.Name = updatedRole.Name;
+
         return NoContent();
     }
 
@@ -80,9 +87,12 @@ public class RolesController : ControllerBase
     public ActionResult Delete(int id)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
-        if (role == null) return NotFound();
+
+        if (role == null) 
+            return NotFound();
 
         roles.Remove(role);
+
         return NoContent();
     }
 }

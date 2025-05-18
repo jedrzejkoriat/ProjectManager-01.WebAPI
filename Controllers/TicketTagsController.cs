@@ -33,21 +33,25 @@ public class TicketTagsController : ControllerBase
     public ActionResult<Ticket> GetTicket(int id)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
-        if (ticketTag == null) return NotFound();
+
+        if (ticketTag == null) 
+            return NotFound();
+
         return Ok(ticketTag);
     }
 
     // POST: api/tickettags
     /// <summary>
-    /// Create a new ticket
+    /// Create a new ticket tag
     /// </summary>
-    /// <param name="ticket"></param>
+    /// <param name="ticketTag"></param>
     /// <returns></returns>
     [HttpPost]
     public ActionResult Post([FromBody] TicketTag ticketTag)
     {
         ticketTag.Id = ticketTags.Max(t => t.Id) + 1;
         ticketTags.Add(ticketTag);
+
         return CreatedAtAction(nameof(GetTicket), new { id = ticketTag.Id }, ticketTag);
     }
 
@@ -62,7 +66,9 @@ public class TicketTagsController : ControllerBase
     public ActionResult Put(int id, [FromBody] TicketTag updatedTicketTag)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
-        if (ticketTag == null) return NotFound();
+
+        if (ticketTag == null) 
+            return NotFound();
 
         ticketTag.Id = updatedTicketTag.Id;
         ticketTag.TicketId = updatedTicketTag.TicketId;
@@ -81,9 +87,12 @@ public class TicketTagsController : ControllerBase
     public ActionResult Delete(int id)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
-        if (ticketTag == null) return NotFound();
+
+        if (ticketTag == null) 
+            return NotFound();
 
         ticketTags.Remove(ticketTag);
+
         return NoContent();
     }
 }

@@ -34,7 +34,10 @@ public class PrioritiesController : ControllerBase
     public ActionResult<Priority> GetPriority(int id)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
-        if (priority == null) return NotFound();
+
+        if (priority == null) 
+            return NotFound();
+
         return Ok(priority);
     }
 
@@ -49,6 +52,7 @@ public class PrioritiesController : ControllerBase
     {
         priority.Id = priorities.Max(p => p.Id) + 1;
         priorities.Add(priority);
+
         return CreatedAtAction(nameof(GetPriority), new { id = priority.Id }, priority);
     }
 
@@ -63,10 +67,13 @@ public class PrioritiesController : ControllerBase
     public ActionResult Put(int id, [FromBody] Priority updatedPriority)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
-        if (priority == null) return NotFound();
+
+        if (priority == null) 
+            return NotFound();
 
         priority.Name = updatedPriority.Name;
         priority.Level = updatedPriority.Level;
+
         return NoContent();
     }
 
@@ -80,9 +87,12 @@ public class PrioritiesController : ControllerBase
     public ActionResult Delete(int id)
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
-        if (priority == null) return NotFound();
+
+        if (priority == null) 
+            return NotFound();
 
         priorities.Remove(priority);
+
         return NoContent();
     }
 }

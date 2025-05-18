@@ -34,7 +34,10 @@ public class UsersController : ControllerBase
     public ActionResult<User> GetUser(int id)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
-        if (user == null) return NotFound();
+
+        if (user == null) 
+            return NotFound();
+
         return Ok(user);
     }
 
@@ -49,6 +52,7 @@ public class UsersController : ControllerBase
     {
         user.Id = users.Max(u => u.Id) + 1;
         users.Add(user);
+
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
 
@@ -63,11 +67,14 @@ public class UsersController : ControllerBase
     public ActionResult Put(int id, [FromBody] User updatedUser)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
-        if (user == null) return NotFound();
+
+        if (user == null) 
+            return NotFound();
 
         user.UserName = updatedUser.UserName;
         user.Email = updatedUser.Email;
         user.Password = updatedUser.Password;
+
         return NoContent();
     }
 
@@ -81,9 +88,12 @@ public class UsersController : ControllerBase
     public ActionResult Delete(int id)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
-        if (user == null) return NotFound();
+
+        if (user == null) 
+            return NotFound();
 
         users.Remove(user);
+
         return NoContent();
     }
 }

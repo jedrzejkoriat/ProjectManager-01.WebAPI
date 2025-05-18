@@ -35,7 +35,10 @@ public class ProjectMembersController : ControllerBase
     public ActionResult<ProjectMember> GetProjectMember(int id)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-        if (pm == null) return NotFound();
+
+        if (pm == null) 
+            return NotFound();
+
         return Ok(pm);
     }
 
@@ -50,6 +53,7 @@ public class ProjectMembersController : ControllerBase
     {
         projectMember.Id = projectMembers.Max(p => p.Id) + 1;
         projectMembers.Add(projectMember);
+
         return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
     }
 
@@ -64,12 +68,15 @@ public class ProjectMembersController : ControllerBase
     public ActionResult Put(int id, [FromBody] ProjectMember updatedProjectMember)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-        if (pm == null) return NotFound();
+
+        if (pm == null) 
+            return NotFound();
 
         pm.UserId = updatedProjectMember.UserId;
         pm.ProjectId = updatedProjectMember.ProjectId;
         pm.RoleId = updatedProjectMember.RoleId;
         pm.JoinDate = updatedProjectMember.JoinDate;
+
         return NoContent();
     }
 
@@ -83,9 +90,12 @@ public class ProjectMembersController : ControllerBase
     public ActionResult Delete(int id)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-        if (pm == null) return NotFound();
+
+        if (pm == null) 
+            return NotFound();
 
         projectMembers.Remove(pm);
+
         return NoContent();
     }
 }

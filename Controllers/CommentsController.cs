@@ -34,7 +34,10 @@ public class CommentsController : ControllerBase
     public ActionResult<Comment> GetComment(int id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
-        if (comment == null) return NotFound();
+
+        if (comment == null) 
+            return NotFound();
+
         return Ok(comment);
     }
 
@@ -49,6 +52,7 @@ public class CommentsController : ControllerBase
     {
         comment.Id = comments.Max(c => c.Id) + 1;
         comments.Add(comment);
+
         return CreatedAtAction(nameof(GetComment), new { id = comment.Id }, comment);
     }
 
@@ -63,11 +67,14 @@ public class CommentsController : ControllerBase
     public ActionResult Put(int id, [FromBody] Comment updatedComment)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
-        if (comment == null) return NotFound();
+
+        if (comment == null) 
+            return NotFound();
 
         comment.TicketId = updatedComment.TicketId;
         comment.Content = updatedComment.Content;
         comment.CreatedAt = updatedComment.CreatedAt;
+
         return NoContent();
     }
 
@@ -81,9 +88,12 @@ public class CommentsController : ControllerBase
     public ActionResult Delete(int id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
-        if (comment == null) return NotFound();
+
+        if (comment == null) 
+            return NotFound();
 
         comments.Remove(comment);
+
         return NoContent();
     }
 }

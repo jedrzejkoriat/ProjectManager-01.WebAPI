@@ -48,7 +48,10 @@ public class TicketsController : ControllerBase
     public ActionResult<Ticket> GetTicket(int id)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
-        if (ticket == null) return NotFound();
+
+        if (ticket == null) 
+            return NotFound();
+
         return Ok(ticket);
     }
 
@@ -63,6 +66,7 @@ public class TicketsController : ControllerBase
     {
         ticket.Id = tickets.Max(t => t.Id) + 1;
         tickets.Add(ticket);
+
         return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
     }
 
@@ -77,7 +81,9 @@ public class TicketsController : ControllerBase
     public ActionResult Put(int id, [FromBody] Ticket updatedTicket)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
-        if (ticket == null) return NotFound();
+
+        if (ticket == null) 
+            return NotFound();
 
         ticket.ProjectId = updatedTicket.ProjectId;
         ticket.TicketType = updatedTicket.TicketType;
@@ -104,9 +110,12 @@ public class TicketsController : ControllerBase
     public ActionResult Delete(int id)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
-        if (ticket == null) return NotFound();
+
+        if (ticket == null) 
+            return NotFound();
 
         tickets.Remove(ticket);
+
         return NoContent();
     }
 }

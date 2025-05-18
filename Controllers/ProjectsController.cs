@@ -34,7 +34,10 @@ public class ProjectsController : ControllerBase
     public ActionResult<Project> GetProject([FromRoute] int id)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
-        if (project == null) return NotFound();
+
+        if (project == null) 
+            return NotFound();
+
         return Ok(project);
     }
 
@@ -49,6 +52,7 @@ public class ProjectsController : ControllerBase
     {
         project.Id = projects.Max(p => p.Id) + 1;
         projects.Add(project);
+
         return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
     }
 
@@ -63,10 +67,13 @@ public class ProjectsController : ControllerBase
     public ActionResult Put([FromRoute] int id, [FromBody] Project updatedProject)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
-        if (project == null) return NotFound();
+
+        if (project == null) 
+            return NotFound();
 
         project.Name = updatedProject.Name;
         project.CreatedAt = updatedProject.CreatedAt;
+
         return NoContent();
     }
 
@@ -80,9 +87,12 @@ public class ProjectsController : ControllerBase
     public ActionResult Delete([FromRoute] int id)
     {
         Project project = projects.FirstOrDefault(p => p.Id == id);
-        if (project == null) return NotFound();
+
+        if (project == null) 
+            return NotFound();
 
         projects.Remove(project);
+
         return NoContent();
     }
 }
