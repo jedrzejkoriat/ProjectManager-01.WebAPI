@@ -6,5 +6,5 @@ public sealed class ProjectMember
     public int UserId { get; set; }
     public int ProjectId { get; set; }
     public int RoleId { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTimeOffset JoinDate { get; set; }
 }

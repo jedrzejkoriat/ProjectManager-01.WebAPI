@@ -14,5 +14,5 @@
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? Version { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
     }
