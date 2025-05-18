@@ -14,13 +14,12 @@ public class TicketsController : ControllerBase
             {
                 Id = 1,
                 ProjectId = 1,
-                TagId = 1,
                 TypeId = 1,
                 PriorityId = 1,
-                StatusId = 1,
                 AssigneeId = null,
                 ReporterId = 1,
                 ResolutionId = 1,
+                Status = Enums.Status.Open,
                 Title = "Sample Ticket",
                 Description = "Description here",
                 Version = "1.0",
@@ -81,10 +80,9 @@ public class TicketsController : ControllerBase
         if (ticket == null) return NotFound();
 
         ticket.ProjectId = updatedTicket.ProjectId;
-        ticket.TagId = updatedTicket.TagId;
         ticket.TypeId = updatedTicket.TypeId;
         ticket.PriorityId = updatedTicket.PriorityId;
-        ticket.StatusId = updatedTicket.StatusId;
+        ticket.Status = updatedTicket.Status;
         ticket.AssigneeId = updatedTicket.AssigneeId;
         ticket.ReporterId = updatedTicket.ReporterId;
         ticket.ResolutionId = updatedTicket.ResolutionId;
