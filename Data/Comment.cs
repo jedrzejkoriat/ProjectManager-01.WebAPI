@@ -4,6 +4,7 @@ public sealed class Comment
 {
     public int Id { get; set; }
     public int TicketId { get; set; }
+    public int UserId { get; set; }
     public string Content { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }
