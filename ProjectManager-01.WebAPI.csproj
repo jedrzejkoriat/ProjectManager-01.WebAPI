@@ -5,7 +5,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ProjectManager_01.WebAPI</RootNamespace>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWanr>$(NoWanr);1591</NoWanr>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.txt" />
+    <None Remove="README.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
