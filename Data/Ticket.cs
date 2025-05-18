@@ -4,7 +4,6 @@
     {
         public int Id { get; set; }
         public int ProjectId { get; set; }
-        public int? TagId { get; set; }
         public int TypeId { get; set; }
         public int PriorityId { get; set; }
         public int StatusId { get; set; }
