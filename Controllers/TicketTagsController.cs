@@ -2,14 +2,15 @@
 using ProjectManager_01.WebAPI.Data;
 
 namespace ProjectManager_01.WebAPI.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class TicketTagsController : ControllerBase
 {
     private static List<TicketTag> ticketTags = new List<TicketTag>
     {
-        new TicketTag { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
-        new TicketTag { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
+        new TicketTag { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
+        new TicketTag { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
     };
 
     // GET: api/tickettags
@@ -18,21 +19,22 @@ public class TicketTagsController : ControllerBase
     /// </summary>
     /// <returns>All ticket tags</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Ticket>> GetTickets()
+    public ActionResult<IEnumerable<TicketTag>> GetTicketTags()
     {
         return Ok(ticketTags);
     }
 
-    // GET: api/tickettags/{id}
+    // GET: api/tickettags/{ticketId}/{tagId}
     /// <summary>
-    /// Get a ticket tag by ID
+    /// Get a ticket tag by ticket id and tag id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns>Ticket tag by its id</returns>
-    [HttpGet("{id}")]
-    public ActionResult<Ticket> GetTicket(Guid id)
+    /// <param name="ticketId"></param>
+    /// <param name="tagId"></param>
+    /// <returns>Ticket tag by its ticket id and tag id</returns>
+    [HttpGet("{ticketId}/{tagId}")]
+    public ActionResult<TicketTag> GetTicketTag(Guid ticketId, Guid tagId)
     {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
+        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
         if (ticketTag == null) 
             return NotFound();
@@ -49,44 +51,44 @@ public class TicketTagsController : ControllerBase
     [HttpPost]
     public ActionResult Post([FromBody] TicketTag ticketTag)
     {
-        ticketTag.Id = Guid.NewGuid();
         ticketTags.Add(ticketTag);
 
-        return CreatedAtAction(nameof(GetTicket), new { id = ticketTag.Id }, ticketTag);
+        return CreatedAtAction(nameof(GetTicketTag), new { ticketId = ticketTag.TicketId, tagId = ticketTag.TagId }, ticketTag);
     }
 
-    // PUT: api/tickettags/{id}
+    // PUT: api/tickettags/{ticketId}/{tagId}
     /// <summary>
     /// Update an existing ticket tag
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="ticketId"></param>
+    /// <param name="tagId"></param>
     /// <param name="updatedTicketTag"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] TicketTag updatedTicketTag)
+    [HttpPut("{ticketId}/{tagId}")]
+    public ActionResult Put(Guid ticketId, Guid tagId, [FromBody] TicketTag updatedTicketTag)
     {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
+        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
         if (ticketTag == null) 
             return NotFound();
 
-        ticketTag.Id = updatedTicketTag.Id;
         ticketTag.TicketId = updatedTicketTag.TicketId;
         ticketTag.TagId = updatedTicketTag.TagId;
 
         return NoContent();
     }
 
-    // DELETE: api/tickettags/{id}
+    // DELETE: api/tickettags/{ticketId}/{tagId}
     /// <summary>
-    /// Delete a ticket tag by id
+    /// Delete a ticket tag by ticket id and tag id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="ticketId"></param>
+    /// <param name="tagId"></param>
     /// <returns></returns>
-    [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    [HttpDelete("{ticketId}/{tagId}")]
+    public ActionResult Delete(Guid ticketId, Guid tagId)
     {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.Id == id);
+        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
         if (ticketTag == null) 
             return NotFound();
