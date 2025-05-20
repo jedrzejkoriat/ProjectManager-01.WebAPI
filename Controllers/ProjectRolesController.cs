@@ -6,35 +6,35 @@ namespace ProjectManager_01.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RolesController : ControllerBase
+public class ProjectRolesController : ControllerBase
 {
-    private static List<Role> roles = new List<Role>
+    private static List<ProjectRole> projectRoles = new List<ProjectRole>
         {
-            new Role { Id = Guid.NewGuid(), Name = "Admin" },
-            new Role { Id = Guid.NewGuid(), Name = "User" }
+            new ProjectRole { Id = Guid.NewGuid(), Name = "Admin" },
+            new ProjectRole { Id = Guid.NewGuid(), Name = "User" }
         };
 
     // GET: api/roles
     /// <summary>
-    /// Get all roles
+    /// Get all project roles
     /// </summary>
-    /// <returns>All roles</returns>
+    /// <returns>All project roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Role>> GetRoles()
+    public ActionResult<IEnumerable<ProjectRole>> GetProjectRoles()
     {
-        return Ok(roles);
+        return Ok(projectRoles);
     }
 
     // GET: api/roles/{id}
     /// <summary>
-    /// Get a role by ID
+    /// Get a project role by ID
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Role by its id</returns>
+    /// <returns>Project role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Role> GetRole(Guid id)
+    public ActionResult<ProjectRole> GetProjectRole(Guid id)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
+        var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
         if (role == null) 
             return NotFound();
@@ -49,12 +49,12 @@ public class RolesController : ControllerBase
     /// <param name="role"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Role role)
+    public ActionResult Post([FromBody] ProjectRole projectRole)
     {
-        role.Id = Guid.NewGuid();
-        roles.Add(role);
+        projectRole.Id = Guid.NewGuid();
+        projectRoles.Add(projectRole);
 
-        return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
+        return CreatedAtAction(nameof(GetProjectRole), new { id = projectRole.Id }, projectRole);
     }
 
     // PUT: api/roles/{id}
@@ -62,17 +62,17 @@ public class RolesController : ControllerBase
     /// Update an existing role
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="updatedRole"></param>
+    /// <param name="updatedProjectRole"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Role updatedRole)
+    public ActionResult Put(Guid id, [FromBody] ProjectRole updatedProjectRole)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
+        var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
         if (role == null) 
             return NotFound();
 
-        role.Name = updatedRole.Name;
+        role.Name = updatedProjectRole.Name;
 
         return NoContent();
     }
@@ -86,12 +86,12 @@ public class RolesController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(Guid id)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
+        var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
         if (role == null) 
             return NotFound();
 
-        roles.Remove(role);
+        projectRoles.Remove(role);
 
         return NoContent();
     }
