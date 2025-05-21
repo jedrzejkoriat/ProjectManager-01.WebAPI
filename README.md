@@ -13,6 +13,11 @@
 
 ```bash
 git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
+```
+
+2. **Run the application**
+
+```bash
 cd ProjectManager-01.WebAPI
 dotnet run
 ```
