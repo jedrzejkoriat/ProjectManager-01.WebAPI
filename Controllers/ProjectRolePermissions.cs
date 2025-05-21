@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
 using ProjectManager_01.WebAPI.Enums;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+[EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase

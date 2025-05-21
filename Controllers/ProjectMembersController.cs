@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+[EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class ProjectMembersController : ControllerBase
 {
     private static List<ProjectMember> projectMembers = new List<ProjectMember>
         {
-            new ProjectMember { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), RoleId = Guid.NewGuid(), JoinDate = DateTime.Now },
-            new ProjectMember { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), RoleId = Guid.NewGuid(), JoinDate = DateTime.Now }
+            new ProjectMember { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid(), JoinDate = DateTime.Now },
+            new ProjectMember { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid(), JoinDate = DateTime.Now }
         };
 
     // GET api/projectmembers
@@ -74,7 +76,7 @@ public class ProjectMembersController : ControllerBase
 
         pm.UserId = updatedProjectMember.UserId;
         pm.ProjectId = updatedProjectMember.ProjectId;
-        pm.RoleId = updatedProjectMember.RoleId;
+        pm.ProjectRoleId = updatedProjectMember.ProjectRoleId;
         pm.JoinDate = updatedProjectMember.JoinDate;
 
         return NoContent();
