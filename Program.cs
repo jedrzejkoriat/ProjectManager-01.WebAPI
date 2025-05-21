@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => 
 {
@@ -21,9 +22,10 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,5 +37,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<TicketsHub>("/hubs/tickets");
 
 app.Run();

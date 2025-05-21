@@ -11,8 +11,8 @@ public class TicketRelationsController : ControllerBase
 {
     private static List<TicketRelation> ticketRelations = new List<TicketRelation>
     {
-        new TicketRelation { TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Blocks },
-        new TicketRelation { TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Relates }
+        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Blocks },
+        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Relates }
     };
 
     // GET: api/ticketrelations
