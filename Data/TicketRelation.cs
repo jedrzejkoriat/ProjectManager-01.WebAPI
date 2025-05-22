@@ -2,7 +2,7 @@
 
 namespace ProjectManager_01.WebAPI.Data;
 
-public class TicketRelation
+public sealed class TicketRelation
 {
     public Guid Id { get; set; }
     public Guid TargetId { get; set; }
