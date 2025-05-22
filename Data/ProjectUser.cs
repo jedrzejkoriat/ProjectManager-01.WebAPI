@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager_01.WebAPI.Data;
 
-public sealed class ProjectMember
+public sealed class ProjectUser
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
