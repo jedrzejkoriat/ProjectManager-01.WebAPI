@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace ProjectManager_01.WebAPI.Data;
+﻿namespace ProjectManager_01.WebAPI.Data;
 
 public sealed class User
 {
