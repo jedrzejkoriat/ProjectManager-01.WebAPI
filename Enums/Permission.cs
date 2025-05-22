@@ -8,19 +8,15 @@ public enum Permission
     EditProjectMember = 2,
     RemoveProjectMember = 3,
 
-    AddProjectRole = 4,
-    EditProjectRole = 5,
-    RemoveProjectRole = 6,
+    AddTag = 5,
+    EditTag = 6,
+    RemoveTag = 7,
 
-    AddTag = 7,
-    EditTag = 8,
-    RemoveTag = 9,
+    AddTicket = 8,
+    EditTicket = 9,
+    RemoveTicket = 10,
 
-    AddTicket = 10,
-    EditTicket = 11,
-    RemoveTicket = 12,
-
-    AddTicketRelation = 13,
-    EditTicketRelation = 14,
-    RemoveTicketRelation = 15
+    AddTicketRelation = 11,
+    EditTicketRelation = 12,
+    RemoveTicketRelation = 13
 }
