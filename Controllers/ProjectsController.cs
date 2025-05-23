@@ -11,8 +11,8 @@ public class ProjectsController : ControllerBase
 {
     private static List<Project> projects = new List<Project>
         {
-            new Project { Id = Guid.NewGuid(), Name = "Project 1", CreatedAt = DateTime.Now },
-            new Project { Id = Guid.NewGuid(), Name = "Project 2", CreatedAt = DateTime.Now}
+            new Project { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", CreatedAt = DateTime.Now },
+            new Project { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", CreatedAt = DateTime.Now}
         };
 
     // GET: api/projects
@@ -74,6 +74,7 @@ public class ProjectsController : ControllerBase
             return NotFound();
 
         project.Name = updatedProject.Name;
+        project.Key = updatedProject.Key;
         project.CreatedAt = updatedProject.CreatedAt;
 
         return NoContent();
