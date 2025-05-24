@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
+    <None Remove="CODEOWNERS" />
     <None Remove="LICENSE.txt" />
     <None Remove="README.md" />
   </ItemGroup>

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+[EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class TicketsController : ControllerBase
@@ -20,6 +22,7 @@ public class TicketsController : ControllerBase
                 Resolution = Enums.Resolution.Unresolved,
                 Status = Enums.Status.Open,
                 TicketType = Enums.TicketType.Bug,
+                TicketNumber = 231,
                 Title = "Sample Ticket",
                 Description = "Description here",
                 Version = "1.0",
@@ -92,6 +95,7 @@ public class TicketsController : ControllerBase
         ticket.AssigneeId = updatedTicket.AssigneeId;
         ticket.ReporterId = updatedTicket.ReporterId;
         ticket.Resolution = updatedTicket.Resolution;
+        ticket.TicketNumber = updatedTicket.TicketNumber;
         ticket.Title = updatedTicket.Title;
         ticket.Description = updatedTicket.Description;
         ticket.Version = updatedTicket.Version;

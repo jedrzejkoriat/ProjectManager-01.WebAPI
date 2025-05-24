@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+[EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class RolesController : ControllerBase
 {
     private static List<Role> roles = new List<Role>
-        {
-            new Role { Id = Guid.NewGuid(), Name = "Admin" },
-            new Role { Id = Guid.NewGuid(), Name = "User" }
-        };
+    {
+        new Role { Id = Guid.NewGuid(), Name = "Admin" },
+        new Role { Id = Guid.NewGuid(), Name = "User" }
+    };
 
     // GET: api/roles
     /// <summary>
@@ -25,7 +26,7 @@ public class RolesController : ControllerBase
         return Ok(roles);
     }
 
-    // GET: api/roles/{id}
+    // GET api/roles/{id}
     /// <summary>
     /// Get a role by ID
     /// </summary>
@@ -36,13 +37,13 @@ public class RolesController : ControllerBase
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         return Ok(role);
     }
 
-    // POST: api/roles
+    // POST api/roles
     /// <summary>
     /// Create a new role
     /// </summary>
@@ -57,7 +58,7 @@ public class RolesController : ControllerBase
         return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
     }
 
-    // PUT: api/roles/{id}
+    // PUT api/roles/{id}
     /// <summary>
     /// Update an existing role
     /// </summary>
@@ -69,7 +70,7 @@ public class RolesController : ControllerBase
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         role.Name = updatedRole.Name;
@@ -77,7 +78,7 @@ public class RolesController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/roles/{id}
+    // DELETE api/roles/{id}
     /// <summary>
     /// Delete a role
     /// </summary>
@@ -88,7 +89,7 @@ public class RolesController : ControllerBase
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         roles.Remove(role);
