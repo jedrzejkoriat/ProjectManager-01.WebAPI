@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
-using ProjectManager_01.WebAPI.Enums;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -12,8 +11,8 @@ public class ProjectRolePermissionsController : ControllerBase
 {
     private static List<ProjectRolePermission> projectRolePermissions = new List<ProjectRolePermission>
     {
-        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), Permission = Permission.AddTicket },
-        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), Permission = Permission.Comment },
+        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
+        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
     };
 
     // GET: api/projectrolepermissions
@@ -27,17 +26,17 @@ public class ProjectRolePermissionsController : ControllerBase
         return Ok(projectRolePermissions);
     }
 
-    // GET: api/projectrolepermissions/{projectRoleId}/{permission}
+    // GET: api/projectrolepermissions/{projectRoleId}/{permissionId}
     /// <summary>
-    /// Get a project role permission by project role id and permission
+    /// Get a project role permission by project role id and permission id
     /// </summary>
     /// <param name="projectRoleId"></param>
-    /// <param name="permission"></param>
-    /// <returns>Project role permission by its project role id and permission</returns>
-    [HttpGet("{projectRoleId}/{permission}")]
-    public ActionResult<ProjectRolePermission> GetProjectRolePermission(Guid projectRoleId, Permission permission)
+    /// <param name="permissionId"></param>
+    /// <returns>Project role permission by its project role id and permission id</returns>
+    [HttpGet("{projectRoleId}/{permissionId}")]
+    public ActionResult<ProjectRolePermission> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.Permission == permission);
+        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
 
         if (permissionEntry == null)
             return NotFound();
@@ -56,42 +55,42 @@ public class ProjectRolePermissionsController : ControllerBase
     {
         projectRolePermissions.Add(projectRolePermission);
 
-        return CreatedAtAction(nameof(GetProjectRolePermission), new { projectRoleId = projectRolePermission.ProjectRoleId, permission = projectRolePermission.Permission }, projectRolePermission);
+        return CreatedAtAction(nameof(GetProjectRolePermission), new { projectRoleId = projectRolePermission.ProjectRoleId, permissionId = projectRolePermission.PermissionId }, projectRolePermission);
     }
 
-    // PUT: api/projectrolepermissions/{projectRoleId}/{permission}
+    // PUT: api/projectrolepermissions/{projectRoleId}/{permissionId}
     /// <summary>
     /// Update an existing project role permission
     /// </summary>
     /// <param name="projectRoleId"></param>
-    /// <param name="permission"></param>
+    /// <param name="permissionId"></param>
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
-    [HttpPut("{projectRoleId}/{permission}")]
-    public ActionResult Put(Guid projectRoleId, Permission permission, [FromBody] ProjectRolePermission updatedPermission)
+    [HttpPut("{projectRoleId}/{permissionId}")]
+    public ActionResult Put(Guid projectRoleId, Guid permissionId, [FromBody] ProjectRolePermission updatedPermission)
     {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.Permission == permission);
+        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
 
         if (permissionEntry == null)
             return NotFound();
 
         permissionEntry.ProjectRoleId = updatedPermission.ProjectRoleId;
-        permissionEntry.Permission = updatedPermission.Permission;
+        permissionEntry.PermissionId = updatedPermission.PermissionId;
 
         return NoContent();
     }
 
-    // DELETE: api/projectrolepermissions/{projectRoleId}/{permission}
+    // DELETE: api/projectrolepermissions/{projectRoleId}/{permissionId}
     /// <summary>
-    /// Delete a project role permission by project role id and permission
+    /// Delete a project role permission by project role id and permission id
     /// </summary>
     /// <param name="projectRoleId"></param>
-    /// <param name="permission"></param>
+    /// <param name="permissionId"></param>
     /// <returns></returns>
-    [HttpDelete("{projectRoleId}/{permission}")]
-    public ActionResult Delete(Guid projectRoleId, Permission permission)
+    [HttpDelete("{projectRoleId}/{permissionId}")]
+    public ActionResult Delete(Guid projectRoleId, Guid permissionId)
     {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.Permission == permission);
+        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
 
         if (permissionEntry == null)
             return NotFound();

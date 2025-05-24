@@ -22,7 +22,7 @@ public class TicketsController : ControllerBase
                 Resolution = Enums.Resolution.Unresolved,
                 Status = Enums.Status.Open,
                 TicketType = Enums.TicketType.Bug,
-                TicketNumber = "ABCD-001",
+                TicketNumber = 231,
                 Title = "Sample Ticket",
                 Description = "Description here",
                 Version = "1.0",

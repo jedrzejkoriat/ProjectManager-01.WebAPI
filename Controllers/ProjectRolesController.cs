@@ -12,8 +12,8 @@ public class ProjectRolesController : ControllerBase
 {
     private static List<ProjectRole> projectRoles = new List<ProjectRole>
         {
-            new ProjectRole { Id = Guid.NewGuid(), Name = "Admin" },
-            new ProjectRole { Id = Guid.NewGuid(), Name = "User" }
+            new ProjectRole { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "Admin" },
+            new ProjectRole { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "User" }
         };
 
     // GET: api/roles
@@ -75,6 +75,7 @@ public class ProjectRolesController : ControllerBase
             return NotFound();
 
         role.Name = updatedProjectRole.Name;
+        role.ProjectId = updatedProjectRole.ProjectId;
 
         return NoContent();
     }

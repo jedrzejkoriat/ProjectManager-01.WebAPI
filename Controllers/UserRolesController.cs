@@ -12,8 +12,8 @@ public class UserRolesController : ControllerBase
 {
     private static List<UserRole> userRoles = new List<UserRole>
     {
-        new UserRole { UserId = Guid.NewGuid(), Role = Role.User },
-        new UserRole { UserId = Guid.NewGuid(), Role = Role.Admin },
+        new UserRole { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
+        new UserRole { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
     };
 
     // GET: api/userroles
@@ -74,7 +74,7 @@ public class UserRolesController : ControllerBase
             return NotFound();
 
         userRole.UserId = updatedUserRole.UserId;
-        userRole.Role = updatedUserRole.Role;
+        userRole.RoleId = updatedUserRole.RoleId;
 
         return NoContent();
     }
