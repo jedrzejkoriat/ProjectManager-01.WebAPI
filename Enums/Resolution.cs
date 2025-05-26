@@ -10,5 +10,6 @@ public enum Resolution
     Incomplete = 5,
     Invalid = 6,
     Done = 7,
-    Cancelled = 8
+    Cancelled = 8,
+    WontDo = 9
 }
