@@ -38,7 +38,6 @@
 
   <ItemGroup>
     <ProjectReference Include="ProjectManager-01.WebAPI.Application\ProjectManager-01.WebAPI.Application.csproj" />
-    <ProjectReference Include="ProjectManager-01.WebAPI.Infrastructure\ProjectManager-01.WebAPI.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
