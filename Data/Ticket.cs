@@ -12,8 +12,10 @@ public sealed class Ticket
     public Status Status { get; set; }
     public Resolution Resolution { get; set; }
     public TicketType TicketType { get; set; }
+    public int TicketNumber { get; set; }
     public string Title { get; set; }
     public string? Description { get; set; }
     public string? Version { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }

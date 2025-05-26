@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Data;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+[EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
 {
     private static List<User> users = new List<User>
         {
-            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", Password = "hashed_password" },
-            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", Password = "hashed_password" }
+            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow },
+            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow }
         };
 
     // GET: api/users
@@ -73,7 +75,8 @@ public class UsersController : ControllerBase
 
         user.UserName = updatedUser.UserName;
         user.Email = updatedUser.Email;
-        user.Password = updatedUser.Password;
+        user.PasswordHash = updatedUser.PasswordHash;
+        user.CreatedAt = updatedUser.CreatedAt;
 
         return NoContent();
     }
