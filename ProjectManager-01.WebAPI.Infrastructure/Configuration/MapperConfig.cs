@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ProjectManager_01.WebAPI.Application.DTOs;
 using ProjectManager_01.WebAPI.Domain.Models;
 
-namespace ProjectManager_01.WebAPI.Application.Configuration;
+namespace ProjectManager_01.WebAPI.Infrastructure.Configuration;
 internal class MapperConfig : Profile
 {
     public MapperConfig()
