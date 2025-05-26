@@ -16,5 +16,6 @@ public sealed class Ticket
     public string Title { get; set; }
     public string? Description { get; set; }
     public string? Version { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }

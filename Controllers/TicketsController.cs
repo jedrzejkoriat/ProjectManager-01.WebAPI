@@ -26,6 +26,7 @@ public class TicketsController : ControllerBase
                 Title = "Sample Ticket",
                 Description = "Description here",
                 Version = "1.0",
+                IsDeleted = false,
                 CreatedAt = DateTime.Now
             }
         };
