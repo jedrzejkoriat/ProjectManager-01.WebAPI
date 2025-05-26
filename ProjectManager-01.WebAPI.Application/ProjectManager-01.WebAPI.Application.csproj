@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectManager-01.WebAPI-Domain\ProjectManager-01.WebAPI.Domain.csproj" />
+    <ProjectReference Include="..\ProjectManager-01.WebAPI-Domain\ProjectManager-01.WebAPI.Domain.csproj" PrivateAssets="all"/>
   </ItemGroup>
 
 </Project>
