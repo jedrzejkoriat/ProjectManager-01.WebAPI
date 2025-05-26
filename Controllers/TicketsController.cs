@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Domain.Models;
-using ProjectManager_01.WebAPI.Domain.Enums;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
