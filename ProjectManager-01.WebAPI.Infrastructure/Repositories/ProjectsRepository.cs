@@ -2,7 +2,7 @@
 using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Infrastructure.Repositories;
-public class ProjectsRepository : IProjectsRepository
+internal sealed class ProjectsRepository : IProjectsRepository
 {
     public ProjectDTO GetProjectDTO()
     {
