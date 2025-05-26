@@ -10,8 +10,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ProjectManager-01.WebAPI-Domain\**" />
+    <Compile Remove="ProjectManager-01.WebAPI.Application\**" />
+    <Compile Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <Content Remove="ProjectManager-01.WebAPI-Domain\**" />
+    <Content Remove="ProjectManager-01.WebAPI.Application\**" />
+    <Content Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <EmbeddedResource Remove="ProjectManager-01.WebAPI-Domain\**" />
+    <EmbeddedResource Remove="ProjectManager-01.WebAPI.Application\**" />
+    <EmbeddedResource Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <None Remove="ProjectManager-01.WebAPI-Domain\**" />
+    <None Remove="ProjectManager-01.WebAPI.Application\**" />
+    <None Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
+    <None Remove="CODEOWNERS" />
     <None Remove="LICENSE.txt" />
     <None Remove="README.md" />
   </ItemGroup>
