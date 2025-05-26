@@ -11,8 +11,8 @@ public class UsersController : ControllerBase
 {
     private static List<User> users = new List<User>
         {
-            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", CreatedAt = DateTimeOffset.UtcNow },
-            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", CreatedAt = DateTimeOffset.UtcNow }
+            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow },
+            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow }
         };
 
     // GET: api/users

@@ -11,8 +11,8 @@ public class ProjectsController : ControllerBase
 {
     private static List<Project> projects = new List<Project>
         {
-            new Project { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", CreatedAt = DateTime.Now },
-            new Project { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", CreatedAt = DateTime.Now}
+            new Project { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", IsDeleted = false, CreatedAt = DateTime.Now },
+            new Project { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", IsDeleted = false, CreatedAt = DateTime.Now}
         };
 
     // GET: api/projects
