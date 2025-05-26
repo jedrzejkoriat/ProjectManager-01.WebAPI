@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class RolesController : ControllerBase
 {
-    private static List<Role> roles = new List<Role>
+    private static List<RoleDTO> roles = new List<RoleDTO>
     {
-        new Role { Id = Guid.NewGuid(), Name = "Admin" },
-        new Role { Id = Guid.NewGuid(), Name = "User" }
+        new RoleDTO { Id = Guid.NewGuid(), Name = "Admin" },
+        new RoleDTO { Id = Guid.NewGuid(), Name = "User" }
     };
 
     // GET: api/roles
@@ -20,7 +21,7 @@ public class RolesController : ControllerBase
     /// </summary>
     /// <returns>All roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Role>> GetRoles()
+    public ActionResult<IEnumerable<RoleDTO>> GetRoles()
     {
         return Ok(roles);
     }
@@ -32,7 +33,7 @@ public class RolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Role> GetRole(Guid id)
+    public ActionResult<RoleDTO> GetRole(Guid id)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 
@@ -49,7 +50,7 @@ public class RolesController : ControllerBase
     /// <param name="role"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Role role)
+    public ActionResult Post([FromBody] RoleDTO role)
     {
         role.Id = Guid.NewGuid();
         roles.Add(role);
@@ -65,7 +66,7 @@ public class RolesController : ControllerBase
     /// <param name="updatedRole"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Role updatedRole)
+    public ActionResult Put(Guid id, [FromBody] RoleDTO updatedRole)
     {
         var role = roles.FirstOrDefault(r => r.Id == id);
 

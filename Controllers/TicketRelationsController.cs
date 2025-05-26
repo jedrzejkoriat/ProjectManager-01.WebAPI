@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class TicketRelationsController : ControllerBase
 {
-    private static List<TicketRelation> ticketRelations = new List<TicketRelation>
+    private static List<TicketRelationDTO> ticketRelations = new List<TicketRelationDTO>
     {
-        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = RelationType.Blocks },
-        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = RelationType.Relates }
+        new TicketRelationDTO { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = 1 },
+        new TicketRelationDTO { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = 1 }
     };
 
     // GET: api/ticketrelations
@@ -20,7 +21,7 @@ public class TicketRelationsController : ControllerBase
     /// </summary>
     /// <returns>All ticket relations</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<TicketRelation>> GetTicketRelations()
+    public ActionResult<IEnumerable<TicketRelationDTO>> GetTicketRelations()
     {
         return Ok(ticketRelations);
     }
@@ -33,9 +34,9 @@ public class TicketRelationsController : ControllerBase
     /// <param name="sourceId"></param>
     /// <returns>Ticket relation by its composite key</returns>
     [HttpGet("{targetId}/{sourceId}")]
-    public ActionResult<TicketRelation> GetTicketRelation(Guid targetId, Guid sourceId)
+    public ActionResult<TicketRelationDTO> GetTicketRelation(Guid targetId, Guid sourceId)
     {
-        TicketRelation ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
+        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
 
         if (ticketRelation == null)
             return NotFound();
@@ -50,7 +51,7 @@ public class TicketRelationsController : ControllerBase
     /// <param name="ticketRelation"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] TicketRelation ticketRelation)
+    public ActionResult Post([FromBody] TicketRelationDTO ticketRelation)
     {
         ticketRelations.Add(ticketRelation);
 
@@ -66,9 +67,9 @@ public class TicketRelationsController : ControllerBase
     /// <param name="updatedTicketRelation"></param>
     /// <returns></returns>
     [HttpPut("{targetId}/{sourceId}")]
-    public ActionResult Put(Guid targetId, Guid sourceId, [FromBody] TicketRelation updatedTicketRelation)
+    public ActionResult Put(Guid targetId, Guid sourceId, [FromBody] TicketRelationDTO updatedTicketRelation)
     {
-        TicketRelation ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
+        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
 
         if (ticketRelation == null)
             return NotFound();
@@ -88,7 +89,7 @@ public class TicketRelationsController : ControllerBase
     [HttpDelete("{targetId}/{sourceId}")]
     public ActionResult Delete(Guid targetId, Guid sourceId)
     {
-        TicketRelation ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
+        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
 
         if (ticketRelation == null)
             return NotFound();

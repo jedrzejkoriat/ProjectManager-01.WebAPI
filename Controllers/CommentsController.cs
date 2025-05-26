@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class CommentsController : ControllerBase
 {
-    private static List<Comment> comments = new List<Comment>
+    private static List<CommentDTO> comments = new List<CommentDTO>
         {
-            new Comment { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
-            new Comment { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
+            new CommentDTO { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
+            new CommentDTO { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
         };
 
     // GET: api/comments
@@ -20,7 +21,7 @@ public class CommentsController : ControllerBase
     /// </summary>
     /// <returns>All comments</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Comment>> GetComments()
+    public ActionResult<IEnumerable<CommentDTO>> GetComments()
     {
         return Ok(comments);
     }
@@ -32,7 +33,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Comment by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Comment> GetComment(Guid id)
+    public ActionResult<CommentDTO> GetComment(Guid id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
@@ -49,7 +50,7 @@ public class CommentsController : ControllerBase
     /// <param name="comment"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Comment comment)
+    public ActionResult Post([FromBody] CommentDTO comment)
     {
         comment.Id = Guid.NewGuid();
         comments.Add(comment);
@@ -65,7 +66,7 @@ public class CommentsController : ControllerBase
     /// <param name="updatedComment"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Comment updatedComment)
+    public ActionResult Put(Guid id, [FromBody] CommentDTO updatedComment)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 

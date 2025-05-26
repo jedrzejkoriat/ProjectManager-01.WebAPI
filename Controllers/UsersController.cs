@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private static List<User> users = new List<User>
+    private static List<UserDTO> users = new List<UserDTO>
         {
-            new User { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow },
-            new User { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow }
+            new UserDTO { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow },
+            new UserDTO { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow }
         };
 
     // GET: api/users
@@ -20,7 +21,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <returns>All urses</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<User>> GetUsers()
+    public ActionResult<IEnumerable<UserDTO>> GetUsers()
     {
         return Ok(users);
     }
@@ -32,7 +33,7 @@ public class UsersController : ControllerBase
     /// <param name="id"></param>
     /// <returns>User by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<User> GetUser(Guid id)
+    public ActionResult<UserDTO> GetUser(Guid id)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
@@ -49,7 +50,7 @@ public class UsersController : ControllerBase
     /// <param name="user"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] User user)
+    public ActionResult Post([FromBody] UserDTO user)
     {
         user.Id = Guid.NewGuid();
         users.Add(user);
@@ -65,7 +66,7 @@ public class UsersController : ControllerBase
     /// <param name="updatedUser"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] User updatedUser)
+    public ActionResult Put(Guid id, [FromBody] UserDTO updatedUser)
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 

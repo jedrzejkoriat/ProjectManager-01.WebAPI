@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class PermissionsController : ControllerBase
 {
-    private static List<Permission> permissions = new List<Permission>
+    private static List<PermissionDTO> permissions = new List<PermissionDTO>
     {
-        new Permission { Id = Guid.NewGuid(), Name = "CreateTicket" },
-        new Permission { Id = Guid.NewGuid(), Name = "EditUser" }
+        new PermissionDTO { Id = Guid.NewGuid(), Name = "CreateTicket" },
+        new PermissionDTO { Id = Guid.NewGuid(), Name = "EditUser" }
     };
 
     // GET: api/permissions
@@ -20,7 +21,7 @@ public class PermissionsController : ControllerBase
     /// </summary>
     /// <returns>All permissions</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Permission>> GetPermissions()
+    public ActionResult<IEnumerable<PermissionDTO>> GetPermissions()
     {
         return Ok(permissions);
     }
@@ -32,7 +33,7 @@ public class PermissionsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Permission by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Permission> GetPermission(Guid id)
+    public ActionResult<PermissionDTO> GetPermission(Guid id)
     {
         var permission = permissions.FirstOrDefault(p => p.Id == id);
 
@@ -49,7 +50,7 @@ public class PermissionsController : ControllerBase
     /// <param name="permission"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Permission permission)
+    public ActionResult Post([FromBody] PermissionDTO permission)
     {
         permission.Id = Guid.NewGuid();
         permissions.Add(permission);
@@ -65,7 +66,7 @@ public class PermissionsController : ControllerBase
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Permission updatedPermission)
+    public ActionResult Put(Guid id, [FromBody] PermissionDTO updatedPermission)
     {
         var permission = permissions.FirstOrDefault(p => p.Id == id);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class UserRolesController : ControllerBase
 {
-    private static List<UserRole> userRoles = new List<UserRole>
+    private static List<UserRoleDTO> userRoles = new List<UserRoleDTO>
     {
-        new UserRole { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
-        new UserRole { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
+        new UserRoleDTO { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
+        new UserRoleDTO { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
     };
 
     // GET: api/userroles
@@ -20,7 +21,7 @@ public class UserRolesController : ControllerBase
     /// </summary>
     /// <returns>All user roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<UserRole>> GetUserRoles()
+    public ActionResult<IEnumerable<UserRoleDTO>> GetUserRoles()
     {
         return Ok(userRoles);
     }
@@ -32,7 +33,7 @@ public class UserRolesController : ControllerBase
     /// <param name="userId"></param>
     /// <returns>User role by user id</returns>
     [HttpGet("{userId}")]
-    public ActionResult<UserRole> GetUserRole(Guid userId)
+    public ActionResult<UserRoleDTO> GetUserRole(Guid userId)
     {
         var userRole = userRoles.FirstOrDefault(ur => ur.UserId == userId);
 
@@ -49,7 +50,7 @@ public class UserRolesController : ControllerBase
     /// <param name="userRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] UserRole userRole)
+    public ActionResult Post([FromBody] UserRoleDTO userRole)
     {
         userRoles.Add(userRole);
 
@@ -64,7 +65,7 @@ public class UserRolesController : ControllerBase
     /// <param name="updatedUserRole"></param>
     /// <returns></returns>
     [HttpPut("{userId}")]
-    public ActionResult Put(Guid userId, [FromBody] UserRole updatedUserRole)
+    public ActionResult Put(Guid userId, [FromBody] UserRoleDTO updatedUserRole)
     {
         var userRole = userRoles.FirstOrDefault(ur => ur.UserId == userId);
 

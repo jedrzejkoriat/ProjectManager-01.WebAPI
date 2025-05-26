@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -9,10 +10,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class ProjectRolesController : ControllerBase
 {
-    private static List<ProjectRole> projectRoles = new List<ProjectRole>
+    private static List<ProjectRoleDTO> projectRoles = new List<ProjectRoleDTO>
         {
-            new ProjectRole { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "Admin" },
-            new ProjectRole { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "User" }
+            new ProjectRoleDTO { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "Admin" },
+            new ProjectRoleDTO { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "User" }
         };
 
     // GET: api/roles
@@ -21,7 +22,7 @@ public class ProjectRolesController : ControllerBase
     /// </summary>
     /// <returns>All project roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectRole>> GetProjectRoles()
+    public ActionResult<IEnumerable<ProjectRoleDTO>> GetProjectRoles()
     {
         return Ok(projectRoles);
     }
@@ -33,7 +34,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectRole> GetProjectRole(Guid id)
+    public ActionResult<ProjectRoleDTO> GetProjectRole(Guid id)
     {
         var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
@@ -50,7 +51,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="role"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectRole projectRole)
+    public ActionResult Post([FromBody] ProjectRoleDTO projectRole)
     {
         projectRole.Id = Guid.NewGuid();
         projectRoles.Add(projectRole);
@@ -66,7 +67,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="updatedProjectRole"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] ProjectRole updatedProjectRole)
+    public ActionResult Put(Guid id, [FromBody] ProjectRoleDTO updatedProjectRole)
     {
         var role = projectRoles.FirstOrDefault(r => r.Id == id);
 

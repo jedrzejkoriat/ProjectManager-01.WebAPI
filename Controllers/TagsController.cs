@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -9,10 +10,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class TagsController : ControllerBase
 {
-    private static List<Tag> tags = new List<Tag>
+    private static List<TagDTO> tags = new List<TagDTO>
         {
-            new Tag { Id = Guid.NewGuid(), Name = "Bug" },
-            new Tag { Id = Guid.NewGuid(), Name = "Feature" }
+            new TagDTO { Id = Guid.NewGuid(), Name = "Bug" },
+            new TagDTO { Id = Guid.NewGuid(), Name = "Feature" }
         };
 
     // GET: api/tags
@@ -21,7 +22,7 @@ public class TagsController : ControllerBase
     /// </summary>
     /// <returns>All tags</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Tag>> GetTags()
+    public ActionResult<IEnumerable<TagDTO>> GetTags()
     {
         return Ok(tags);
     }
@@ -33,7 +34,7 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<Tag> GetTag(Guid id)
+    public ActionResult<TagDTO> GetTag(Guid id)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
@@ -50,7 +51,7 @@ public class TagsController : ControllerBase
     /// <param name="tag"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Tag tag)
+    public ActionResult Post([FromBody] TagDTO tag)
     {
         tag.Id = Guid.NewGuid();
         tags.Add(tag);
@@ -66,7 +67,7 @@ public class TagsController : ControllerBase
     /// <param name="updatedTag"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Tag updatedTag)
+    public ActionResult Put(Guid id, [FromBody] TagDTO updatedTag)
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase
 {
-    private static List<ProjectRolePermission> projectRolePermissions = new List<ProjectRolePermission>
+    private static List<ProjectRolePermissionDTO> projectRolePermissions = new List<ProjectRolePermissionDTO>
     {
-        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
-        new ProjectRolePermission { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
+        new ProjectRolePermissionDTO { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
+        new ProjectRolePermissionDTO { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
     };
 
     // GET: api/projectrolepermissions
@@ -20,7 +21,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// </summary>
     /// <returns>All project role permissions</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectRolePermission>> GetProjectRolePermissions()
+    public ActionResult<IEnumerable<ProjectRolePermissionDTO>> GetProjectRolePermissions()
     {
         return Ok(projectRolePermissions);
     }
@@ -33,7 +34,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="permissionId"></param>
     /// <returns>Project role permission by its project role id and permission id</returns>
     [HttpGet("{projectRoleId}/{permissionId}")]
-    public ActionResult<ProjectRolePermission> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
+    public ActionResult<ProjectRolePermissionDTO> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
         var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
 
@@ -50,7 +51,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="projectRolePermission"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectRolePermission projectRolePermission)
+    public ActionResult Post([FromBody] ProjectRolePermissionDTO projectRolePermission)
     {
         projectRolePermissions.Add(projectRolePermission);
 
@@ -66,7 +67,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
     [HttpPut("{projectRoleId}/{permissionId}")]
-    public ActionResult Put(Guid projectRoleId, Guid permissionId, [FromBody] ProjectRolePermission updatedPermission)
+    public ActionResult Put(Guid projectRoleId, Guid permissionId, [FromBody] ProjectRolePermissionDTO updatedPermission)
     {
         var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
 

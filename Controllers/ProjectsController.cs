@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class ProjectsController : ControllerBase
 {
-    private static List<Project> projects = new List<Project>
+    private static List<ProjectDTO> projects = new List<ProjectDTO>
         {
-            new Project { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", IsDeleted = false, CreatedAt = DateTime.Now },
-            new Project { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", IsDeleted = false, CreatedAt = DateTime.Now}
+            new ProjectDTO { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", IsDeleted = false, CreatedAt = DateTime.Now },
+            new ProjectDTO { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", IsDeleted = false, CreatedAt = DateTime.Now}
         };
 
     // GET: api/projects
@@ -20,7 +21,7 @@ public class ProjectsController : ControllerBase
     /// </summary>
     /// <returns>All projects</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Project>> GetProjects()
+    public ActionResult<IEnumerable<ProjectDTO>> GetProjects()
     {
         return Ok(projects);
     }
@@ -32,9 +33,9 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Project> GetProject(Guid id)
+    public ActionResult<ProjectDTO> GetProject(Guid id)
     {
-        Project project = projects.FirstOrDefault(p => p.Id == id);
+        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
         if (project == null) 
             return NotFound();
@@ -49,7 +50,7 @@ public class ProjectsController : ControllerBase
     /// <param name="project"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Project project)
+    public ActionResult Post([FromBody] ProjectDTO project)
     {
         project.Id = Guid.NewGuid();
         projects.Add(project);
@@ -65,9 +66,9 @@ public class ProjectsController : ControllerBase
     /// <param name="updatedProject"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Project updatedProject)
+    public ActionResult Put(Guid id, [FromBody] ProjectDTO updatedProject)
     {
-        Project project = projects.FirstOrDefault(p => p.Id == id);
+        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
         if (project == null) 
             return NotFound();
@@ -88,7 +89,7 @@ public class ProjectsController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(Guid id)
     {
-        Project project = projects.FirstOrDefault(p => p.Id == id);
+        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
         if (project == null) 
             return NotFound();

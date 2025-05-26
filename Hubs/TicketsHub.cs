@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Hubs;
 
@@ -8,7 +9,7 @@ public class TicketsHub : Hub
     {
         if (Guid.TryParse(id, out var guid))
         {
-            var ticket = new Ticket { Id = guid }; //await ticketsRepository.GetAsync(guid);
+            var ticket = new TicketDTO { Id = guid }; //await ticketsRepository.GetAsync(guid);
             await Clients.Caller.SendAsync("ReceiveTicket", ticket);
         }
         else

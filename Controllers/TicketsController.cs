@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,18 +9,18 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class TicketsController : ControllerBase
 {
-    private static List<Ticket> tickets = new List<Ticket>
+    private static List<TicketDTO> tickets = new List<TicketDTO>
         {
-            new Ticket
+            new TicketDTO
             {
                 Id = Guid.NewGuid(),
                 ProjectId = Guid.NewGuid(),
                 PriorityId = Guid.NewGuid(),
                 AssigneeId = null,
                 ReporterId = Guid.NewGuid(),
-                Resolution = Resolution.Unresolved,
-                Status = Status.Open,
-                TicketType = TicketType.Bug,
+                Resolution = 1,
+                Status = 1,
+                TicketType = 1,
                 TicketNumber = 231,
                 Title = "Sample Ticket",
                 Description = "Description here",
@@ -35,7 +36,7 @@ public class TicketsController : ControllerBase
     /// </summary>
     /// <returns>All tickets</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Ticket>> GetTickets()
+    public ActionResult<IEnumerable<TicketDTO>> GetTickets()
     {
         return Ok(tickets);
     }
@@ -47,7 +48,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Ticket by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<Ticket> GetTicket(Guid id)
+    public ActionResult<TicketDTO> GetTicket(Guid id)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
@@ -64,7 +65,7 @@ public class TicketsController : ControllerBase
     /// <param name="ticket"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] Ticket ticket)
+    public ActionResult Post([FromBody] TicketDTO ticket)
     {
         ticket.Id = Guid.NewGuid();
         tickets.Add(ticket);
@@ -80,7 +81,7 @@ public class TicketsController : ControllerBase
     /// <param name="updatedTicket"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] Ticket updatedTicket)
+    public ActionResult Put(Guid id, [FromBody] TicketDTO updatedTicket)
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 namespace ProjectManager_01.WebAPI.Controllers;
 
 [EnableRateLimiting("fixedlimit")]
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class ProjectUserRolesController : ControllerBase
 {
-    private static List<ProjectUserRole> projectMembers = new List<ProjectUserRole>
+    private static List<ProjectUserRoleDTO> projectMembers = new List<ProjectUserRoleDTO>
         {
-            new ProjectUserRole { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() },
-            new ProjectUserRole { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() }
+            new ProjectUserRoleDTO { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() },
+            new ProjectUserRoleDTO { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() }
         };
 
     // GET api/projectmembers
@@ -20,7 +21,7 @@ public class ProjectUserRolesController : ControllerBase
     /// </summary>
     /// <returns>All project members</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectUserRole>> GetProjectMembers()
+    public ActionResult<IEnumerable<ProjectUserRoleDTO>> GetProjectMembers()
     {
         return Ok(projectMembers);
     }
@@ -32,7 +33,7 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project member by id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectUserRole> GetProjectMember(Guid id)
+    public ActionResult<ProjectUserRoleDTO> GetProjectMember(Guid id)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
@@ -49,7 +50,7 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="projectMember"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectUserRole projectMember)
+    public ActionResult Post([FromBody] ProjectUserRoleDTO projectMember)
     {
         projectMember.Id = Guid.NewGuid();
         projectMembers.Add(projectMember);
@@ -65,7 +66,7 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="updatedProjectMember"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] ProjectUserRole updatedProjectMember)
+    public ActionResult Put(Guid id, [FromBody] ProjectUserRoleDTO updatedProjectMember)
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 

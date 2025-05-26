@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -8,10 +9,10 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class TicketTagsController : ControllerBase
 {
-    private static List<TicketTag> ticketTags = new List<TicketTag>
+    private static List<TicketTagDTO> ticketTags = new List<TicketTagDTO>
     {
-        new TicketTag { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
-        new TicketTag { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
+        new TicketTagDTO { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
+        new TicketTagDTO { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
     };
 
     // GET: api/tickettags
@@ -20,7 +21,7 @@ public class TicketTagsController : ControllerBase
     /// </summary>
     /// <returns>All ticket tags</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<TicketTag>> GetTicketTags()
+    public ActionResult<IEnumerable<TicketTagDTO>> GetTicketTags()
     {
         return Ok(ticketTags);
     }
@@ -33,7 +34,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns>Ticket tag by its ticket id and tag id</returns>
     [HttpGet("{ticketId}/{tagId}")]
-    public ActionResult<TicketTag> GetTicketTag(Guid ticketId, Guid tagId)
+    public ActionResult<TicketTagDTO> GetTicketTag(Guid ticketId, Guid tagId)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
@@ -50,7 +51,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="ticketTag"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] TicketTag ticketTag)
+    public ActionResult Post([FromBody] TicketTagDTO ticketTag)
     {
         ticketTags.Add(ticketTag);
 
@@ -66,7 +67,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="updatedTicketTag"></param>
     /// <returns></returns>
     [HttpPut("{ticketId}/{tagId}")]
-    public ActionResult Put(Guid ticketId, Guid tagId, [FromBody] TicketTag updatedTicketTag)
+    public ActionResult Put(Guid ticketId, Guid tagId, [FromBody] TicketTagDTO updatedTicketTag)
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
