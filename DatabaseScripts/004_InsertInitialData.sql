@@ -1,5 +1,4 @@
 USE ProjectManagerDB;
-GO
 
 INSERT INTO Permissions (Id, Name) VALUES
 ('d2f6a7ce-15e3-45df-9a2a-7b1eec0042a3', 'Comment'),

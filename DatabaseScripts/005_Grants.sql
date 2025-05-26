@@ -1,5 +1,4 @@
 USE ProjectManagerDB;
-GO
 
 DENY INSERT, UPDATE, DELETE ON Permissions TO PUBLIC;
 GRANT SELECT ON Permissions TO PUBLIC;

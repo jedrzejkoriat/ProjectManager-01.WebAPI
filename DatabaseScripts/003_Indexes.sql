@@ -1,5 +1,4 @@
 USE ProjectManagerDB;
-GO
 
 CREATE INDEX IX_Comments_TicketId ON Comments(TicketId);
 CREATE INDEX IX_ProjectRoles_ProjectId ON ProjectRoles(ProjectId);
