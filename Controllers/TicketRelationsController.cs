@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Data;
+using ProjectManager_01.WebAPI.Domain.Models;
+using ProjectManager_01.WebAPI.Domain.Enums;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -11,8 +12,8 @@ public class TicketRelationsController : ControllerBase
 {
     private static List<TicketRelation> ticketRelations = new List<TicketRelation>
     {
-        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Blocks },
-        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = Enums.RelationType.Relates }
+        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = RelationType.Blocks },
+        new TicketRelation { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = RelationType.Relates }
     };
 
     // GET: api/ticketrelations

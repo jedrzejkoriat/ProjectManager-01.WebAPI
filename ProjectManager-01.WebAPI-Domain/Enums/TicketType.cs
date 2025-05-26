@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Enums;
+﻿namespace ProjectManager_01.WebAPI.Domain.Enums;
 
 public enum TicketType
 {

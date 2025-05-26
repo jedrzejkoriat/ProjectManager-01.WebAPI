@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Data;
+﻿namespace ProjectManager_01.WebAPI.Domain.Models;
 
 public sealed class Comment
 {

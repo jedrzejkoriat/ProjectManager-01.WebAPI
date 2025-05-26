@@ -1,6 +1,6 @@
-﻿namespace ProjectManager_01.WebAPI.Data;
+﻿namespace ProjectManager_01.WebAPI.Domain.Models;
 
-public sealed class ProjectRole
+public sealed class Tag
 {
     public Guid Id { get; set; }
     public Guid ProjectId { get; set; }

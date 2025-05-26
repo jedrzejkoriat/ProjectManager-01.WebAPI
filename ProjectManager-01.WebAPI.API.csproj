@@ -10,15 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DatabaseScripts\**" />
     <Compile Remove="ProjectManager-01.WebAPI-Domain\**" />
     <Compile Remove="ProjectManager-01.WebAPI.Application\**" />
     <Compile Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <Content Remove="DatabaseScripts\**" />
     <Content Remove="ProjectManager-01.WebAPI-Domain\**" />
     <Content Remove="ProjectManager-01.WebAPI.Application\**" />
     <Content Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <EmbeddedResource Remove="DatabaseScripts\**" />
     <EmbeddedResource Remove="ProjectManager-01.WebAPI-Domain\**" />
     <EmbeddedResource Remove="ProjectManager-01.WebAPI.Application\**" />
     <EmbeddedResource Remove="ProjectManager-01.WebAPI.Infrastructure\**" />
+    <None Remove="DatabaseScripts\**" />
     <None Remove="ProjectManager-01.WebAPI-Domain\**" />
     <None Remove="ProjectManager-01.WebAPI.Application\**" />
     <None Remove="ProjectManager-01.WebAPI.Infrastructure\**" />

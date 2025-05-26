@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Data;
+using ProjectManager_01.WebAPI.Domain.Models;
+using ProjectManager_01.WebAPI.Domain.Enums;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -19,9 +19,9 @@ public class TicketsController : ControllerBase
                 PriorityId = Guid.NewGuid(),
                 AssigneeId = null,
                 ReporterId = Guid.NewGuid(),
-                Resolution = Enums.Resolution.Unresolved,
-                Status = Enums.Status.Open,
-                TicketType = Enums.TicketType.Bug,
+                Resolution = Resolution.Unresolved,
+                Status = Status.Open,
+                TicketType = TicketType.Bug,
                 TicketNumber = 231,
                 Title = "Sample Ticket",
                 Description = "Description here",

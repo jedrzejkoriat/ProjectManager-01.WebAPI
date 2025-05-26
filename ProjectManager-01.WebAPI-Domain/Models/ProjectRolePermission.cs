@@ -1,6 +1,4 @@
-﻿using ProjectManager_01.WebAPI.Enums;
-
-namespace ProjectManager_01.WebAPI.Data;
+﻿namespace ProjectManager_01.WebAPI.Domain.Models;
 
 public sealed class ProjectRolePermission
 {
