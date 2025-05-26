@@ -25,6 +25,8 @@ CREATE UNIQUE INDEX IX_Projects_Key ON Projects([Key]);
 CREATE UNIQUE INDEX IX_Users_UserName ON Users(UserName);
 CREATE UNIQUE INDEX IX_Users_Email ON Users(Email);
 CREATE UNIQUE INDEX IX_UserRoles_UserId ON UserRoles(UserId);
+CREATE UNIQUE INDEX IX_Roles_Name ON Roles(Name);
+CREATE UNIQUE INDEX IX_Permissions_Name ON Permissions(Name);
 
 CREATE UNIQUE INDEX IX_ProjectRoles_ProjectId_Name ON ProjectRoles(ProjectId, Name);
 CREATE UNIQUE INDEX IX_ProjectUserRoles_ProjectId_ProjectRoleId_UserId ON ProjectUserRoles(ProjectId, ProjectRoleId, UserId);
