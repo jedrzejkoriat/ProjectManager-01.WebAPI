@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.WebAPI.Hubs;
+using ProjectManager_01.WebAPI.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddRateLimiter(options =>
         opt.PermitLimit = 500;
     });
 });
+
+builder.Services.AddInfrastructure();
 
 builder.Services.AddSignalR();
 

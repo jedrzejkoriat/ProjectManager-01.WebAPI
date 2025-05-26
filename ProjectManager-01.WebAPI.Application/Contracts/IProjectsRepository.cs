@@ -8,5 +8,5 @@ using ProjectManager_01.WebAPI.Application.DTOs;
 namespace ProjectManager_01.WebAPI.Application.Contracts;
 public interface IProjectsRepository
 {
-    ProjectDTO GetProjectDTO(ProjectDTO projectDTO);
+    ProjectDTO GetProjectDTO();
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.WebAPI.Application.Contracts;
 using ProjectManager_01.WebAPI.Application.DTOs;
 
 namespace ProjectManager_01.WebAPI.Controllers;
@@ -9,6 +11,12 @@ namespace ProjectManager_01.WebAPI.Controllers;
 [ApiController]
 public class ProjectsController : ControllerBase
 {
+    private readonly IProjectsRepository projectsRepository;
+    public ProjectsController(IProjectsRepository projectsRepository)
+    {
+        this.projectsRepository = projectsRepository;
+    }
+
     private static List<ProjectDTO> projects = new List<ProjectDTO>
         {
             new ProjectDTO { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", IsDeleted = false, CreatedAt = DateTime.Now },
@@ -23,7 +31,7 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<ProjectDTO>> GetProjects()
     {
-        return Ok(projects);
+        return Ok(projectsRepository.GetProjectDTO());
     }
 
     // GET api/projects
