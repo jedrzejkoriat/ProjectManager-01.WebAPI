@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Domain.Models;
+﻿namespace ProjectManager_01.Domain.Models;
 
 public sealed class Project
 {

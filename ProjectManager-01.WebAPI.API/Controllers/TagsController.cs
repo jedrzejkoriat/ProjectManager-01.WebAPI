@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Application.DTOs;
+using ProjectManager_01.API.DTOs;
 
-namespace ProjectManager_01.WebAPI.Controllers;
+namespace ProjectManager_01.Controllers;
 
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]

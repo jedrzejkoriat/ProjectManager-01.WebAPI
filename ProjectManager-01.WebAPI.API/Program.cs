@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Hubs;
-using ProjectManager_01.WebAPI.Infrastructure.Configuration;
+using ProjectManager_01.Hubs;
+using ProjectManager_01.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

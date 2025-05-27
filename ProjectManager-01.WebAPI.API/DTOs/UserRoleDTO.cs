@@ -1,6 +1,4 @@
-﻿using ProjectManager_01.WebAPI.Domain.Enums;
-
-namespace ProjectManager_01.WebAPI.Application.DTOs;
+﻿namespace ProjectManager_01.API.DTOs;
 
 public sealed class UserRoleDTO
 {

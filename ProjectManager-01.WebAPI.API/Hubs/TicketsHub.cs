@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ProjectManager_01.WebAPI.Application.DTOs;
+using ProjectManager_01.API.DTOs;
 
-namespace ProjectManager_01.WebAPI.Hubs;
+namespace ProjectManager_01.Hubs;
 
 public class TicketsHub : Hub
 {

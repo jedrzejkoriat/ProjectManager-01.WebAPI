@@ -27,17 +27,18 @@ git clone https://github.com/jedrzejkoriat/ProjectManager-02.DatabaseSetup.git
 ```bash
 cd ProjectManager-02.DatabaseSetup
 dotnet run
+cd ..
 ```
 
 4. **Clone the main project repository**
 
 ```bash
 git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
-cd ProjectManager-01.WebAPI
 ```
 
 5. **Run the application**
 
 ```bash
+cd ProjectManager-01.WebAPI
 dotnet run
 ```

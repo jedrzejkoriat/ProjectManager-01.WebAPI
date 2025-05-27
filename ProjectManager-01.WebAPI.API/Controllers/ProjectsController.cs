@@ -1,20 +1,17 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.WebAPI.Application.Contracts;
-using ProjectManager_01.WebAPI.Application.DTOs;
+using ProjectManager_01.API.DTOs;
 
-namespace ProjectManager_01.WebAPI.Controllers;
+namespace ProjectManager_01.Controllers;
 
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
 public class ProjectsController : ControllerBase
 {
-    private readonly IProjectsRepository projectsRepository;
-    public ProjectsController(IProjectsRepository projectsRepository)
+    public ProjectsController()
     {
-        this.projectsRepository = projectsRepository;
     }
 
     private static List<ProjectDTO> projects = new List<ProjectDTO>
@@ -31,7 +28,7 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<ProjectDTO>> GetProjects()
     {
-        return Ok(projectsRepository.GetProjectDTO());
+        return Ok(projects);
     }
 
     // GET api/projects

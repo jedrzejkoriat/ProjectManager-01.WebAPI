@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Domain.Enums;
+﻿namespace ProjectManager_01.Domain.Enums;
 
 public enum Resolution
 {

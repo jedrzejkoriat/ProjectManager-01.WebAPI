@@ -1,6 +1,6 @@
-﻿using ProjectManager_01.WebAPI.Domain.Enums;
+﻿using ProjectManager_01.Domain.Enums;
 
-namespace ProjectManager_01.WebAPI.Domain.Models;
+namespace ProjectManager_01.Domain.Models;
 
 public sealed class TicketRelation
 {

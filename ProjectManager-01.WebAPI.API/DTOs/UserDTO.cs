@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.WebAPI.Application.DTOs;
+﻿namespace ProjectManager_01.API.DTOs;
 
 public sealed class UserDTO
 {
