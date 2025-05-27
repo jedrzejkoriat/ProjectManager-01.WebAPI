@@ -23,8 +23,6 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-builder.Services.AddInfrastructure();
-
 builder.Services.AddSignalR();
 
 var app = builder.Build();
