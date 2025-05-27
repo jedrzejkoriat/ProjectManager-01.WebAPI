@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager-01.WebAPI.API", "ProjectManager-01.WebAPI.API.csproj", "{08E713E0-B7FE-47FC-87E9-044A78683D63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager-01.WebAPI.API", "ProjectManager-01.WebAPI.API\ProjectManager-01.WebAPI.API.csproj", "{08E713E0-B7FE-47FC-87E9-044A78683D63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManager-01.WebAPI.Domain", "ProjectManager-01.WebAPI-Domain\ProjectManager-01.WebAPI.Domain.csproj", "{1C74ACAC-0A9A-4B30-BCB7-928633307762}"
 EndProject
