@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectManager-01.WebAPI.Application\ProjectManager-01.WebAPI.Application.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\ProjectManager-01.WebAPI.Infrastructure\ProjectManager-01.WebAPI.Infrastructure.csproj" PrivateAssets="all"  />
+    <ProjectReference Include="..\ProjectManager-01.WebAPI.Application\ProjectManager-01.Application.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ProjectManager-01.WebAPI.Infrastructure\ProjectManager-01.Infrastructure.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

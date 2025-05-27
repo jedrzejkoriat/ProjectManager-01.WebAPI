@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectManager-01.WebAPI-Domain\ProjectManager-01.WebAPI.Domain.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ProjectManager-01.WebAPI.Domain\ProjectManager-01.Domain.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
