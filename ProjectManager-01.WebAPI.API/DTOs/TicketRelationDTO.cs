@@ -1,0 +1,9 @@
+﻿namespace ProjectManager_01.API.DTOs;
+
+public sealed class TicketRelationDTO
+{
+    public Guid Id { get; set; }
+    public Guid SourceId { get; set; }
+    public Guid TargetId { get; set; }
+    public int RelationType { get; set; }
+}

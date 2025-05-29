@@ -12,47 +12,33 @@ The purpose of the ProjectManager application is to help manage projects in an o
 
 ---
 
-### 1. Initial Database Setup (preferred)
+### Steps
 
 1. **Clone the database setup repository**
+
 ```bash
 git clone https://github.com/jedrzejkoriat/ProjectManager-02.DatabaseSetup.git
-cd ProjectManager-02.DatabaseSetup
 ```
 
 2. **Add your database server name in Program.cs of ProjectManager-02.DatabaseSetup**
 
 3. **Run the application**
+
 ```bash
+cd ProjectManager-02.DatabaseSetup
 dotnet run
+cd ..
 ```
 
----
-
-### 1. Initial Database Setup (optional)
-
-1. **Clone the project repository**
+4. **Clone the main project repository**
 
 ```bash
 git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
-cd ProjectManager-01.WebAPI
 ```
 
-2. **Open SSMS and run all scripts from DatabaseScripts folder in ascending order**
-
----
-
-### 2. Run the application
-
-1. **Clone the project repository (if not done during Initial Database Setup)**
+5. **Run the application**
 
 ```bash
-git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
 cd ProjectManager-01.WebAPI
-```
-
-2. **Run the application**
-
-```bash
 dotnet run
 ```
