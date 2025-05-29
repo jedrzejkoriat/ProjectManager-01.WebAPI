@@ -25,6 +25,8 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddSignalR();
 
+builder.Services.AddRepositories();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
