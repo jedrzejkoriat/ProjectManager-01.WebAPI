@@ -14,22 +14,12 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteAsync(Guid id)
+    public Task<bool> DeleteAsync(Guid id1, Guid id2)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<ProjectRolePermission>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProjectRolePermission> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> UpdateAsync(ProjectRolePermission entity)
+    public Task<List<ProjectRolePermission>> GetByProjectRoleIdAsync(Guid projectRoleId)
     {
         throw new NotImplementedException();
     }

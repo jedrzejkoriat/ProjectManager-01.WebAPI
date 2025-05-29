@@ -14,22 +14,12 @@ internal class UserRoleRepository : IUserRoleRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteAsync(Guid id)
+    public Task<bool> DeleteAsync(Guid id1, Guid id2)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<UserRole>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UserRole> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> UpdateAsync(UserRole entity)
+    public Task<UserRole> GetByUserIdAsync(Guid userId)
     {
         throw new NotImplementedException();
     }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectManager_01.Application.Contracts.Repositories.Base;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface IProjectRolePermissionRepository : IGenericRepository<ProjectRolePermission>
+public interface IProjectRolePermissionRepository : ICreateable<ProjectRolePermission>, ICompositeDeletable
 {
+    Task<List<ProjectRolePermission>> GetByProjectRoleIdAsync(Guid projectRoleId);
 }

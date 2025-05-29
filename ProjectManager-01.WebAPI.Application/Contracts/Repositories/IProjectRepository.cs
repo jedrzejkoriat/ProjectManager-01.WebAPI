@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectManager_01.Application.Contracts.Repositories.Base;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface IProjectRepository : IGenericRepository<Project>
+public interface IProjectRepository : ICreateable<Project>, IUpdateable<Project>, ISoftDeletable
 {
     Task<Project> GetByIdAsync(Guid id);
-    Task<List<Project>> GetAllAsync();
-    Task<Guid> CreateAsync(Project project);
-    Task<bool> UpdateAsync(Project project);
+    Task<List<Project>> GetByUserIdAsync(Guid userId);
 }

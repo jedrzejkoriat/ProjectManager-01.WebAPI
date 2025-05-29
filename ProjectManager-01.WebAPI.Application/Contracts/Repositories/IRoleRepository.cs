@@ -9,5 +9,4 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 public interface IRoleRepository
 {
     Task<Role> GetByIdAsync(Guid id);
-    Task<List<Role>> GetAllAsync();
 }

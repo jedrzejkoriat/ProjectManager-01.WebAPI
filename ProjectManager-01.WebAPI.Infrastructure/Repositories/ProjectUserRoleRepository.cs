@@ -19,12 +19,17 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<ProjectUserRole>> GetAllAsync()
+    public Task<ProjectUserRole> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ProjectUserRole> GetByIdAsync(Guid id)
+    public Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<ProjectUserRole>> GetByUserIdAsync(Guid userId)
     {
         throw new NotImplementedException();
     }

@@ -9,17 +9,7 @@ using ProjectManager_01.Domain.Models;
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class ProjectRepository : IProjectRepository
 {
-    public Task<Guid> CreateAsync(Project project)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DeleteAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Project>> GetAllAsync()
+    public Task<Guid> CreateAsync(Project entity)
     {
         throw new NotImplementedException();
     }
@@ -29,7 +19,17 @@ internal class ProjectRepository : IProjectRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateAsync(Project project)
+    public Task<List<Project>> GetByUserIdAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> SoftDeleteAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UpdateAsync(Project entity)
     {
         throw new NotImplementedException();
     }

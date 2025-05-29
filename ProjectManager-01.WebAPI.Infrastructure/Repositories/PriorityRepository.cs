@@ -13,9 +13,4 @@ internal class PriorityRepository : IPriorityRepository
     {
         throw new NotImplementedException();
     }
-
-    public Task<Priority> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
 }

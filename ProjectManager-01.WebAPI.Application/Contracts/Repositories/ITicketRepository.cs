@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectManager_01.Application.Contracts.Repositories.Base;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface ITicketRepository
+public interface ITicketRepository : ICreateable<Ticket>, IUpdateable<Ticket>, ISoftDeletable
 {
+    Task<List<Ticket>> GetByProjectIdAsync(Guid projectId);
+    Task<Ticket> GetByKeyAndNumberAsync(string key, int number);
     Task<Ticket> GetByIdAsync(Guid id);
-    Task<List<Ticket>> GetAllAsync();
-    Task<Guid> CreateAsync(Ticket ticket);
-    Task<bool> UpdateAsync(Ticket ticket);
 }

@@ -19,12 +19,7 @@ internal class CommentRepository : ICommentRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Comment>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Comment> GetByIdAsync(Guid id)
+    public Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
     {
         throw new NotImplementedException();
     }
