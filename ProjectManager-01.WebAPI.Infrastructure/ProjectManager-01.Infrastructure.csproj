@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProjectManager-01.WebAPI.Application\ProjectManager-01.Application.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\ProjectManager-01.WebAPI.Domain\ProjectManager-01.Domain.csproj" PrivateAssets="all" />
   </ItemGroup>

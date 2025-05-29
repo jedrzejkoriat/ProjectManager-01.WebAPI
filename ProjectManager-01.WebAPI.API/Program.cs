@@ -1,8 +1,16 @@
+using System.Data;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Data.SqlClient;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IDbConnection>(sp =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    return new SqlConnection(connectionString);
+});
 
 builder.Services.AddControllers();
 
