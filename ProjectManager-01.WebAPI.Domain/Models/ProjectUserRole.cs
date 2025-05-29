@@ -5,5 +5,7 @@ public sealed class ProjectUserRole
     public Guid Id { get; set; }
     public Guid ProjectId { get; set; }
     public Guid ProjectRoleId { get; set; }
+    public ProjectRole ProjectRole { get; set; }
     public Guid UserId { get; set; }
+    public User User { get; set; }
 }

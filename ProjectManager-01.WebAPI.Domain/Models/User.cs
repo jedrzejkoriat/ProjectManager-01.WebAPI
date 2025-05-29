@@ -8,4 +8,6 @@ public sealed class User
     public string PasswordHash { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    public UserRole UserRole { get; set; }
+    public ProjectUserRole ProjectUserRole { get; set; }
 }
