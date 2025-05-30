@@ -10,5 +10,4 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 public interface IProjectRepository : ICreateable<Project>, IUpdateable<Project>, ISoftDeletable
 {
     Task<Project> GetByIdAsync(Guid id);
-    Task<List<Project>> GetByUserIdAsync(Guid userId);
 }

@@ -1,36 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class ProjectRepository : IProjectRepository
 {
-    public Task<Guid> CreateAsync(Project entity)
+    private readonly IDbConnection dbConnection;
+
+    public ProjectRepository(IDbConnection dbConnection)
     {
-        throw new NotImplementedException();
+        this.dbConnection = dbConnection;
+    }
+    public async Task<Guid> CreateAsync(Project project)
+    {
+        var sql = @"INSERT INTO Projects(Id, Name, Key, CreatedAt, IsDeleted)
+                    VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted";
+
+        project.Id = Guid.NewGuid();
+        project.CreatedAt = DateTime.Now;
+
+        var result = await dbConnection.ExecuteAsync(sql, project);
+
+        if (result > 0)
+            return project.Id;
+        else
+            throw new Exception("Insert to projects table failed.");
+
     }
 
-    public Task<Project> GetByIdAsync(Guid id)
+    public async Task<Project> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var sql = @"SELECT * FROM Projects WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
+
+        return result;
     }
 
-    public Task<List<Project>> GetByUserIdAsync(Guid userId)
+    public async Task<bool> SoftDeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var sql = @"UPDATE Projects
+                    SET IsDeleted = 1
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql , new { Id = id });
+
+        return result > 0;
     }
 
-    public Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> UpdateAsync(Project project)
     {
-        throw new NotImplementedException();
-    }
+        var sql = @"UPDATE Projects
+                    SET Name = @Name,
+                        Key = @Key
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, project);
 
-    public Task<bool> UpdateAsync(Project entity)
-    {
-        throw new NotImplementedException();
+        return result > 0;
     }
 }

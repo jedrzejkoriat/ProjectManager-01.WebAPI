@@ -37,6 +37,7 @@ internal class CommentRepository : ICommentRepository
     {
         var sql = "DELETE FROM Comments WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
         return result > 0;
     }
 
@@ -68,6 +69,7 @@ internal class CommentRepository : ICommentRepository
                 WHERE Id = @Id";
 
         var result = await dbConnection.ExecuteAsync(sql, comment);
+
         return result > 0;
     }
 }
