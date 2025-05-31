@@ -7,7 +7,7 @@ using ProjectManager_01.Application.Contracts.Repositories.Base;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface ITicketRepository : ICreateable<Ticket>, IUpdateable<Ticket>, ISoftDeletable
+public interface ITicketRepository : ICreateable<Ticket>, IReadable<Ticket>, IUpdateable<Ticket>, IDeleteable, ISoftDeletable
 {
     Task<List<Ticket>> GetByProjectIdAsync(Guid projectId);
     Task<Ticket> GetByKeyAndNumberAsync(string key, int number);

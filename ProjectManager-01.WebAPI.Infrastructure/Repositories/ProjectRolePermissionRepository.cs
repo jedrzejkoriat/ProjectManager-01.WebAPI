@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.Contracts.Repositories.Base;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
@@ -35,7 +36,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId)
+	public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId)
     {
         var sql = @"DELETE FROM ProjectRolePermissions WHERE PermissionId = @PermissionId";
         var result = await dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId });
@@ -50,4 +51,21 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
 
         return result > 0;
     }
+
+	public async Task<List<ProjectRolePermission>> GetAllAsync()
+	{
+        var sql = @"SELECT * FROM ProjectRolePermissions";
+        var result = await dbConnection.QueryAsync<ProjectRolePermission>(sql);
+
+        return result.ToList();
+	}
+
+	public async Task<ProjectRolePermission> GetByIdAsync(Guid projectRoleId, Guid permissionId)
+	{
+        var sql = @"SELECT * FROM ProjectRolePermissions
+                    WHERE ProjectRoleId = @ProjectRoleId, PermissionId = @PermissionId";
+        var result = await dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new {RoleId = projectRoleId, PermissionId = permissionId});
+
+        return result;
+	}
 }

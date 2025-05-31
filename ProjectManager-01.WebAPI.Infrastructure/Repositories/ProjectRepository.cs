@@ -21,20 +21,33 @@ internal class ProjectRepository : IProjectRepository
     {
         var sql = @"INSERT INTO Projects(Id, Name, Key, CreatedAt, IsDeleted)
                     VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted";
-
         project.Id = Guid.NewGuid();
         project.CreatedAt = DateTime.Now;
-
         var result = await dbConnection.ExecuteAsync(sql, project);
 
         if (result > 0)
             return project.Id;
         else
             throw new Exception("Insert to projects table failed.");
-
     }
 
-    public async Task<Project> GetByIdAsync(Guid id)
+	public async Task<bool> DeleteAsync(Guid id)
+	{
+        var sql = @"DELETE FROM Projects WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+	}
+
+	public async Task<List<Project>> GetAllAsync()
+	{
+        var sql = @"SELECT * FROM Projects";
+        var result = await dbConnection.QueryAsync<Project>(sql);
+
+        return result.ToList();
+	}
+
+	public async Task<Project> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM Projects WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });

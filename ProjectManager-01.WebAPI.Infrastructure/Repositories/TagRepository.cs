@@ -19,8 +19,23 @@ internal class TagRepository : ITagRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+	public Task<List<Tag>> GetAllAsync()
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<Tag> GetByIdAsync(Guid id)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
     {
         throw new NotImplementedException();
     }
+
+	public Task<bool> UpdateAsync(Tag entity)
+	{
+		throw new NotImplementedException();
+	}
 }

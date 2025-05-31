@@ -14,7 +14,17 @@ internal class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> GetByIdAsync(Guid id)
+	public Task<bool> DeleteAsync(Guid id)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<List<User>> GetAllAsync()
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<User> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }

@@ -14,7 +14,17 @@ internal class TicketRepository : ITicketRepository
         throw new NotImplementedException();
     }
 
-    public Task<Ticket> GetByIdAsync(Guid id)
+	public Task<bool> DeleteAsync(Guid id)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<List<Ticket>> GetAllAsync()
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<Ticket> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }

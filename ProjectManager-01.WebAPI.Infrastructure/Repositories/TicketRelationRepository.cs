@@ -19,7 +19,17 @@ internal class TicketRelationRepository : ITicketRelationRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
+	public Task<List<TicketRelation>> GetAllAsync()
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<TicketRelation> GetByIdAsync(Guid id)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
     {
         throw new NotImplementedException();
     }
@@ -28,4 +38,9 @@ internal class TicketRelationRepository : ITicketRelationRepository
     {
         throw new NotImplementedException();
     }
+
+	public Task<bool> UpdateAsync(TicketRelation entity)
+	{
+		throw new NotImplementedException();
+	}
 }
