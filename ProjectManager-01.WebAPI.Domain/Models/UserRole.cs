@@ -1,6 +1,4 @@
-﻿using ProjectManager_01.Domain.Enums;
-
-namespace ProjectManager_01.Domain.Models;
+﻿namespace ProjectManager_01.Domain.Models;
 
 public sealed class UserRole
 {

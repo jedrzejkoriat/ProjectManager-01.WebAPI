@@ -1,41 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
+using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class TagRepository : ITagRepository
 {
-    public Task<Guid> CreateAsync(Tag entity)
-    {
-        throw new NotImplementedException();
-    }
+	private readonly IDbConnection dbConnection;
 
-    public Task<bool> DeleteAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-	public Task<List<Tag>> GetAllAsync()
+	public TagRepository(IDbConnection dbConnection)
 	{
-		throw new NotImplementedException();
+		this.dbConnection = dbConnection;
 	}
 
-	public Task<Tag> GetByIdAsync(Guid id)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+    public async Task<Guid> CreateAsync(Tag entity)
     {
-        throw new NotImplementedException();
+		var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
+					VALUES (@Id, @Name, @ProjectId)";
+		entity.Id = Guid.NewGuid();
+		var result = await dbConnection.ExecuteAsync(sql, entity);
+
+		if (result > 0)
+			return entity.Id;
+		else
+			throw new Exception("Creating tag failed.");
     }
 
-	public Task<bool> UpdateAsync(Tag entity)
+	public async Task<bool> DeleteAsync(Guid id)
+    {
+		var sql = @"DELETE FROM Tags WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+		return result > 0;
+    }
+
+	public async Task<List<Tag>> GetAllAsync()
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tags";
+		var result = await dbConnection.QueryAsync<Tag>(sql);
+
+		return result.ToList();
+	}
+
+	public async Task<Tag> GetByIdAsync(Guid id)
+	{
+		var sql = @"SELECT * FROM Tags WHERE Id = @Id";
+		var result = await dbConnection.QueryFirstAsync<Tag>(sql);
+
+		return result;
+	}
+
+	public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+    {
+		var sql = @"SELECT * FROM Tags WHERE ProjectId = @ProjectId";
+		var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
+
+		return result.ToList();
+    }
+
+	public async Task<bool> UpdateAsync(Tag entity)
+	{
+		var sql = @"UPDATE Tags
+					SET Name = @Name,
+						ProjectId = @ProjectId
+					WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, entity);
+
+		return result > 0;
 	}
 }

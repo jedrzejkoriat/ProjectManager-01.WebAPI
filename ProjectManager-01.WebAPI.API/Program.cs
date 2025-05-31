@@ -1,8 +1,8 @@
-using System.Data;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
