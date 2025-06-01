@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Common;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
@@ -61,7 +60,7 @@ internal class UserRoleRepository : IUserRoleRepository
     public async Task<bool> DeleteAsync(Guid userId)
     {
         var sql = @"DELETE FROM UserRoles WHERE UserId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new {UserId = userId});
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId });
 
         return result > 0;
     }

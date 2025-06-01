@@ -1,7 +1,7 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class PriorityRepository : IPriorityRepository
@@ -15,15 +15,15 @@ internal class PriorityRepository : IPriorityRepository
 
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Priority entity)
-	{
-		var sql = @"INSERT INTO Priorities (Id, Name) VALUES (@Id, @Name)";
-		entity.Id = Guid.NewGuid();
-		var result = await dbConnection.ExecuteAsync(sql, entity);
+    {
+        var sql = @"INSERT INTO Priorities (Id, Name) VALUES (@Id, @Name)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
 
-		if (result > 0)
-			return entity.Id;
-		else
-			throw new Exception("Creating new Priority failed.");
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating new Priority failed.");
     }
 
     public async Task<List<Priority>> GetAllAsync()
@@ -51,10 +51,10 @@ internal class PriorityRepository : IPriorityRepository
     }
 
     public async Task<bool> DeleteAsync(Guid id)
-	{
-		var sql = @"DELETE FROM Priorities WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+    {
+        var sql = @"DELETE FROM Priorities WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
-		return result > 0;
-	}
+        return result > 0;
+    }
 }

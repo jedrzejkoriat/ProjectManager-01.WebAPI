@@ -41,7 +41,7 @@ public class ProjectsController : ControllerBase
     {
         ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
-        if (project == null) 
+        if (project == null)
             return NotFound();
 
         return Ok(project);
@@ -74,7 +74,7 @@ public class ProjectsController : ControllerBase
     {
         ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
-        if (project == null) 
+        if (project == null)
             return NotFound();
 
         project.Name = updatedProject.Name;
@@ -95,7 +95,7 @@ public class ProjectsController : ControllerBase
     {
         ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
 
-        if (project == null) 
+        if (project == null)
             return NotFound();
 
         projects.Remove(project);

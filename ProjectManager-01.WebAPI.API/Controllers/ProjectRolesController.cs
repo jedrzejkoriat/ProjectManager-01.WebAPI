@@ -37,7 +37,7 @@ public class ProjectRolesController : ControllerBase
     {
         var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         return Ok(role);
@@ -70,7 +70,7 @@ public class ProjectRolesController : ControllerBase
     {
         var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         role.Name = updatedProjectRole.Name;
@@ -90,7 +90,7 @@ public class ProjectRolesController : ControllerBase
     {
         var role = projectRoles.FirstOrDefault(r => r.Id == id);
 
-        if (role == null) 
+        if (role == null)
             return NotFound();
 
         projectRoles.Remove(role);

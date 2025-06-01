@@ -1,7 +1,7 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class ProjectRolePermissionRepository : IProjectRolePermissionRepository

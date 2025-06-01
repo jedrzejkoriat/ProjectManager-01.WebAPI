@@ -37,7 +37,7 @@ public class UsersController : ControllerBase
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
-        if (user == null) 
+        if (user == null)
             return NotFound();
 
         return Ok(user);
@@ -70,7 +70,7 @@ public class UsersController : ControllerBase
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
-        if (user == null) 
+        if (user == null)
             return NotFound();
 
         user.UserName = updatedUser.UserName;
@@ -92,7 +92,7 @@ public class UsersController : ControllerBase
     {
         var user = users.FirstOrDefault(u => u.Id == id);
 
-        if (user == null) 
+        if (user == null)
             return NotFound();
 
         users.Remove(user);

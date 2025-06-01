@@ -37,7 +37,7 @@ public class CommentsController : ControllerBase
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
-        if (comment == null) 
+        if (comment == null)
             return NotFound();
 
         return Ok(comment);
@@ -70,7 +70,7 @@ public class CommentsController : ControllerBase
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
-        if (comment == null) 
+        if (comment == null)
             return NotFound();
 
         comment.TicketId = updatedComment.TicketId;
@@ -91,7 +91,7 @@ public class CommentsController : ControllerBase
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
-        if (comment == null) 
+        if (comment == null)
             return NotFound();
 
         comments.Remove(comment);

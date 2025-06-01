@@ -1,16 +1,16 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class TicketRelationRepository : ITicketRelationRepository
 {
-	private readonly IDbConnection dbConnection;
+    private readonly IDbConnection dbConnection;
 
-	public TicketRelationRepository(IDbConnection dbConnection)
+    public TicketRelationRepository(IDbConnection dbConnection)
     {
-		this.dbConnection = dbConnection;
+        this.dbConnection = dbConnection;
     }
 
     public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
@@ -32,31 +32,31 @@ internal class TicketRelationRepository : ITicketRelationRepository
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(TicketRelation entity)
     {
-		var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
+        var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
 					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
-		entity.Id = Guid.NewGuid();
-		var result = await dbConnection.ExecuteAsync(sql, entity);
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
 
-		if (result > 0)
-			return entity.Id;
-		else
-			throw new Exception("Creating TicketRelation failed.");
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating TicketRelation failed.");
     }
 
-	public async Task<List<TicketRelation>> GetAllAsync()
-	{
-		var sql = @"SELECT * FROM TicketRelations";
-		var result = await dbConnection.QueryAsync<TicketRelation>(sql);
+    public async Task<List<TicketRelation>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM TicketRelations";
+        var result = await dbConnection.QueryAsync<TicketRelation>(sql);
 
-		return result.ToList();
-	}
+        return result.ToList();
+    }
 
-	public async Task<TicketRelation> GetByIdAsync(Guid id)
-	{
-		var sql = @"SELECT * FROM TicketRelations WHERE Id = @Id";
-		var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new {Id = id});
+    public async Task<TicketRelation> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM TicketRelations WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new { Id = id });
 
-		return result;
+        return result;
     }
 
     public async Task<bool> UpdateAsync(TicketRelation entity)

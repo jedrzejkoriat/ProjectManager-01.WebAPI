@@ -2,7 +2,7 @@
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface ICommentRepository : 
+public interface ICommentRepository :
     ICreateable<Comment>, IReadable<Comment>, IUpdateable<Comment>, IDeleteable
 {
     Task<List<Comment>> GetByTicketIdAsync(Guid ticketId);

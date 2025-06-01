@@ -37,7 +37,7 @@ public class TagsController : ControllerBase
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
-        if (tag == null) 
+        if (tag == null)
             return NotFound();
 
         return Ok(tag);
@@ -70,7 +70,7 @@ public class TagsController : ControllerBase
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
-        if (tag == null) 
+        if (tag == null)
             return NotFound();
 
         tag.Name = updatedTag.Name;
@@ -89,7 +89,7 @@ public class TagsController : ControllerBase
     {
         var tag = tags.FirstOrDefault(t => t.Id == id);
 
-        if (tag == null) 
+        if (tag == null)
             return NotFound();
 
         tags.Remove(tag);

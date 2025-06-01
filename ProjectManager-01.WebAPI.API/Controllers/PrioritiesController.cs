@@ -37,7 +37,7 @@ public class PrioritiesController : ControllerBase
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 
-        if (priority == null) 
+        if (priority == null)
             return NotFound();
 
         return Ok(priority);
@@ -70,7 +70,7 @@ public class PrioritiesController : ControllerBase
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 
-        if (priority == null) 
+        if (priority == null)
             return NotFound();
 
         priority.Name = updatedPriority.Name;
@@ -90,7 +90,7 @@ public class PrioritiesController : ControllerBase
     {
         var priority = priorities.FirstOrDefault(p => p.Id == id);
 
-        if (priority == null) 
+        if (priority == null)
             return NotFound();
 
         priorities.Remove(priority);

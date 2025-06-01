@@ -3,7 +3,7 @@ using ProjectManager_01.Domain.Enums;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface ITicketRepository : 
+public interface ITicketRepository :
     ICreateable<Ticket>, IReadable<Ticket>, IUpdateable<Ticket>, IDeleteable, ISoftDeletable
 {
     Task<List<Ticket>> GetByProjectIdAsync(Guid projectId);

@@ -36,7 +36,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
-        if (pm == null) 
+        if (pm == null)
             return NotFound();
 
         return Ok(pm);
@@ -69,7 +69,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
-        if (pm == null) 
+        if (pm == null)
             return NotFound();
 
         pm.UserId = updatedProjectMember.UserId;
@@ -90,7 +90,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         var pm = projectMembers.FirstOrDefault(p => p.Id == id);
 
-        if (pm == null) 
+        if (pm == null)
             return NotFound();
 
         projectMembers.Remove(pm);

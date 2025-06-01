@@ -52,7 +52,7 @@ public class TicketsController : ControllerBase
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
-        if (ticket == null) 
+        if (ticket == null)
             return NotFound();
 
         return Ok(ticket);
@@ -85,7 +85,7 @@ public class TicketsController : ControllerBase
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
-        if (ticket == null) 
+        if (ticket == null)
             return NotFound();
 
         ticket.ProjectId = updatedTicket.ProjectId;
@@ -115,7 +115,7 @@ public class TicketsController : ControllerBase
     {
         var ticket = tickets.FirstOrDefault(t => t.Id == id);
 
-        if (ticket == null) 
+        if (ticket == null)
             return NotFound();
 
         tickets.Remove(ticket);

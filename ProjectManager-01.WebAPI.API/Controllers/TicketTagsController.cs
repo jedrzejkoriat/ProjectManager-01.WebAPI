@@ -38,7 +38,7 @@ public class TicketTagsController : ControllerBase
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
-        if (ticketTag == null) 
+        if (ticketTag == null)
             return NotFound();
 
         return Ok(ticketTag);
@@ -71,7 +71,7 @@ public class TicketTagsController : ControllerBase
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
-        if (ticketTag == null) 
+        if (ticketTag == null)
             return NotFound();
 
         ticketTag.TicketId = updatedTicketTag.TicketId;
@@ -92,7 +92,7 @@ public class TicketTagsController : ControllerBase
     {
         var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
 
-        if (ticketTag == null) 
+        if (ticketTag == null)
             return NotFound();
 
         ticketTags.Remove(ticketTag);

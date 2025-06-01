@@ -1,16 +1,16 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class ProjectRoleRepository : IProjectRoleRepository
 {
-	private readonly IDbConnection dbConnection;
+    private readonly IDbConnection dbConnection;
 
-	public ProjectRoleRepository(IDbConnection dbConnection)
+    public ProjectRoleRepository(IDbConnection dbConnection)
     {
-		this.dbConnection = dbConnection;
+        this.dbConnection = dbConnection;
     }
 
     public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
@@ -58,18 +58,18 @@ internal class ProjectRoleRepository : IProjectRoleRepository
             throw new Exception("Creating ProjectRole failed");
     }
 
-	public async Task<List<ProjectRole>> GetAllAsync()
-	{
+    public async Task<List<ProjectRole>> GetAllAsync()
+    {
         var sql = @"SELECT * FROM ProjectRoles";
         var result = await dbConnection.QueryAsync<ProjectRole>(sql);
 
         return result.ToList();
-	}
+    }
 
-	public async Task<ProjectRole> GetByIdAsync(Guid id)
+    public async Task<ProjectRole> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM ProjectRoles WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new {Id = id});
+        var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new { Id = id });
 
         return result;
     }

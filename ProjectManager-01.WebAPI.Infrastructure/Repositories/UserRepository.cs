@@ -79,7 +79,7 @@ internal class UserRepository : IUserRepository
     public async Task<bool> DeleteAsync(Guid id)
     {
         var sql = @"DELETE FROM Users WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

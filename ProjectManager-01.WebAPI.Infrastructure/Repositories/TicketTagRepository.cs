@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Net.WebSockets;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
@@ -75,7 +74,7 @@ internal class TicketTagRepository : ITicketTagRepository
     public async Task<bool> DeleteAsync(Guid ticketId, Guid tagId)
     {
         var sql = @"DELETE FROM TicketTags WHERE TicketId = @TicketId AND TagId = @TagId";
-        var result = await dbConnection.ExecuteAsync(sql, new {TicketId = ticketId, TagId = tagId});
+        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result > 0;
     }

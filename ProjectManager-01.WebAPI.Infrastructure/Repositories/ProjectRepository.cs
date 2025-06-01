@@ -1,7 +1,7 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class ProjectRepository : IProjectRepository
@@ -38,15 +38,15 @@ internal class ProjectRepository : IProjectRepository
             throw new Exception("Insert to projects table failed.");
     }
 
-	public async Task<List<Project>> GetAllAsync()
-	{
+    public async Task<List<Project>> GetAllAsync()
+    {
         var sql = @"SELECT * FROM Projects";
         var result = await dbConnection.QueryAsync<Project>(sql);
 
         return result.ToList();
-	}
+    }
 
-	public async Task<Project> GetByIdAsync(Guid id)
+    public async Task<Project> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM Projects WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });

@@ -2,7 +2,7 @@
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
-public interface IPriorityRepository : 
-	ICreateable<Priority>, IReadable<Priority>, IUpdateable<Priority>, IDeleteable
+public interface IPriorityRepository :
+    ICreateable<Priority>, IReadable<Priority>, IUpdateable<Priority>, IDeleteable
 {
 }

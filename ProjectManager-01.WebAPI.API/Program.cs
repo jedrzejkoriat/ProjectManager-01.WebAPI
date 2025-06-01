@@ -1,8 +1,8 @@
+using System.Data;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
-using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => 
+builder.Services.AddSwaggerGen(c =>
 {
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -34,6 +34,7 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.AddSignalR();
 
 builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 

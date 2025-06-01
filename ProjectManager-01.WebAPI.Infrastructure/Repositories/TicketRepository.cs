@@ -1,17 +1,17 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Enums;
 using ProjectManager_01.Domain.Models;
-using System.Data;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class TicketRepository : ITicketRepository
 {
-	private readonly IDbConnection dbConnection;
+    private readonly IDbConnection dbConnection;
 
-	public TicketRepository(IDbConnection dbConnection)
-	{
-		this.dbConnection = dbConnection;
+    public TicketRepository(IDbConnection dbConnection)
+    {
+        this.dbConnection = dbConnection;
     }
 
     public async Task<Ticket> GetByKeyAndNumberWithDetailsAsync(string projectKey, int ticketNumber)
@@ -137,19 +137,19 @@ internal class TicketRepository : ITicketRepository
 
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Ticket entity)
-	{
-		var sql = @"INSERT INTO Tickets 
+    {
+        var sql = @"INSERT INTO Tickets 
 					(Id, ProjectId, PriorityId, ReporterId, Status, Resolution, TicketType, TicketNumber, Title, Description, Version, CreatedAt)
 					VALUES
 					(@Id, @ProjectId, @PriorityId, @ReportedId, @Status, @Reolustion, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
-		entity.Id = Guid.NewGuid();
-		entity.CreatedAt = DateTime.Now;
-		var result = await dbConnection.ExecuteAsync(sql, entity);
+        entity.Id = Guid.NewGuid();
+        entity.CreatedAt = DateTime.Now;
+        var result = await dbConnection.ExecuteAsync(sql, entity);
 
-		if (result > 0)
-			return entity.Id;
-		else
-			throw new Exception("Creating ticket failed");
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating ticket failed");
     }
 
     public async Task<List<Ticket>> GetAllAsync()
@@ -186,10 +186,10 @@ internal class TicketRepository : ITicketRepository
     }
 
     public async Task<bool> DeleteAsync(Guid id)
-	{
-		var sql = @"DELETE FROM Tickets WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
+    {
+        var sql = @"DELETE FROM Tickets WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
-		return result > 0;
-	}
+        return result > 0;
+    }
 }
