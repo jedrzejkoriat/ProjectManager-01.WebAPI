@@ -13,7 +13,6 @@
     <ProjectReference Include="..\ProjectManager_01.WebAPI.Domain\ProjectManager_01.Domain.csproj" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Comments\Commands\NewFolder\" />
     <Folder Include="Features\Tickets\Commands\" />
     <Folder Include="Features\Tickets\Queries\" />
     <Folder Include="Features\TicketTags\Commands\" />
@@ -49,5 +48,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\Comments\Queries\GetCommentsByUserAndProjectId\GetCommentsByUserAndProjectIdResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsResponse.cs" />
   </ItemGroup>
 </Project>

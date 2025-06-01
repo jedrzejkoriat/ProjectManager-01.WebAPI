@@ -1,7 +1,8 @@
 param(
     [string]$Name,
     [ValidateSet("Query","Command")]
-    [string]$Type
+    [string]$Type,
+	[string]$Entity
 )
 
 if (-not $Name) {
@@ -14,6 +15,10 @@ if (-not $Type) {
         Write-Error "Type must be Query or Command"
         exit 1
     }
+}
+
+if (-not $Entity) {
+	$Entity = Read-Host "Enter entity name (e. g. Comment, Ticket)"
 }
 
 # Determine project root and namespace based on current folder and csproj
@@ -41,19 +46,37 @@ if (-not (Test-Path $folderPath)) {
     New-Item -ItemType Directory -Path $folderPath | Out-Null
 }
 
+function ToCamelCase($text) {
+    if ([string]::IsNullOrEmpty($text)) { return $text }
+    return ($text[0].ToString().ToLower() + $text.Substring(1))
+}
+
+$EntityLower = ToCamelCase $Entity
+
 # Handler file content
 $handlerPath = Join-Path $folderPath "${Name}Handler.cs"
 $handlerContent = @"
 using MediatR;
+using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.Contracts.Services;
 
 namespace $fullNamespace.$Name;
 
 public class ${Name}Handler : IRequestHandler<${Name}${Type}, ${Name}Response>
 {
-	public async Task<${Name}Response> Handle(${Name}${Type} request, CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
+    private readonly I${Entity}Repository ${EntityLower}Repository;
+    private readonly I${Entity}Service ${EntityLower}Service;
+
+    public ${Name}Handler(I${Entity}Repository ${EntityLower}Repository, I${Entity}Service ${EntityLower}Service)
+    {
+        this.${EntityLower}Repository = ${EntityLower}Repository;
+        this.${EntityLower}Service = ${EntityLower}Service;
+    }
+
+    public async Task<${Name}Response> Handle(${Name}${Type} request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
 "@
 Set-Content -Path $handlerPath -Value $handlerContent -Encoding utf8
