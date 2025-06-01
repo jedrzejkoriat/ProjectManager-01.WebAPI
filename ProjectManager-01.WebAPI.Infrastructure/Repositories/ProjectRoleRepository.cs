@@ -11,7 +11,9 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 	public ProjectRoleRepository(IDbConnection dbConnection)
     {
 		this.dbConnection = dbConnection;
-	}
+    }
+
+    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(ProjectRole entity)
     {
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
@@ -23,14 +25,6 @@ internal class ProjectRoleRepository : IProjectRoleRepository
             return entity.Id;
         else
             throw new Exception("Creating ProjectRole failed");
-    }
-
-    public async Task<bool> DeleteAsync(Guid id)
-    {
-        var sql = @"DELETE FROM ProjectRoles WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
-
-        return result > 0;
     }
 
 	public async Task<List<ProjectRole>> GetAllAsync()
@@ -56,6 +50,14 @@ internal class ProjectRoleRepository : IProjectRoleRepository
                         Name = @Name
                     WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM ProjectRoles WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

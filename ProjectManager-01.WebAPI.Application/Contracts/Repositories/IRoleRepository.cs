@@ -5,5 +5,4 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 public interface IRoleRepository : 
     ICreateable<Role>, IReadable<Role>, IUpdateable<Role>, IDeleteable
 {
-    Task<Role> GetByIdAsync(Guid id);
 }

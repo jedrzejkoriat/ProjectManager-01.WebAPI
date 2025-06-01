@@ -11,8 +11,17 @@ internal class TagRepository : ITagRepository
 	public TagRepository(IDbConnection dbConnection)
 	{
 		this.dbConnection = dbConnection;
-	}
+    }
 
+    public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+    {
+        var sql = @"SELECT * FROM Tags WHERE ProjectId = @ProjectId";
+        var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Tag entity)
     {
 		var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
@@ -24,14 +33,6 @@ internal class TagRepository : ITagRepository
 			return entity.Id;
 		else
 			throw new Exception("Creating tag failed.");
-    }
-
-	public async Task<bool> DeleteAsync(Guid id)
-    {
-		var sql = @"DELETE FROM Tags WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-		return result > 0;
     }
 
 	public async Task<List<Tag>> GetAllAsync()
@@ -50,14 +51,6 @@ internal class TagRepository : ITagRepository
 		return result;
 	}
 
-	public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
-    {
-		var sql = @"SELECT * FROM Tags WHERE ProjectId = @ProjectId";
-		var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
-
-		return result.ToList();
-    }
-
 	public async Task<bool> UpdateAsync(Tag entity)
 	{
 		var sql = @"UPDATE Tags
@@ -67,5 +60,13 @@ internal class TagRepository : ITagRepository
 		var result = await dbConnection.ExecuteAsync(sql, entity);
 
 		return result > 0;
-	}
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM Tags WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
 }

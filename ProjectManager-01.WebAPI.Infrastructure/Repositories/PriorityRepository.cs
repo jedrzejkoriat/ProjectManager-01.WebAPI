@@ -13,7 +13,8 @@ internal class PriorityRepository : IPriorityRepository
         this.dbConnection = dbConnection;
     }
 
-	public async Task<Guid> CreateAsync(Priority entity)
+    // ============================= CRUD =============================
+    public async Task<Guid> CreateAsync(Priority entity)
 	{
 		var sql = @"INSERT INTO Priorities (Id, Name) VALUES (@Id, @Name)";
 		entity.Id = Guid.NewGuid();
@@ -23,17 +24,9 @@ internal class PriorityRepository : IPriorityRepository
 			return entity.Id;
 		else
 			throw new Exception("Creating new Priority failed.");
-	}
+    }
 
-	public async Task<bool> DeleteAsync(Guid id)
-	{
-		var sql = @"DELETE FROM Priorities WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-		return result > 0;
-	}
-
-	public async Task<List<Priority>> GetAllAsync()
+    public async Task<List<Priority>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Priorities";
         var result = await dbConnection.QueryAsync<Priority>(sql);
@@ -41,18 +34,26 @@ internal class PriorityRepository : IPriorityRepository
         return result.ToList();
     }
 
-	public async Task<Priority> GetByIdAsync(Guid id)
-	{
-		var sql = @"SELECT * FROM Priorities WHERE Id = @Id";
-		var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
+    public async Task<Priority> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM Priorities WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
 
-		return result;
-	}
+        return result;
+    }
 
-	public async Task<bool> UpdateAsync(Priority entity)
+    public async Task<bool> UpdateAsync(Priority entity)
+    {
+        var sql = @"UPDATE Priorities SET Name = @Name WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
 	{
-		var sql = @"UPDATE Priorities SET Name = @Name WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, entity);
+		var sql = @"DELETE FROM Priorities WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
 		return result > 0;
 	}

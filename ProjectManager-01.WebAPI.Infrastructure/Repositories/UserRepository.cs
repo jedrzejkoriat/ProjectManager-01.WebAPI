@@ -13,6 +13,28 @@ internal class UserRepository : IUserRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<List<User>> GetByProjectIdAsync(Guid projectId)
+    {
+        var sql = @"SELECT DISTINCT u.* FROM Users u
+                    JOIN ProjectUserRoles pur ON u.Id = pur.UserId
+                    WHERE pur.ProjectId = @ProjectId
+                    AND u.IsDeleted = 0";
+        var result = await dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    public async Task<bool> SoftDeleteAsync(Guid id)
+    {
+        var sql = @"UPDATE Users
+                    SET IsDeleted = 1
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
+
+    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(User entity)
     {
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
@@ -24,14 +46,6 @@ internal class UserRepository : IUserRepository
             return entity.Id;
         else
             throw new Exception("Creating user failed.");
-    }
-
-    public async Task<bool> DeleteAsync(Guid id)
-    {
-        var sql = @"DELETE FROM Users WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
-
-        return result > 0;
     }
 
     public async Task<List<User>> GetAllAsync()
@@ -50,21 +64,6 @@ internal class UserRepository : IUserRepository
         return result;
     }
 
-    public Task<List<User>> GetByProjectIdAsync(Guid projectId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> SoftDeleteAsync(Guid id)
-    {
-        var sql = @"UPDATE Users
-                    SET IsDeleted = 1
-                    WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-        return result > 0;
-    }
-
     public async Task<bool> UpdateAsync(User entity)
     {
         var sql = @"UPDATE USers
@@ -73,6 +72,14 @@ internal class UserRepository : IUserRepository
                         PasswordHash = @PasswordHash
                     WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM Users WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
 
         return result > 0;
     }

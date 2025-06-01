@@ -13,7 +13,8 @@ internal class PermissionRepository : IPermissionRepository
         this.dbConnection = dbConnection;
     }
 
-	public async Task<Guid> CreateAsync(Permission permission)
+    // ============================= CRUD =============================
+    public async Task<Guid> CreateAsync(Permission permission)
 	{
 		var sql = "INSERT INTO Permissions (Id, Name) VALUES (@Id, @Name)";
 		permission.Id = Guid.NewGuid();

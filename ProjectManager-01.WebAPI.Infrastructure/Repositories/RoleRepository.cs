@@ -11,9 +11,10 @@ internal class RoleRepository : IRoleRepository
 	public RoleRepository(IDbConnection dbConnection)
 	{
 		this.dbConnection = dbConnection;
-	}
+    }
 
-	public async Task<Guid> CreateAsync(Role entity)
+    // ============================= CRUD =============================
+    public async Task<Guid> CreateAsync(Role entity)
 	{
 		var sql = @"INSERT INTO Roles (Id, Name)
 					VALUES (@Id, @Name)";
@@ -24,14 +25,6 @@ internal class RoleRepository : IRoleRepository
 			return entity.Id;
 		else
 			throw new Exception("Creating new role failed.");
-	}
-
-	public async Task<bool> DeleteAsync(Guid id)
-	{
-		var sql = @"DELETE FROM Roles WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
-
-		return result > 0;
 	}
 
 	public async Task<List<Role>> GetAllAsync()
@@ -58,5 +51,13 @@ internal class RoleRepository : IRoleRepository
 		var result = await dbConnection.ExecuteAsync(sql, entity);
 
 		return result > 0;
-	}
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM Roles WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
 }

@@ -11,9 +11,27 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 	public ProjectUserRoleRepository(IDbConnection dbConnection)
 	{
 		this.dbConnection = dbConnection;
-	}
+    }
 
-	public async Task<Guid> CreateAsync(ProjectUserRole entity)
+    public async Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId, ProjectId = @ProjectId";
+        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    public async Task<List<ProjectUserRole>> GetByUserIdAsync(Guid userId)
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId";
+        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId });
+
+        return result.ToList();
+    }
+
+    // ============================= CRUD =============================
+
+    public async Task<Guid> CreateAsync(ProjectUserRole entity)
 	{
 		var sql = @"INSERT INTO ProjectUserRoles (Id, ProjectId, ProjectRoleId, UserId)
 					VALUES (@Id, @ProjectId, @ProjectRoleId, @UserId";
@@ -24,14 +42,6 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 			return entity.Id;
 		else
 			throw new Exception("Creating ProjectUserRoles failed.");
-	}
-
-	public async Task<bool> DeleteAsync(Guid id)
-	{
-		var sql = @"DELETE FROM ProjectUserRoles WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-		return result > 0;
 	}
 
 	public async Task<List<ProjectUserRole>> GetAllAsync()
@@ -50,22 +60,6 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 		return result;
 	}
 
-	public async Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
-	{
-		var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId, ProjectId = @ProjectId";
-		var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
-
-		return result.ToList();
-	}
-
-	public async Task<List<ProjectUserRole>> GetByUserIdAsync(Guid userId)
-	{
-		var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId";
-		var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId });
-
-		return result.ToList();
-	}
-
 	public async Task<bool> UpdateAsync(ProjectUserRole entity)
 	{
 		var sql = @"UPDATE ProjectUserRoles
@@ -76,5 +70,13 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 		var result = await dbConnection.ExecuteAsync(sql, entity);
 
 		return result > 0;
-	}
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM ProjectUserRoles WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
 }

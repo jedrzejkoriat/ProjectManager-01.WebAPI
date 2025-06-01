@@ -13,11 +13,47 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+
+    public async Task<List<UserRole>> GetByRoleIdAsync(Guid roleId)
+    {
+        var sql = @"SELECT * FROM UserRoles WHERE RoleId = @RoleId";
+        var result = await dbConnection.QueryAsync<UserRole>(sql, new { RoleId = roleId });
+
+        return result.ToList();
+    }
+
+    // ============================= CRUD =============================
     public async Task<bool> CreateAsync(UserRole entity)
     {
         var sql = @"INSERT INTO UserRoles (UserId, RoleId)
                     VALUES (@UserId, @RoleId)";
         var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        return result > 0;
+    }
+
+    public async Task<UserRole> GetByUserIdAsync(Guid userId)
+    {
+        var sql = @"SELECT * FROM UserRoles WHERE UserId = @UserId";
+        var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
+
+        return result;
+    }
+
+    public async Task<List<UserRole>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM UserRoles";
+        var result = await dbConnection.QueryAsync<UserRole>(sql);
+
+        return result.ToList();
+    }
+
+    public async Task<bool> UpdateAsync(UserRole userRole)
+    {
+        var sql = @"UPDATE UserRoles
+                    SET RoleId = @RoleId
+                    WHERE UserId = @UserId";
+        var result = await dbConnection.ExecuteAsync(sql, userRole);
 
         return result > 0;
     }
@@ -28,21 +64,5 @@ internal class UserRoleRepository : IUserRoleRepository
         var result = await dbConnection.ExecuteAsync(sql, new {UserId = userId});
 
         return result > 0;
-    }
-
-    public async Task<UserRole> GetByUserIdAsync(Guid userId)
-    {
-        var sql = @"SELECT * FROM UserRoles WHERE UserId = @UserId";
-        var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new {UserId = userId});
-
-        return result;
-    }
-
-    public async Task<List<UserRole>> GetByRoleIdAsync(Guid roleId)
-    {
-        var sql = @"SELECT * FROM UserRoles WHERE RoleId = @RoleId";
-        var result = await dbConnection.QueryAsync<UserRole>(sql, new {RoleId = roleId});
-
-        return result.ToList();
     }
 }

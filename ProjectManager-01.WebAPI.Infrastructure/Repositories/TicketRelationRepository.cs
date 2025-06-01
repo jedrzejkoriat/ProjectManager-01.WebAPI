@@ -11,8 +11,25 @@ internal class TicketRelationRepository : ITicketRelationRepository
 	public TicketRelationRepository(IDbConnection dbConnection)
     {
 		this.dbConnection = dbConnection;
-	}
+    }
 
+    public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
+    {
+        var sql = @"SELECT * FROM TicketRelations WHERE SourceId = @SourceId";
+        var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { SourceId = sourceId });
+
+        return result.ToList();
+    }
+
+    public async Task<List<TicketRelation>> GetByTargetIdAsync(Guid targetId)
+    {
+        var sql = @"SELECT * FROM TicketRelations WHERE TargetId = @TargetId";
+        var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { TargetId = targetId });
+
+        return result.ToList();
+    }
+
+    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(TicketRelation entity)
     {
 		var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
@@ -24,14 +41,6 @@ internal class TicketRelationRepository : ITicketRelationRepository
 			return entity.Id;
 		else
 			throw new Exception("Creating TicketRelation failed.");
-    }
-
-	public async Task<bool> DeleteAsync(Guid id)
-    {
-		var sql = @"DELETE FROM TicketRelations WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-		return result > 0;
     }
 
 	public async Task<List<TicketRelation>> GetAllAsync()
@@ -48,33 +57,25 @@ internal class TicketRelationRepository : ITicketRelationRepository
 		var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new {Id = id});
 
 		return result;
-	}
-
-	public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
-    {
-		var sql = @"SELECT * FROM TicketRelations WHERE SourceId = @SourceId";
-		var result = await dbConnection.QueryAsync<TicketRelation>(sql, new {SourceId = sourceId});
-
-		return result.ToList();
     }
 
-	public async Task<List<TicketRelation>> GetByTargetIdAsync(Guid targetId)
+    public async Task<bool> UpdateAsync(TicketRelation entity)
     {
-		var sql = @"SELECT * FROM TicketRelations WHERE TargetId = @TargetId";
-		var result = await dbConnection.QueryAsync<TicketRelation>(sql, new {TargetId = targetId});
-
-		return result.ToList();
-    }
-
-	public async Task<bool> UpdateAsync(TicketRelation entity)
-	{
-		var sql = @"UPDATE TicketRelations
+        var sql = @"UPDATE TicketRelations
 					SET SourceId = @SourceId,
 						TargetId = @TargetId,
 						RelationType = @RelationType
 					WHERE Id = @Id";
-		var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await dbConnection.ExecuteAsync(sql, entity);
 
-		return result > 0;
-	}
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM TicketRelations WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
 }

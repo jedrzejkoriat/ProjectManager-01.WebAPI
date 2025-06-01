@@ -4,5 +4,4 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 public interface IProjectRoleRepository : 
     ICreateable<ProjectRole>, IReadable<ProjectRole>, IUpdateable<ProjectRole>, IDeleteable
 {
-    Task<ProjectRole> GetByIdAsync(Guid id);
 }

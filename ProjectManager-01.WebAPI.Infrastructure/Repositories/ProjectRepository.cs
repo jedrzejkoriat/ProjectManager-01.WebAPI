@@ -12,6 +12,18 @@ internal class ProjectRepository : IProjectRepository
     {
         this.dbConnection = dbConnection;
     }
+
+    public async Task<bool> SoftDeleteAsync(Guid id)
+    {
+        var sql = @"UPDATE Projects
+                    SET IsDeleted = 1
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
+
+    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Project project)
     {
         var sql = @"INSERT INTO Projects(Id, Name, Key, CreatedAt, IsDeleted)
@@ -48,16 +60,6 @@ internal class ProjectRepository : IProjectRepository
         var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
 
         return result;
-    }
-
-    public async Task<bool> SoftDeleteAsync(Guid id)
-    {
-        var sql = @"UPDATE Projects
-                    SET IsDeleted = 1
-                    WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql , new { Id = id });
-
-        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Project project)
