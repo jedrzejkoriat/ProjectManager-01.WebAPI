@@ -1,27 +1,53 @@
-﻿using ProjectManager_01.Application.Contracts.Repositories;
+﻿using System.Data;
+using Dapper;
+using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 internal class UserRepository : IUserRepository
 {
-    public Task<Guid> CreateAsync(User entity)
+    private readonly IDbConnection dbConnection;
+
+    public UserRepository(IDbConnection dbConnection)
     {
-        throw new NotImplementedException();
+        this.dbConnection = dbConnection;
     }
 
-	public Task<bool> DeleteAsync(Guid id)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<List<User>> GetAllAsync()
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<User> GetByIdAsync(Guid id)
+    public async Task<Guid> CreateAsync(User entity)
     {
-        throw new NotImplementedException();
+        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
+                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating user failed.");
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM Users WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
+
+        return result > 0;
+    }
+
+    public async Task<List<User>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM Users";
+        var result = await dbConnection.QueryAsync<User>(sql);
+
+        return result.ToList();
+    }
+
+    public async Task<User> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM Users WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
+
+        return result;
     }
 
     public Task<List<User>> GetByProjectIdAsync(Guid projectId)
@@ -29,13 +55,25 @@ internal class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> SoftDeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var sql = @"UPDATE Users
+                    SET IsDeleted = 1
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
     }
 
-    public Task<bool> UpdateAsync(User entity)
+    public async Task<bool> UpdateAsync(User entity)
     {
-        throw new NotImplementedException();
+        var sql = @"UPDATE USers
+                    SET UserName = @UserName,
+                        Email = @Email,
+                        PasswordHash = @PasswordHash
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        return result > 0;
     }
 }

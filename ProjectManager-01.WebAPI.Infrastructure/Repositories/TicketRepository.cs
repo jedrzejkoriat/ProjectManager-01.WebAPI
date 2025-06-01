@@ -32,66 +32,121 @@ internal class TicketRepository : ITicketRepository
 
 	public async Task<bool> DeleteAsync(Guid id)
 	{
-		throw new NotImplementedException();
+		var sql = @"DELETE FROM Tickets WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
+
+		return result > 0;
 	}
 
-	public Task<bool> SoftDeleteAsync(Guid id)
+	public async Task<bool> SoftDeleteAsync(Guid id)
 	{
-		throw new NotImplementedException();
+		var sql = @"UPDATE Tickets
+					SET IsDeleted = 1
+					WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, new {Id = id});
+
+		return result > 0;
 	}
 
-	public Task<bool> UpdateAsync(Ticket entity)
+	public async Task<bool> UpdateAsync(Ticket entity)
 	{
-		throw new NotImplementedException();
+		var sql = @"UPDATE Tickets
+					SET PriorityId = @PriorityId,
+						AssigneeId = @AssigneeId,
+						Status = @Status,
+						Resolution = @Resolution,
+						TicketType = @TicketType,
+						Title = @Title,
+						Description = @Description,
+						Version = @Version
+					WHERE Id = @Id";
+		var result = await dbConnection.ExecuteAsync(sql, entity);
+
+		return result > 0;
 	}
 
-	public Task<List<Ticket>> GetAllAsync()
+	public async Task<List<Ticket>> GetAllAsync()
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets";
+		var result = await dbConnection.QueryAsync<Ticket>(sql);
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByAssigneeIdAsync(Guid? assigneeId)
+	public async Task<List<Ticket>> GetByAssigneeIdAsync(Guid? assigneeId)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE AssigneeId = @AssigneeId";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {AssigneeId = assigneeId});
+
+		return result.ToList();
 	}
 
-	public Task<Ticket> GetByIdAsync(Guid id)
+	public async Task<Ticket> GetByIdAsync(Guid id)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE Id = @Id";
+		var result = await dbConnection.QueryFirstAsync<Ticket>(sql, new {Id = id});
+
+		return result;
 	}
 
-	public Task<Ticket> GetByKeyAndNumberAsync(string key, int ticketNumber)
+	public async Task<Ticket> GetByKeyAndNumberAsync(string projectKey, int ticketNumber)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT t.* FROM Tickets t
+					JOIN Projects p ON t.ProjectId = p.Id
+					WHERE t.TicketNumber = @TicketNumber
+						AND p.Key = @ProjectKey
+						AND p.IsDeleted = 0
+						AND t.IsDeleted = 0";
+		var result = await dbConnection.QueryFirstAsync<Ticket>(sql, new {TicketNumber = ticketNumber, Key = projectKey});
+
+		return result;
 	}
 
-	public Task<List<Ticket>> GetByPriorityAsync(Guid priorityId)
+	public async Task<List<Ticket>> GetByPriorityAsync(Guid priorityId)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE PriorityId = @PriorityId";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {PriorityId = priorityId});
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByProjectIdAsync(Guid projectId)
+	public async Task<List<Ticket>> GetByProjectIdAsync(Guid projectId)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE ProjectId = @ProjectId";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {ProjectId = projectId});
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId)
+	public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE ReporterId = @ReporterId";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {ReporterId = reporterId});
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByResolutionAsync(Resolution resolution)
+	public async Task<List<Ticket>> GetByResolutionAsync(Resolution resolution)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE Resolution = @Resolution";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {Resolution = resolution});
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByStatusAsync(Status status)
+	public async Task<List<Ticket>> GetByStatusAsync(Status status)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE Status = @Status";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {Status = status});
+
+		return result.ToList();
 	}
 
-	public Task<List<Ticket>> GetByTicketTypeAsync(TicketType ticketType)
+	public async Task<List<Ticket>> GetByTicketTypeAsync(TicketType ticketType)
 	{
-		throw new NotImplementedException();
+		var sql = @"SELECT * FROM Tickets WHERE TicketType = @TicketType";
+		var result = await dbConnection.QueryAsync<Ticket>(sql, new {TicketType = ticketType});
+
+		return result.ToList();
 	}
 }
