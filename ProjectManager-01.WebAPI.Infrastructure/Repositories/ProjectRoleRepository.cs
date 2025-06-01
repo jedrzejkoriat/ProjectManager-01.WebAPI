@@ -13,6 +13,37 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 		this.dbConnection = dbConnection;
     }
 
+    public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
+    {
+        var sql = @"SELECT pr.*, prp.*, p.*
+                FROM ProjectRoles pr
+                JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
+                JOIN Permissions p ON prp.PermissionId = p.Id
+                WHERE pr.Id = @Id";
+
+        var projectRoleDict = new Dictionary<Guid, ProjectRole>();
+
+        var result = await dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
+            sql,
+            (projectRole, permission) =>
+            {
+                if (!projectRoleDict.TryGetValue(projectRole.Id, out var pr))
+                {
+                    pr = projectRole;
+                    pr.Permissions = new List<Permission>();
+                    projectRoleDict[pr.Id] = pr;
+                }
+
+                pr.Permissions.Add(permission);
+                return pr;
+            },
+            new { Id = id },
+            splitOn: "Id,Id"
+        );
+
+        return projectRoleDict.Values.FirstOrDefault();
+    }
+
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(ProjectRole entity)
     {

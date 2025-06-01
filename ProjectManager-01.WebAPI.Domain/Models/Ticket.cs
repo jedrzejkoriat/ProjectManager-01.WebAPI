@@ -24,5 +24,6 @@ public sealed class Ticket
     public DateTimeOffset CreatedAt { get; set; }
     public List<TicketTag> TicketTags { get; set; }
     public List<Comment> Comments { get; set; }
-    public List<TicketRelation> TicketRelations { get; set; }
+    public List<TicketRelation> RelationsAsSource { get; set; }
+    public List<TicketRelation> RelationsAsTarget { get; set; }
 }

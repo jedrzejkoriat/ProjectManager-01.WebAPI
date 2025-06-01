@@ -30,6 +30,27 @@ internal class CommentRepository : ICommentRepository
 		return comments.ToList();
 	}
 
+	public async Task<List<Comment>> GetByUserAndProjectIdAsync(Guid userId, Guid projectId)
+	{
+		var sql = @"SELECT c.*, t.Id, t.TicketNumber, t.Title, p.Id, p.Key
+					FROM Comments c
+					JOIN Tickets t ON c.TicketId = t.Id
+					JOIN Projects p ON t.ProjectId = p.Id
+					WHERE c.UserId = @UserId AND p.Id = @ProjectId";
+		var comments = await dbConnection.QueryAsync<Comment, Ticket, Project, Comment>(sql, (comment, ticket, project) =>
+		{
+			ticket.Project = project;
+			comment.Ticket = ticket;
+			return comment;
+		},
+		new { UserId = userId, ProjectId = projectId },
+		splitOn: "Id,Id"
+		);
+
+
+		return comments.ToList();
+	}
+
 	// ============================= CRUD =============================
 	public async Task<Guid> CreateAsync(Comment comment)
     {

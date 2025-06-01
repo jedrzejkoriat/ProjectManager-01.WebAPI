@@ -14,6 +14,48 @@ internal class TicketRepository : ITicketRepository
 		this.dbConnection = dbConnection;
     }
 
+    public async Task<Ticket> GetByKeyAndNumberWithDetailsAsync(string projectKey, int ticketNumber)
+    {
+        var ticketSql = @"SELECT t.*, proj.Key, prio.*, a.*, r.*, tt.*, c.*, trs.*, trt.*
+                    FROM Tickets t
+                    JOIN Projects proj ON t.ProjectId = proj.Id
+                    JOIN Priorities prio ON t.PriorityId = prio.Id
+                    LEFT JOIN Users a ON t.AssigneeId = a.Id
+                    JOIN Users r ON t.ReporterId = r.Id
+
+                    WHERE t.TicketNumber = @TicketNumber
+                        AND proj.Key = @ProjectKey";
+
+        var ticket = (await dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
+            (ticketSql, (ticket, project, priority, assignee, reporter) =>
+        {
+            ticket.Project = project;
+            ticket.Priority = priority;
+            ticket.Assignee = assignee;
+            ticket.Reporter = reporter;
+            return ticket;
+        },
+        new { TicketNumber = ticketNumber, ProjectKey = projectKey },
+        splitOn: "Id,Id,Id,Id")).FirstOrDefault();
+
+        if (ticket == null)
+            throw new Exception("Finding ticket failed");
+
+        ticket.TicketTags = (await dbConnection.QueryAsync<TicketTag>
+            ("SELECT * FROM TicketTags WHERE TicketId = @TicketId", new { TicketId = ticket.Id })).ToList();
+
+        ticket.Comments = (await dbConnection.QueryAsync<Comment>
+            ("SELECT * FROM Comments WHERE TicketId = @TicketId", new { TicketId = ticket.Id })).ToList();
+
+        ticket.RelationsAsSource = (await dbConnection.QueryAsync<TicketRelation>
+            ("SELECT * FROM TicketRelations WHERE SourceId = @TicketId", new { TicketId = ticket.Id })).ToList();
+
+        ticket.RelationsAsTarget = (await dbConnection.QueryAsync<TicketRelation>
+            ("SELECT * FROM TicketRelations WHERE TargetId = @TicketId", new { TicketId = ticket.Id })).ToList();
+
+        return ticket;
+    }
+
     public async Task<bool> SoftDeleteAsync(Guid id)
     {
         var sql = @"UPDATE Tickets

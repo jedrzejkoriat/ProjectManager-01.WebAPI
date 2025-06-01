@@ -38,14 +38,6 @@ internal class ProjectRepository : IProjectRepository
             throw new Exception("Insert to projects table failed.");
     }
 
-	public async Task<bool> DeleteAsync(Guid id)
-	{
-        var sql = @"DELETE FROM Projects WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
-
-        return result > 0;
-	}
-
 	public async Task<List<Project>> GetAllAsync()
 	{
         var sql = @"SELECT * FROM Projects";
@@ -69,6 +61,14 @@ internal class ProjectRepository : IProjectRepository
                         Key = @Key
                     WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, project);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var sql = @"DELETE FROM Projects WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

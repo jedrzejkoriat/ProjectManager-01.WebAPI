@@ -6,4 +6,5 @@ public interface ICommentRepository :
     ICreateable<Comment>, IReadable<Comment>, IUpdateable<Comment>, IDeleteable
 {
     Task<List<Comment>> GetByTicketIdAsync(Guid ticketId);
+    Task<List<Comment>> GetByUserAndProjectIdAsync(Guid userId, Guid projectId);
 }
