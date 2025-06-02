@@ -2,6 +2,7 @@
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
+
 public interface IRoleRepository :
     ICreateable<Role>, IReadable<Role>, IUpdateable<Role>, IDeleteable
 {

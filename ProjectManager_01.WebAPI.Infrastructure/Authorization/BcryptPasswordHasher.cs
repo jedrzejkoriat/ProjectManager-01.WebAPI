@@ -1,6 +1,7 @@
 ﻿using ProjectManager_01.Application.Contracts.Authorization;
 
 namespace ProjectManager_01.Infrastructure.Authorization;
+
 internal class BcryptPasswordHasher : IBcryptPasswordHasher
 {
     public string HashPassword(string password)

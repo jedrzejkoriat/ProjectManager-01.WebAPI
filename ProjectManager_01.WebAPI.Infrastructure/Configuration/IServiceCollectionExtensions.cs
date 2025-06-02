@@ -5,6 +5,7 @@ using ProjectManager_01.Application.Services;
 using ProjectManager_01.Infrastructure.Repositories;
 
 namespace ProjectManager_01.Infrastructure.Configuration;
+
 public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddRepositories(this IServiceCollection services)

@@ -5,6 +5,7 @@ using ProjectManager_01.Domain.Enums;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
+
 internal class TicketRepository : ITicketRepository
 {
     private readonly IDbConnection dbConnection;

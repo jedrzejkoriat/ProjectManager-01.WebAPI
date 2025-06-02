@@ -4,6 +4,7 @@ using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
+
 internal class UserRepository : IUserRepository
 {
     private readonly IDbConnection dbConnection;
