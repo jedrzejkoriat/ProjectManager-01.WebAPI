@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ProjectManager_01.API.DTOs;
+using ProjectManager_01.Application.DTOs;
 
 namespace ProjectManager_01.Hubs;
 

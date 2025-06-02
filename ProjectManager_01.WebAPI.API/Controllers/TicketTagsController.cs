@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.API.DTOs;
+using ProjectManager_01.Application.DTOs;
 
 namespace ProjectManager_01.Controllers;
 

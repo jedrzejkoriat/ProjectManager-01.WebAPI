@@ -88,9 +88,7 @@ internal class CommentRepository : ICommentRepository
     public async Task<bool> UpdateAsync(Comment comment)
     {
         var sql = @"UPDATE Comments
-                    SET TicketId = @TicketId,
-                        UserId = @UserId,
-                        Content = @Content
+                    SET Content = @Content
                     WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, comment);
 

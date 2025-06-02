@@ -1,4 +1,4 @@
-﻿namespace ProjectManager_01.API.DTOs;
+﻿namespace ProjectManager_01.Application.DTOs;
 
 public sealed class PermissionDTO
 {

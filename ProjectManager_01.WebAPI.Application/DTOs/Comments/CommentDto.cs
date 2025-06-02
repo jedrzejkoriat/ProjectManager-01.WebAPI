@@ -1,6 +1,6 @@
-﻿namespace ProjectManager_01.API.DTOs;
+﻿namespace ProjectManager_01.Application.DTOs.Comments;
 
-public sealed class CommentDTO
+public sealed class CommentDto
 {
     public Guid Id { get; set; }
     public Guid TicketId { get; set; }

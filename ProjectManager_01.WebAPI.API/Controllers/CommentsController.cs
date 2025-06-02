@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.API.DTOs;
+using ProjectManager_01.Application.Contracts.Services;
+using ProjectManager_01.Application.DTOs.Comments;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,21 +11,34 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class CommentsController : ControllerBase
 {
-    private static List<CommentDTO> comments = new List<CommentDTO>
-        {
-            new CommentDTO { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
-            new CommentDTO { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
-        };
+    private readonly ICommentService commentService;
+    public CommentsController(ICommentService commentService)
+    {
+        this.commentService = commentService;
+    }
 
+    private static List<CommentDto> comments = new List<CommentDto>
+    {
+        new CommentDto { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
+        new CommentDto { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
+    };
+    
     // GET: api/comments
     /// <summary>
     /// Get all comments
     /// </summary>
     /// <returns>All comments</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<CommentDTO>> GetComments()
+    public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments()
     {
-        return Ok(comments);
+        try
+        {
+            return Ok(await commentService.GetCommentsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/comments/{id}
@@ -33,14 +48,21 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Comment by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<CommentDTO> GetComment(Guid id)
+    public async Task<ActionResult<CommentDto>> GetComment(Guid id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
         if (comment == null)
             return NotFound();
 
-        return Ok(comment);
+        try
+        {
+            return Ok(await commentService.GetCommentAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/comments
@@ -50,34 +72,37 @@ public class CommentsController : ControllerBase
     /// <param name="comment"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] CommentDTO comment)
+    public async Task<ActionResult> Post([FromBody] CommentCreateDto commentCreateDto)
     {
-        comment.Id = Guid.NewGuid();
-        comments.Add(comment);
-
-        return CreatedAtAction(nameof(GetComment), new { id = comment.Id }, comment);
+        try
+        {
+            await commentService.CreateCommentAsync(commentCreateDto);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // PUT api/comments/{id}
     /// <summary>
     /// Update an existing comment
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedComment"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] CommentDTO updatedComment)
+    [HttpPut]
+    public ActionResult Put([FromBody] CommentUpdateDto updatedComment)
     {
-        var comment = comments.FirstOrDefault(c => c.Id == id);
-
-        if (comment == null)
-            return NotFound();
-
-        comment.TicketId = updatedComment.TicketId;
-        comment.Content = updatedComment.Content;
-        comment.CreatedAt = updatedComment.CreatedAt;
-
-        return NoContent();
+        try
+        {
+            commentService.UpdateCommentAsync(updatedComment);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/comments/{id}
@@ -87,15 +112,21 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         var comment = comments.FirstOrDefault(c => c.Id == id);
 
         if (comment == null)
             return NotFound();
 
-        comments.Remove(comment);
-
-        return NoContent();
+        try
+        {
+            await commentService.DeleteCommentAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }
