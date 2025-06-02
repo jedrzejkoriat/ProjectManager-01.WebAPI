@@ -16,7 +16,9 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 
     public async Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
     {
-        var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId, ProjectId = @ProjectId";
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE UserId = @UserId 
+                    AND ProjectId = @ProjectId";
         var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
 
         return result.ToList();
@@ -24,7 +26,8 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 
     public async Task<List<ProjectUserRole>> GetByUserIdAsync(Guid userId)
     {
-        var sql = @"SELECT * FROM ProjectUserRoles WHERE UserId = @UserId";
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE UserId = @UserId";
         var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId });
 
         return result.ToList();
@@ -35,7 +38,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
     public async Task<Guid> CreateAsync(ProjectUserRole entity)
     {
         var sql = @"INSERT INTO ProjectUserRoles (Id, ProjectId, ProjectRoleId, UserId)
-					VALUES (@Id, @ProjectId, @ProjectRoleId, @UserId";
+					VALUES (@Id, @ProjectId, @ProjectRoleId, @UserId)";
         entity.Id = Guid.NewGuid();
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
@@ -55,7 +58,8 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 
     public async Task<ProjectUserRole> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM ProjectUserRoles WHERE Id = @Id";
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<ProjectUserRole>(sql);
 
         return result;

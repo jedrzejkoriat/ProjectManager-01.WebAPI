@@ -16,7 +16,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<List<UserRole>> GetByRoleIdAsync(Guid roleId)
     {
-        var sql = @"SELECT * FROM UserRoles WHERE RoleId = @RoleId";
+        var sql = @"SELECT * FROM UserRoles 
+                    WHERE RoleId = @RoleId";
         var result = await dbConnection.QueryAsync<UserRole>(sql, new { RoleId = roleId });
 
         return result.ToList();
@@ -34,7 +35,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<UserRole> GetByUserIdAsync(Guid userId)
     {
-        var sql = @"SELECT * FROM UserRoles WHERE UserId = @UserId";
+        var sql = @"SELECT * FROM UserRoles 
+                    WHERE UserId = @UserId";
         var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
 
         return result;
@@ -60,7 +62,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<bool> DeleteAsync(Guid userId)
     {
-        var sql = @"DELETE FROM UserRoles WHERE UserId = @UserId";
+        var sql = @"DELETE FROM UserRoles 
+                    WHERE UserId = @UserId";
         var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId });
 
         return result > 0;

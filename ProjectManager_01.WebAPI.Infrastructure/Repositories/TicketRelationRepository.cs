@@ -16,7 +16,8 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
     public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
     {
-        var sql = @"SELECT * FROM TicketRelations WHERE SourceId = @SourceId";
+        var sql = @"SELECT * FROM TicketRelations 
+                    WHERE SourceId = @SourceId";
         var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { SourceId = sourceId });
 
         return result.ToList();
@@ -24,7 +25,8 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
     public async Task<List<TicketRelation>> GetByTargetIdAsync(Guid targetId)
     {
-        var sql = @"SELECT * FROM TicketRelations WHERE TargetId = @TargetId";
+        var sql = @"SELECT * FROM TicketRelations 
+                    WHERE TargetId = @TargetId";
         var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { TargetId = targetId });
 
         return result.ToList();
@@ -54,7 +56,8 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
     public async Task<TicketRelation> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM TicketRelations WHERE Id = @Id";
+        var sql = @"SELECT * FROM TicketRelations 
+                    WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new { Id = id });
 
         return result;
@@ -74,7 +77,8 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM TicketRelations WHERE Id = @Id";
+        var sql = @"DELETE FROM TicketRelations 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

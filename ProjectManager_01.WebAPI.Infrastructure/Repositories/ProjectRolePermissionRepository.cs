@@ -16,7 +16,8 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
 
     public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId)
     {
-        var sql = @"DELETE FROM ProjectRolePermissions WHERE PermissionId = @PermissionId";
+        var sql = @"DELETE FROM ProjectRolePermissions 
+                    WHERE PermissionId = @PermissionId";
         var result = await dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId });
 
         return result > 0;
@@ -24,7 +25,8 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
 
     public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId)
     {
-        var sql = @"DELETE FROM ProjectRolePermissions WHERE ProjectRoleId = @ProjectRoleId";
+        var sql = @"DELETE FROM ProjectRolePermissions 
+                    WHERE ProjectRoleId = @ProjectRoleId";
         var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId });
 
         return result > 0;
@@ -51,7 +53,8 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     public async Task<ProjectRolePermission> GetByIdAsync(Guid projectRoleId, Guid permissionId)
     {
         var sql = @"SELECT * FROM ProjectRolePermissions
-                    WHERE ProjectRoleId = @ProjectRoleId, PermissionId = @PermissionId";
+                    WHERE ProjectRoleId = @ProjectRoleId 
+                    AND PermissionId = @PermissionId";
         var result = await dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
 
         return result;

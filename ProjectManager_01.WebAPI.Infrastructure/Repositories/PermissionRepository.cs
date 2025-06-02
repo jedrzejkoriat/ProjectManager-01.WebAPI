@@ -17,7 +17,8 @@ internal class PermissionRepository : IPermissionRepository
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Permission permission)
     {
-        var sql = "INSERT INTO Permissions (Id, Name) VALUES (@Id, @Name)";
+        var sql = @"INSERT INTO Permissions (Id, Name) 
+                    VALUES (@Id, @Name)";
         permission.Id = Guid.NewGuid();
         var result = await dbConnection.ExecuteAsync(sql, permission);
 
@@ -37,7 +38,8 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task<Permission> GetByIdAsync(Guid id)
     {
-        var sql = "SELECT * FROM Permissions WHERE Id = @Id";
+        var sql = @"SELECT * FROM Permissions 
+                        WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
 
         return result;
@@ -45,7 +47,9 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task<bool> UpdateAsync(Permission entity)
     {
-        var sql = @"UPDATE Permissions SET Name = @Name WHERE Id = @Id";
+        var sql = @"UPDATE Permissions 
+                        SET Name = @Name 
+                        WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
@@ -53,7 +57,8 @@ internal class PermissionRepository : IPermissionRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Permissions WHERE Id = @Id";
+        var sql = @"DELETE FROM Permissions 
+                        WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

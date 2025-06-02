@@ -59,7 +59,8 @@ internal class UserRepository : IUserRepository
 
     public async Task<User> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Users WHERE Id = @Id";
+        var sql = @"SELECT * FROM Users 
+                    WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
 
         return result;
@@ -67,7 +68,7 @@ internal class UserRepository : IUserRepository
 
     public async Task<bool> UpdateAsync(User entity)
     {
-        var sql = @"UPDATE USers
+        var sql = @"UPDATE Users
                     SET UserName = @UserName,
                         Email = @Email,
                         PasswordHash = @PasswordHash
@@ -79,7 +80,8 @@ internal class UserRepository : IUserRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Users WHERE Id = @Id";
+        var sql = @"DELETE FROM Users 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

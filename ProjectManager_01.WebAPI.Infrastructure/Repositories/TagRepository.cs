@@ -16,7 +16,8 @@ internal class TagRepository : ITagRepository
 
     public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
     {
-        var sql = @"SELECT * FROM Tags WHERE ProjectId = @ProjectId";
+        var sql = @"SELECT * FROM Tags 
+                    WHERE ProjectId = @ProjectId";
         var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
 
         return result.ToList();
@@ -46,8 +47,9 @@ internal class TagRepository : ITagRepository
 
     public async Task<Tag> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Tags WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Tag>(sql);
+        var sql = @"SELECT * FROM Tags 
+                    WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<Tag>(sql, new { Id = id });
 
         return result;
     }
@@ -65,7 +67,8 @@ internal class TagRepository : ITagRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Tags WHERE Id = @Id";
+        var sql = @"DELETE FROM Tags 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

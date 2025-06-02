@@ -17,10 +17,10 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
     {
         var sql = @"SELECT pr.*, prp.*, p.*
-                FROM ProjectRoles pr
-                JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
-                JOIN Permissions p ON prp.PermissionId = p.Id
-                WHERE pr.Id = @Id";
+                    FROM ProjectRoles pr
+                    JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
+                    JOIN Permissions p ON prp.PermissionId = p.Id
+                    WHERE pr.Id = @Id";
 
         var projectRoleDict = new Dictionary<Guid, ProjectRole>();
 
@@ -69,7 +69,8 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 
     public async Task<ProjectRole> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM ProjectRoles WHERE Id = @Id";
+        var sql = @"SELECT * FROM ProjectRoles 
+                    WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new { Id = id });
 
         return result;
@@ -88,7 +89,8 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM ProjectRoles WHERE Id = @Id";
+        var sql = @"DELETE FROM ProjectRoles 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

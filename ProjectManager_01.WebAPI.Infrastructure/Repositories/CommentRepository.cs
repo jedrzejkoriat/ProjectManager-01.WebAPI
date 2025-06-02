@@ -34,10 +34,10 @@ internal class CommentRepository : ICommentRepository
     public async Task<List<Comment>> GetByUserAndProjectIdAsync(Guid userId, Guid projectId)
     {
         var sql = @"SELECT c.*, t.Id, t.TicketNumber, t.Title, p.Id, p.Key
-					FROM Comments c
-					JOIN Tickets t ON c.TicketId = t.Id
-					JOIN Projects p ON t.ProjectId = p.Id
-					WHERE c.UserId = @UserId AND p.Id = @ProjectId";
+                    FROM Comments c
+                    JOIN Tickets t ON c.TicketId = t.Id
+                    JOIN Projects p ON t.ProjectId = p.Id
+                    WHERE c.UserId = @UserId AND p.Id = @ProjectId";
         var comments = await dbConnection.QueryAsync<Comment, Ticket, Project, Comment>(sql, (comment, ticket, project) =>
         {
             ticket.Project = project;
@@ -48,7 +48,6 @@ internal class CommentRepository : ICommentRepository
         splitOn: "Id,Id"
         );
 
-
         return comments.ToList();
     }
 
@@ -56,7 +55,7 @@ internal class CommentRepository : ICommentRepository
     public async Task<Guid> CreateAsync(Comment comment)
     {
         var sql = @"INSERT INTO Comments (Id, TicketId, UserId, Content, CreatedAt)
-                VALUES (@Id, @TicketId, @UserId, @Content, @CreatedAt)";
+                    VALUES (@Id, @TicketId, @UserId, @Content, @CreatedAt)";
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
         var result = await dbConnection.ExecuteAsync(sql, comment);
@@ -86,10 +85,10 @@ internal class CommentRepository : ICommentRepository
     public async Task<bool> UpdateAsync(Comment comment)
     {
         var sql = @"UPDATE Comments
-                SET TicketId = @TicketId,
-                    UserId = @UserId,
-                    Content = @Content
-                WHERE Id = @Id";
+                    SET TicketId = @TicketId,
+                        UserId = @UserId,
+                        Content = @Content
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, comment);
 
         return result > 0;

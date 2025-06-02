@@ -17,8 +17,8 @@ internal class ProjectRepository : IProjectRepository
     public async Task<bool> SoftDeleteAsync(Guid id)
     {
         var sql = @"UPDATE Projects
-                    SET IsDeleted = 1
-                    WHERE Id = @Id";
+                        SET IsDeleted = 1
+                        WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
@@ -49,7 +49,8 @@ internal class ProjectRepository : IProjectRepository
 
     public async Task<Project> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Projects WHERE Id = @Id";
+        var sql = @"SELECT * FROM Projects 
+                        WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
 
         return result;
@@ -68,7 +69,8 @@ internal class ProjectRepository : IProjectRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Projects WHERE Id = @Id";
+        var sql = @"DELETE FROM Projects 
+                        WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

@@ -17,7 +17,8 @@ internal class PriorityRepository : IPriorityRepository
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Priority entity)
     {
-        var sql = @"INSERT INTO Priorities (Id, Name) VALUES (@Id, @Name)";
+        var sql = @"INSERT INTO Priorities (Id, Name) 
+                    VALUES (@Id, @Name)";
         entity.Id = Guid.NewGuid();
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
@@ -37,7 +38,8 @@ internal class PriorityRepository : IPriorityRepository
 
     public async Task<Priority> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Priorities WHERE Id = @Id";
+        var sql = @"SELECT * FROM Priorities 
+                    WHERE Id = @Id";
         var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
 
         return result;
@@ -45,7 +47,9 @@ internal class PriorityRepository : IPriorityRepository
 
     public async Task<bool> UpdateAsync(Priority entity)
     {
-        var sql = @"UPDATE Priorities SET Name = @Name WHERE Id = @Id";
+        var sql = @"UPDATE Priorities 
+                    SET Name = @Name 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
@@ -53,7 +57,8 @@ internal class PriorityRepository : IPriorityRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Priorities WHERE Id = @Id";
+        var sql = @"DELETE FROM Priorities 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

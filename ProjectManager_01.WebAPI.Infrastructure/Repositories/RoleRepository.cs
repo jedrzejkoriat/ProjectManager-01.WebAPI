@@ -38,8 +38,9 @@ internal class RoleRepository : IRoleRepository
 
     public async Task<Role> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Roles WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Role>(sql);
+        var sql = @"SELECT * FROM Roles 
+                    WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<Role>(sql, new { Id = id });
 
         return result;
     }
@@ -56,7 +57,8 @@ internal class RoleRepository : IRoleRepository
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var sql = @"DELETE FROM Roles WHERE Id = @Id";
+        var sql = @"DELETE FROM Roles 
+                    WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;

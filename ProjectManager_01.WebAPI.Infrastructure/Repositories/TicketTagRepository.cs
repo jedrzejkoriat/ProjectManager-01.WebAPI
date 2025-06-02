@@ -16,7 +16,8 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<List<TicketTag>> GetByTagIdAsync(Guid tagId)
     {
-        var sql = @"SELECT * FROM TicketTags WHERE TagId = @TagId";
+        var sql = @"SELECT * FROM TicketTags 
+                    WHERE TagId = @TagId";
         var result = await dbConnection.QueryAsync<TicketTag>(sql, new { TagId = tagId });
 
         return result.ToList();
@@ -24,7 +25,8 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<List<TicketTag>> GetByTicketIdAsync(Guid ticketId)
     {
-        var sql = @"SELECT * FROM TicketTags WHERE TicketId = @TicketId";
+        var sql = @"SELECT * FROM TicketTags 
+                    WHERE TicketId = @TicketId";
         var result = await dbConnection.QueryAsync<TicketTag>(sql, new { TicketId = ticketId });
 
         return result.ToList();
@@ -32,7 +34,8 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<bool> DeleteByTagIdAsync(Guid tagId)
     {
-        var sql = @"DELETE FROM TicketTags WHERE TagId = @TagId";
+        var sql = @"DELETE FROM TicketTags 
+                    WHERE TagId = @TagId";
         var result = await dbConnection.ExecuteAsync(sql, new { TagId = tagId });
 
         return result > 0;
@@ -40,7 +43,8 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<bool> DeleteByTicketIdAsync(Guid ticketId)
     {
-        var sql = @"DELETE FROM TicketTags WHERE TicketId = @TicketId";
+        var sql = @"DELETE FROM TicketTags 
+                    WHERE TicketId = @TicketId";
         var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId });
 
         return result > 0;
@@ -51,7 +55,7 @@ internal class TicketTagRepository : ITicketTagRepository
     {
         var sql = @"INSERT INTO TicketTags (TicketId, TagId)
                     VALUES (@TicketId, @TagId)";
-        var result = await dbConnection.ExecuteAsync(sql, new { TicketTag = ticketTag });
+        var result = await dbConnection.ExecuteAsync(sql, ticketTag);
 
         return result > 0;
     }
@@ -66,7 +70,9 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<TicketTag> GetByIdAsync(Guid ticketId, Guid tagId)
     {
-        var sql = @"SELECT * FROM TicketTags WHERE TicketId = @TicketId AND TagId = @TagId";
+        var sql = @"SELECT * FROM TicketTags 
+                    WHERE TicketId = @TicketId 
+                    AND TagId = @TagId";
         var result = await dbConnection.QueryFirstAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result;
@@ -74,7 +80,9 @@ internal class TicketTagRepository : ITicketTagRepository
 
     public async Task<bool> DeleteAsync(Guid ticketId, Guid tagId)
     {
-        var sql = @"DELETE FROM TicketTags WHERE TicketId = @TicketId AND TagId = @TagId";
+        var sql = @"DELETE FROM TicketTags 
+                    WHERE TicketId = @TicketId 
+                    AND TagId = @TagId";
         var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result > 0;
