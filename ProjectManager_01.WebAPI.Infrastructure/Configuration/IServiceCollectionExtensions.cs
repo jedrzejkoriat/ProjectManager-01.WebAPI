@@ -8,7 +8,7 @@ namespace ProjectManager_01.Infrastructure.Configuration;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    public static IServiceCollection AddDapperRepositories(this IServiceCollection services)
     {
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
@@ -24,26 +24,6 @@ public static class IServiceCollectionExtensions
         services.AddScoped<ITicketTagRepository, TicketTagRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddServices(this IServiceCollection services)
-    {
-        services.AddScoped<ICommentService, CommentService>();
-        services.AddScoped<IPermissionService, PermissionService>();
-        services.AddScoped<IPriorityService, PriorityService>();
-        services.AddScoped<IProjectService, ProjectService>();
-        services.AddScoped<IProjectRolePermissionService, ProjectRolePermissionService>();
-        services.AddScoped<IProjectRoleService, ProjectRoleService>();
-        services.AddScoped<IProjectUserRoleService, ProjectUserRoleService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<ITagService, TagService>();
-        services.AddScoped<ITicketRelationService, TicketRelationService>();
-        services.AddScoped<ITicketService, TicketService>();
-        services.AddScoped<ITicketTagService, TicketTagService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IUserRoleService, UserRoleService>();
 
         return services;
     }

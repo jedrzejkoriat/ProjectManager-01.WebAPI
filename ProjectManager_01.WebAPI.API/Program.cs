@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
+using ProjectManager_01.Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,7 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.AddSignalR();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
-builder.Services.AddRepositories();
+builder.Services.AddDapperRepositories();
 builder.Services.AddServices();
 
 var app = builder.Build();
