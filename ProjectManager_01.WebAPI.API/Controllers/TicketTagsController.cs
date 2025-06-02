@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.TicketTags;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketTagsController : ControllerBase
 {
-    private static List<TicketTagDTO> ticketTags = new List<TicketTagDTO>
+    private readonly ITicketTagService ticketTagService;
+
+    public TicketTagsController(ITicketTagService ticketTagService)
     {
-        new TicketTagDTO { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
-        new TicketTagDTO { TicketId = Guid.NewGuid(), TagId = Guid.NewGuid() },
-    };
+        this.ticketTagService = ticketTagService;
+    }
 
     // GET: api/tickettags
     /// <summary>
@@ -21,9 +25,16 @@ public class TicketTagsController : ControllerBase
     /// </summary>
     /// <returns>All ticket tags</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<TicketTagDTO>> GetTicketTags()
+    public async Task<ActionResult<IEnumerable<TicketTagDto>>> GetTicketTags()
     {
-        return Ok(ticketTags);
+        try
+        {
+            return Ok(await ticketTagService.GetAllTicketTagsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/tickettags/{ticketId}/{tagId}
@@ -34,14 +45,16 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns>Ticket tag by its ticket id and tag id</returns>
     [HttpGet("{ticketId}/{tagId}")]
-    public ActionResult<TicketTagDTO> GetTicketTag(Guid ticketId, Guid tagId)
+    public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId)
     {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
-
-        if (ticketTag == null)
-            return NotFound();
-
-        return Ok(ticketTag);
+        try
+        {
+            return Ok(await ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/tickettags
@@ -51,33 +64,17 @@ public class TicketTagsController : ControllerBase
     /// <param name="ticketTag"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] TicketTagDTO ticketTag)
+    public async Task<ActionResult> Post([FromBody] TicketTagCreateDto ticketTag)
     {
-        ticketTags.Add(ticketTag);
-
-        return CreatedAtAction(nameof(GetTicketTag), new { ticketId = ticketTag.TicketId, tagId = ticketTag.TagId }, ticketTag);
-    }
-
-    // PUT: api/tickettags/{ticketId}/{tagId}
-    /// <summary>
-    /// Update an existing ticket tag
-    /// </summary>
-    /// <param name="ticketId"></param>
-    /// <param name="tagId"></param>
-    /// <param name="updatedTicketTag"></param>
-    /// <returns></returns>
-    [HttpPut("{ticketId}/{tagId}")]
-    public ActionResult Put(Guid ticketId, Guid tagId, [FromBody] TicketTagDTO updatedTicketTag)
-    {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
-
-        if (ticketTag == null)
-            return NotFound();
-
-        ticketTag.TicketId = updatedTicketTag.TicketId;
-        ticketTag.TagId = updatedTicketTag.TagId;
-
-        return NoContent();
+        try
+        {
+            await ticketTagService.CreateTicketTagAsync(ticketTag);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/tickettags/{ticketId}/{tagId}
@@ -88,15 +85,16 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns></returns>
     [HttpDelete("{ticketId}/{tagId}")]
-    public ActionResult Delete(Guid ticketId, Guid tagId)
+    public async Task<ActionResult> Delete(Guid ticketId, Guid tagId)
     {
-        var ticketTag = ticketTags.FirstOrDefault(t => t.TicketId == ticketId && t.TagId == tagId);
-
-        if (ticketTag == null)
-            return NotFound();
-
-        ticketTags.Remove(ticketTag);
-
-        return NoContent();
+        try
+        {
+            await ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

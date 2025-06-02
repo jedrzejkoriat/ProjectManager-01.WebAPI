@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.UserRoles;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class UserRolesController : ControllerBase
 {
-    private static List<UserRoleDTO> userRoles = new List<UserRoleDTO>
+    private readonly IUserRoleService userRoleService;
+
+    public UserRolesController(IUserRoleService userRoleService)
     {
-        new UserRoleDTO { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
-        new UserRoleDTO { UserId = Guid.NewGuid(), RoleId = Guid.NewGuid() },
-    };
+        this.userRoleService = userRoleService;
+    }
 
     // GET: api/userroles
     /// <summary>
@@ -21,9 +25,16 @@ public class UserRolesController : ControllerBase
     /// </summary>
     /// <returns>All user roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<UserRoleDTO>> GetUserRoles()
+    public ActionResult<IEnumerable<UserRoleDto>> GetUserRoles()
     {
-        return Ok(userRoles);
+        try
+        { 
+            return Ok(userRoleService.GetAllUserRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/userroles/{userId}
@@ -33,14 +44,16 @@ public class UserRolesController : ControllerBase
     /// <param name="userId"></param>
     /// <returns>User role by user id</returns>
     [HttpGet("{userId}")]
-    public ActionResult<UserRoleDTO> GetUserRole(Guid userId)
+    public async Task<ActionResult<UserRoleDto>> GetUserRole(Guid userId)
     {
-        var userRole = userRoles.FirstOrDefault(ur => ur.UserId == userId);
-
-        if (userRole == null)
-            return NotFound();
-
-        return Ok(userRole);
+        try
+        {
+            return Ok(await userRoleService.GetUserRoleByUserIdAsync(userId));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/userroles
@@ -50,32 +63,37 @@ public class UserRolesController : ControllerBase
     /// <param name="userRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] UserRoleDTO userRole)
+    public async Task<ActionResult> Post([FromBody] UserRoleCreateDto userRole)
     {
-        userRoles.Add(userRole);
-
-        return CreatedAtAction(nameof(GetUserRole), new { userId = userRole.UserId }, userRole);
+        try
+        {
+            await userRoleService.CreateUserRoleAsync(userRole);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // PUT: api/userroles/{userId}
     /// <summary>
     /// Update an existing user role
     /// </summary>
-    /// <param name="userId"></param>
     /// <param name="updatedUserRole"></param>
     /// <returns></returns>
-    [HttpPut("{userId}")]
-    public ActionResult Put(Guid userId, [FromBody] UserRoleDTO updatedUserRole)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] UserRoleUpdateDto updatedUserRole)
     {
-        var userRole = userRoles.FirstOrDefault(ur => ur.UserId == userId);
-
-        if (userRole == null)
-            return NotFound();
-
-        userRole.UserId = updatedUserRole.UserId;
-        userRole.RoleId = updatedUserRole.RoleId;
-
-        return NoContent();
+        try
+        {
+            await userRoleService.UpdateUserRoleAsync(updatedUserRole);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/userroles/{userId}
@@ -85,15 +103,16 @@ public class UserRolesController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpDelete("{userId}")]
-    public ActionResult Delete(Guid userId)
+    public async Task<ActionResult> Delete(Guid userId)
     {
-        var userRole = userRoles.FirstOrDefault(ur => ur.UserId == userId);
-
-        if (userRole == null)
-            return NotFound();
-
-        userRoles.Remove(userRole);
-
-        return NoContent();
+        try
+        {
+            await userRoleService.DeleteUserRoleAsync(userId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

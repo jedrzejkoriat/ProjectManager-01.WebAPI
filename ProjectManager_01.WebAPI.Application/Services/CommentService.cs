@@ -23,11 +23,6 @@ public class CommentService : ICommentService
         await commentRepository.CreateAsync(comment);
     }
 
-    public async Task DeleteCommentAsync(Guid commentId)
-    {
-        await commentRepository.DeleteAsync(commentId);
-    }
-
     public async Task<CommentDto> GetCommentAsync(Guid commentId)
     {
         Comment comment = await commentRepository.GetByIdAsync(commentId);
@@ -35,16 +30,21 @@ public class CommentService : ICommentService
         return mapper.Map<CommentDto>(comment);
     }
 
-    public async Task<List<CommentDto>> GetCommentsAsync()
+    public async Task<List<CommentDto>> GetAllCommentsAsync()
     {
         List<Comment> comments = await commentRepository.GetAllAsync();
 
         return mapper.Map<List<CommentDto>>(comments);
     }
 
-    public Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto)
+    public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto)
     {
         Comment comment = mapper.Map<Comment>(commentUpdateDto);
-        return commentRepository.UpdateAsync(comment);
+        await commentRepository.UpdateAsync(comment);
+    }
+
+    public async Task DeleteCommentAsync(Guid commentId)
+    {
+        await commentRepository.DeleteAsync(commentId);
     }
 }

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private static List<UserDTO> users = new List<UserDTO>
-        {
-            new UserDTO { Id = Guid.NewGuid(), UserName = "admin", Email = "admin@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow },
-            new UserDTO { Id = Guid.NewGuid(), UserName = "user", Email = "user@example.com", PasswordHash = "hashed_password", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow }
-        };
+    private readonly IUserService userService;
+
+    public UsersController(IUserService userService)
+    {
+        this.userService = userService;
+    }
 
     // GET: api/users
     /// <summary>
@@ -21,9 +25,16 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <returns>All urses</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<UserDTO>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
-        return Ok(users);
+        try
+        {
+            return Ok(await userService.GetAllUsersAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/users/{id}
@@ -33,14 +44,16 @@ public class UsersController : ControllerBase
     /// <param name="id"></param>
     /// <returns>User by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<UserDTO> GetUser(Guid id)
+    public async Task<ActionResult<UserDto>> GetUser(Guid id)
     {
-        var user = users.FirstOrDefault(u => u.Id == id);
-
-        if (user == null)
-            return NotFound();
-
-        return Ok(user);
+        try
+        {
+            return Ok(await userService.GetUserByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/users
@@ -50,35 +63,37 @@ public class UsersController : ControllerBase
     /// <param name="user"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] UserDTO user)
+    public async Task<ActionResult> Post([FromBody] UserCreateDto user)
     {
-        user.Id = Guid.NewGuid();
-        users.Add(user);
-
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        try
+        {
+            await userService.CreateUserAsync(user);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // PUT: api/users/{id}
     /// <summary>
     /// Update an existing user
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedUser"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] UserDTO updatedUser)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] UserUpdateDto updatedUser)
     {
-        var user = users.FirstOrDefault(u => u.Id == id);
-
-        if (user == null)
-            return NotFound();
-
-        user.UserName = updatedUser.UserName;
-        user.Email = updatedUser.Email;
-        user.PasswordHash = updatedUser.PasswordHash;
-        user.CreatedAt = updatedUser.CreatedAt;
-
-        return NoContent();
+        try
+        {
+            await userService.UpdateUserAsync(updatedUser);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/users/{id}
@@ -88,15 +103,16 @@ public class UsersController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var user = users.FirstOrDefault(u => u.Id == id);
-
-        if (user == null)
-            return NotFound();
-
-        users.Remove(user);
-
-        return NoContent();
+        try
+        {
+            await userService.DeleteUserAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

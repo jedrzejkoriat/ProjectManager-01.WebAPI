@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.Projects;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,15 +12,13 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectsController : ControllerBase
 {
-    public ProjectsController()
+    private readonly IProjectService projectService;
+
+    public ProjectsController(IProjectService projectService)
     {
+        this.projectService = projectService;
     }
 
-    private static List<ProjectDTO> projects = new List<ProjectDTO>
-        {
-            new ProjectDTO { Id = Guid.NewGuid(), Name = "Project 1", Key = "ABC", IsDeleted = false, CreatedAt = DateTime.Now },
-            new ProjectDTO { Id = Guid.NewGuid(), Name = "Project 2", Key = "DCE", IsDeleted = false, CreatedAt = DateTime.Now}
-        };
 
     // GET: api/projects
     /// <summary>
@@ -25,9 +26,16 @@ public class ProjectsController : ControllerBase
     /// </summary>
     /// <returns>All projects</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectDTO>> GetProjects()
+    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
-        return Ok(projects);
+        try
+        {
+            return Ok(await projectService.GetAllProjectsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/projects
@@ -37,14 +45,16 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectDTO> GetProject(Guid id)
+    public async Task<ActionResult<ProjectDto>> GetProject(Guid id)
     {
-        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
-
-        if (project == null)
-            return NotFound();
-
-        return Ok(project);
+        try
+        {
+            return Ok(await projectService.GetProjectByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/projects
@@ -54,34 +64,37 @@ public class ProjectsController : ControllerBase
     /// <param name="project"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectDTO project)
+    public async Task<ActionResult> Post([FromBody] ProjectCreateDto project)
     {
-        project.Id = Guid.NewGuid();
-        projects.Add(project);
-
-        return CreatedAtAction(nameof(GetProject), new { id = project.Id }, project);
+        try
+        {
+            await projectService.CreateProjectAsync(project);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // PUT api/projects
     /// <summary>
     /// Update an existing project
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedProject"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] ProjectDTO updatedProject)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] ProjectUpdateDto updatedProject)
     {
-        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
-
-        if (project == null)
-            return NotFound();
-
-        project.Name = updatedProject.Name;
-        project.Key = updatedProject.Key;
-        project.CreatedAt = updatedProject.CreatedAt;
-
-        return NoContent();
+        try
+        {
+            await projectService.UpdateProjectAsync(updatedProject);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/projects
@@ -91,15 +104,16 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        ProjectDTO project = projects.FirstOrDefault(p => p.Id == id);
-
-        if (project == null)
-            return NotFound();
-
-        projects.Remove(project);
-
-        return NoContent();
+        try
+        {
+            await projectService.DeleteProjectAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

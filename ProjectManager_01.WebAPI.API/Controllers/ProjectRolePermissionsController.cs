@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.ProjectRolePermissions;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase
 {
-    private static List<ProjectRolePermissionDTO> projectRolePermissions = new List<ProjectRolePermissionDTO>
+    private readonly IProjectRolePermissionService projectRolePermissionService;
+
+    public ProjectRolePermissionsController(IProjectRolePermissionService projectRolePermissionService)
     {
-        new ProjectRolePermissionDTO { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
-        new ProjectRolePermissionDTO { ProjectRoleId = Guid.NewGuid(), PermissionId = Guid.NewGuid() },
-    };
+        this.projectRolePermissionService = projectRolePermissionService;
+    }
 
     // GET: api/projectrolepermissions
     /// <summary>
@@ -21,9 +25,16 @@ public class ProjectRolePermissionsController : ControllerBase
     /// </summary>
     /// <returns>All project role permissions</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectRolePermissionDTO>> GetProjectRolePermissions()
+    public async Task<ActionResult<IEnumerable<ProjectRolePermissionDto>>> GetProjectRolePermissions()
     {
-        return Ok(projectRolePermissions);
+        try
+        {
+            return Ok(await projectRolePermissionService.GetProjectRolePermissionsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/projectrolepermissions/{projectRoleId}/{permissionId}
@@ -34,14 +45,16 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="permissionId"></param>
     /// <returns>Project role permission by its project role id and permission id</returns>
     [HttpGet("{projectRoleId}/{permissionId}")]
-    public ActionResult<ProjectRolePermissionDTO> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
+    public async Task<ActionResult<ProjectRolePermissionDto>> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
-
-        if (permissionEntry == null)
-            return NotFound();
-
-        return Ok(permissionEntry);
+        try
+        {
+            return Ok(await projectRolePermissionService.GetProjectRolePermissionByIdAsync(projectRoleId, permissionId));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/projectrolepermissions
@@ -51,33 +64,17 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="projectRolePermission"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectRolePermissionDTO projectRolePermission)
+    public async Task<ActionResult> Post([FromBody] ProjectRolePermissionCreateDto projectRolePermission)
     {
-        projectRolePermissions.Add(projectRolePermission);
-
-        return CreatedAtAction(nameof(GetProjectRolePermission), new { projectRoleId = projectRolePermission.ProjectRoleId, permissionId = projectRolePermission.PermissionId }, projectRolePermission);
-    }
-
-    // PUT: api/projectrolepermissions/{projectRoleId}/{permissionId}
-    /// <summary>
-    /// Update an existing project role permission
-    /// </summary>
-    /// <param name="projectRoleId"></param>
-    /// <param name="permissionId"></param>
-    /// <param name="updatedPermission"></param>
-    /// <returns></returns>
-    [HttpPut("{projectRoleId}/{permissionId}")]
-    public ActionResult Put(Guid projectRoleId, Guid permissionId, [FromBody] ProjectRolePermissionDTO updatedPermission)
-    {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
-
-        if (permissionEntry == null)
-            return NotFound();
-
-        permissionEntry.ProjectRoleId = updatedPermission.ProjectRoleId;
-        permissionEntry.PermissionId = updatedPermission.PermissionId;
-
-        return NoContent();
+        try
+        {
+            await projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermission);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/projectrolepermissions/{projectRoleId}/{permissionId}
@@ -88,15 +85,16 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="permissionId"></param>
     /// <returns></returns>
     [HttpDelete("{projectRoleId}/{permissionId}")]
-    public ActionResult Delete(Guid projectRoleId, Guid permissionId)
+    public async Task<ActionResult> Delete(Guid projectRoleId, Guid permissionId)
     {
-        var permissionEntry = projectRolePermissions.FirstOrDefault(p => p.ProjectRoleId == projectRoleId && p.PermissionId == permissionId);
-
-        if (permissionEntry == null)
-            return NotFound();
-
-        projectRolePermissions.Remove(permissionEntry);
-
-        return NoContent();
+        try
+        {
+            await projectRolePermissionService.DeleteProjectRolePermissionAsync(projectRoleId, permissionId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

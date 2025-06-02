@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.Roles;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class RolesController : ControllerBase
 {
-    private static List<RoleDTO> roles = new List<RoleDTO>
+    private readonly IRoleService roleService;
+
+    public RolesController(IRoleService roleService)
     {
-        new RoleDTO { Id = Guid.NewGuid(), Name = "Admin" },
-        new RoleDTO { Id = Guid.NewGuid(), Name = "User" }
-    };
+        this.roleService = roleService;
+    }
 
     // GET: api/roles
     /// <summary>
@@ -21,9 +25,16 @@ public class RolesController : ControllerBase
     /// </summary>
     /// <returns>All roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<RoleDTO>> GetRoles()
+    public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
     {
-        return Ok(roles);
+        try
+        {
+            return Ok(await roleService.GetAllRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/roles/{id}
@@ -33,14 +44,16 @@ public class RolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<RoleDTO> GetRole(Guid id)
+    public async Task<ActionResult<RoleDto>> GetRole(Guid id)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        return Ok(role);
+        try
+        {
+            return Ok(await roleService.GetRoleByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/roles
@@ -50,32 +63,37 @@ public class RolesController : ControllerBase
     /// <param name="role"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] RoleDTO role)
+    public async Task<ActionResult> Post([FromBody] RoleCreateDto role)
     {
-        role.Id = Guid.NewGuid();
-        roles.Add(role);
-
-        return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
+        try
+        {
+            await roleService.CreateRoleAsync(role);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT api/roles/{id}
+    // PUT api/roles
     /// <summary>
     /// Update an existing role
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedRole"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] RoleDTO updatedRole)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] RoleUpdateDto updatedRole)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        role.Name = updatedRole.Name;
-
-        return NoContent();
+        try
+        {
+            await roleService.UpdateRoleAsync(updatedRole);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/roles/{id}
@@ -85,15 +103,16 @@ public class RolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var role = roles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        roles.Remove(role);
-
-        return NoContent();
+        try
+        {
+            await roleService.DeleteRoleAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

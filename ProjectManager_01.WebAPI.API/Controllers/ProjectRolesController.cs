@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.ProjectRoles;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolesController : ControllerBase
 {
-    private static List<ProjectRoleDTO> projectRoles = new List<ProjectRoleDTO>
-        {
-            new ProjectRoleDTO { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "Admin" },
-            new ProjectRoleDTO { Id = Guid.NewGuid(), ProjectId = Guid.NewGuid(), Name = "User" }
-        };
+    private readonly IProjectRoleService projectRoleService;
+
+    public ProjectRolesController(IProjectRoleService projectRoleService)
+    {
+        this.projectRoleService = projectRoleService;
+    }
 
     // GET: api/roles
     /// <summary>
@@ -21,9 +25,16 @@ public class ProjectRolesController : ControllerBase
     /// </summary>
     /// <returns>All project roles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectRoleDTO>> GetProjectRoles()
+    public async Task<ActionResult<IEnumerable<ProjectRoleDto>>> GetProjectRoles()
     {
-        return Ok(projectRoles);
+        try
+        {
+            return Ok(await projectRoleService.GetAllProjectRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/roles/{id}
@@ -33,50 +44,56 @@ public class ProjectRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project role by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectRoleDTO> GetProjectRole(Guid id)
+    public async Task<ActionResult<ProjectRoleDto>> GetProjectRole(Guid id)
     {
-        var role = projectRoles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        return Ok(role);
+        try
+        {
+            return Ok(await projectRoleService.GetProjectRoleByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/roles
     /// <summary>
     /// Create a new role
     /// </summary>
-    /// <param name="role"></param>
+    /// <param name="projectRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectRoleDTO projectRole)
+    public async Task<ActionResult> Post([FromBody] ProjectRoleCreateDto projectRole)
     {
-        projectRole.Id = Guid.NewGuid();
-        projectRoles.Add(projectRole);
-
-        return CreatedAtAction(nameof(GetProjectRole), new { id = projectRole.Id }, projectRole);
+        try
+        {
+            await projectRoleService.CreateProjectRoleAsync(projectRole);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT: api/roles/{id}
+    // PUT: api/roles
     /// <summary>
     /// Update an existing role
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedProjectRole"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] ProjectRoleDTO updatedProjectRole)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] ProjectRoleUpdateDto updatedProjectRole)
     {
-        var role = projectRoles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        role.Name = updatedProjectRole.Name;
-        role.ProjectId = updatedProjectRole.ProjectId;
-
-        return NoContent();
+        try
+        {
+            await projectRoleService.UpdateProjectRoleAsync(updatedProjectRole);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/roles/{id}
@@ -86,15 +103,16 @@ public class ProjectRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var role = projectRoles.FirstOrDefault(r => r.Id == id);
-
-        if (role == null)
-            return NotFound();
-
-        projectRoles.Remove(role);
-
-        return NoContent();
+        try
+        {
+            await projectRoleService.DeleteProjectRoleAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

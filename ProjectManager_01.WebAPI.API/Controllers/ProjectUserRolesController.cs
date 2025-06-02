@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.ProjectUserRoles;
 namespace ProjectManager_01.Controllers;
 
 [EnableRateLimiting("fixedlimit")]
@@ -8,11 +11,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectUserRolesController : ControllerBase
 {
-    private static List<ProjectUserRoleDTO> projectMembers = new List<ProjectUserRoleDTO>
-        {
-            new ProjectUserRoleDTO { Id  = Guid.NewGuid(), UserId =Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() },
-            new ProjectUserRoleDTO { Id = Guid.NewGuid(), UserId = Guid.NewGuid(), ProjectId = Guid.NewGuid(), ProjectRoleId = Guid.NewGuid() }
-        };
+    private readonly IProjectUserRoleService projectUserRoleService;
+
+    public ProjectUserRolesController(IProjectUserRoleService projectUserRoleService)
+    {
+        this.projectUserRoleService = projectUserRoleService;
+    }
 
     // GET api/projectmembers
     /// <summary>
@@ -20,9 +24,16 @@ public class ProjectUserRolesController : ControllerBase
     /// </summary>
     /// <returns>All project members</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ProjectUserRoleDTO>> GetProjectMembers()
+    public async Task<ActionResult<IEnumerable<ProjectUserRoleDto>>> GetProjectMembers()
     {
-        return Ok(projectMembers);
+        try
+        {
+            return Ok(await projectUserRoleService.GetAllProjectUserRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/projectmembers/{id}
@@ -32,14 +43,16 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project member by id</returns>
     [HttpGet("{id}")]
-    public ActionResult<ProjectUserRoleDTO> GetProjectMember(Guid id)
+    public async Task<ActionResult<ProjectUserRoleDto>> GetProjectMember(Guid id)
     {
-        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-
-        if (pm == null)
-            return NotFound();
-
-        return Ok(pm);
+        try
+        {
+            return Ok(await projectUserRoleService.GetProjectUserRoleByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/projectmembers
@@ -49,34 +62,37 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="projectMember"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] ProjectUserRoleDTO projectMember)
+    public async Task<ActionResult> Post([FromBody] ProjectUserRoleCreateDto projectMember)
     {
-        projectMember.Id = Guid.NewGuid();
-        projectMembers.Add(projectMember);
-
-        return CreatedAtAction(nameof(GetProjectMember), new { id = projectMember.Id }, projectMember);
+        try
+        {
+            await projectUserRoleService.CreateProjectUserRoleAsync(projectMember);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT api/projectmembers/{id}
+    // PUT api/projectmembers
     /// <summary>
     /// Update an existing project member
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedProjectMember"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] ProjectUserRoleDTO updatedProjectMember)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] ProjectUserRoleUpdateDto updatedProjectMember)
     {
-        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-
-        if (pm == null)
-            return NotFound();
-
-        pm.UserId = updatedProjectMember.UserId;
-        pm.ProjectId = updatedProjectMember.ProjectId;
-        pm.ProjectRoleId = updatedProjectMember.ProjectRoleId;
-
-        return NoContent();
+        try
+        {
+            await projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectMember);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/projectmembers/{id}
@@ -86,15 +102,16 @@ public class ProjectUserRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var pm = projectMembers.FirstOrDefault(p => p.Id == id);
-
-        if (pm == null)
-            return NotFound();
-
-        projectMembers.Remove(pm);
-
-        return NoContent();
+        try
+        {
+            await projectUserRoleService.DeleteProjectUserRoleAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

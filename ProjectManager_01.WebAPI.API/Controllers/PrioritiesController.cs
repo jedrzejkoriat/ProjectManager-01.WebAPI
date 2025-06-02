@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.Contracts.Services;
+using ProjectManager_01.Application.DTOs.Priorities;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PrioritiesController : ControllerBase
 {
-    private static List<PriorityDTO> priorities = new List<PriorityDTO>
-        {
-            new PriorityDTO { Id = Guid.NewGuid(), Name = "Low", Level = 1 },
-            new PriorityDTO { Id = Guid.NewGuid(), Name = "High", Level = 5 }
-        };
+    private readonly IPriorityService priorityService;
+
+    public PrioritiesController(IPriorityService priorityService)
+    {
+        this.priorityService = priorityService;
+    }
 
     // GET api/priorities
     /// <summary>
@@ -21,9 +25,16 @@ public class PrioritiesController : ControllerBase
     /// </summary>
     /// <returns>All priorities</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<PriorityDTO>> GetPriorities()
+    public async Task<ActionResult<IEnumerable<PriorityDto>>> GetPriorities()
     {
-        return Ok(priorities);
+        try
+        {
+            return Ok(await priorityService.GetAllPrioritiesAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/priorities/{id}
@@ -33,14 +44,16 @@ public class PrioritiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Priority by id</returns>
     [HttpGet("{id}")]
-    public ActionResult<PriorityDTO> GetPriority(Guid id)
+    public async Task<ActionResult<PriorityDto>> GetPriority(Guid id)
     {
-        var priority = priorities.FirstOrDefault(p => p.Id == id);
-
-        if (priority == null)
-            return NotFound();
-
-        return Ok(priority);
+        try
+        {
+            return Ok(await priorityService.GetPriorityByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/priorities
@@ -50,33 +63,37 @@ public class PrioritiesController : ControllerBase
     /// <param name="priority"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] PriorityDTO priority)
+    public async Task<ActionResult> Post([FromBody] PriorityCreateDto priority)
     {
-        priority.Id = Guid.NewGuid();
-        priorities.Add(priority);
-
-        return CreatedAtAction(nameof(GetPriority), new { id = priority.Id }, priority);
+        try
+        {
+            await priorityService.CreatePriorityAsync(priority);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT api/priorities/{id}
+    // PUT api/priorities
     /// <summary>
     /// Update an existing priority
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedPriority"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] PriorityDTO updatedPriority)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] PriorityUpdateDto updatedPriority)
     {
-        var priority = priorities.FirstOrDefault(p => p.Id == id);
-
-        if (priority == null)
-            return NotFound();
-
-        priority.Name = updatedPriority.Name;
-        priority.Level = updatedPriority.Level;
-
-        return NoContent();
+        try
+        {
+            await priorityService.UpdatePriorityAsync(updatedPriority);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/priorities/{id}
@@ -86,15 +103,16 @@ public class PrioritiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var priority = priorities.FirstOrDefault(p => p.Id == id);
-
-        if (priority == null)
-            return NotFound();
-
-        priorities.Remove(priority);
-
-        return NoContent();
+        try
+        {
+            await priorityService.DeletePriorityAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

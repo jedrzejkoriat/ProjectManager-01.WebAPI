@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.Permissions;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PermissionsController : ControllerBase
 {
-    private static List<PermissionDTO> permissions = new List<PermissionDTO>
+    private readonly IPermissionService permissionService;
+
+    public PermissionsController(IPermissionService permissionService)
     {
-        new PermissionDTO { Id = Guid.NewGuid(), Name = "CreateTicket" },
-        new PermissionDTO { Id = Guid.NewGuid(), Name = "EditUser" }
-    };
+        this.permissionService = permissionService;
+    }
 
     // GET: api/permissions
     /// <summary>
@@ -21,9 +25,16 @@ public class PermissionsController : ControllerBase
     /// </summary>
     /// <returns>All permissions</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<PermissionDTO>> GetPermissions()
+    public ActionResult<IEnumerable<PermissionDto>> GetPermissions()
     {
-        return Ok(permissions);
+        try
+        {
+            return Ok(permissionService.GetAllPermissionsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET api/permissions/{id}
@@ -33,14 +44,16 @@ public class PermissionsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Permission by its id</returns>
     [HttpGet("{id}")]
-    public ActionResult<PermissionDTO> GetPermission(Guid id)
+    public ActionResult<PermissionDto> GetPermission(Guid id)
     {
-        var permission = permissions.FirstOrDefault(p => p.Id == id);
-
-        if (permission == null)
-            return NotFound();
-
-        return Ok(permission);
+        try
+        {
+            return Ok(permissionService.GetPermissionByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/permissions
@@ -50,32 +63,37 @@ public class PermissionsController : ControllerBase
     /// <param name="permission"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] PermissionDTO permission)
+    public async Task<ActionResult> Post([FromBody] PermissionCreateDto permission)
     {
-        permission.Id = Guid.NewGuid();
-        permissions.Add(permission);
-
-        return CreatedAtAction(nameof(GetPermission), new { id = permission.Id }, permission);
+        try
+        {
+            await permissionService.CreatePermissionAsync(permission);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT api/permissions/{id}
+    // PUT api/permissions
     /// <summary>
     /// Update an existing permission
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] PermissionDTO updatedPermission)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] PermissionUpdateDto updatedPermission)
     {
-        var permission = permissions.FirstOrDefault(p => p.Id == id);
-
-        if (permission == null)
-            return NotFound();
-
-        permission.Name = updatedPermission.Name;
-
-        return NoContent();
+        try
+        {
+            await permissionService.UpdatePermissionAsync(updatedPermission);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE api/permissions/{id}
@@ -85,15 +103,16 @@ public class PermissionsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var permission = permissions.FirstOrDefault(p => p.Id == id);
-
-        if (permission == null)
-            return NotFound();
-
-        permissions.Remove(permission);
-
-        return NoContent();
+        try
+        {
+            await permissionService.DeletePermissionAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

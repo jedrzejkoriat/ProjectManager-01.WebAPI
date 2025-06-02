@@ -27,10 +27,10 @@ internal class ProjectRepository : IProjectRepository
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Project project)
     {
-        var sql = @"INSERT INTO Projects(Id, Name, Key, CreatedAt, IsDeleted)
-                    VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted";
+        var sql = @"INSERT INTO Projects(Id, Name, [Key], CreatedAt, IsDeleted)
+                    VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted)";
         project.Id = Guid.NewGuid();
-        project.CreatedAt = DateTime.Now;
+        project.CreatedAt = DateTimeOffset.UtcNow;
         var result = await dbConnection.ExecuteAsync(sql, project);
 
         if (result > 0)

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.Tags;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TagsController : ControllerBase
 {
-    private static List<TagDTO> tags = new List<TagDTO>
-        {
-            new TagDTO { Id = Guid.NewGuid(), Name = "Bug" },
-            new TagDTO { Id = Guid.NewGuid(), Name = "Feature" }
-        };
+    private readonly ITagService tagService;
+
+    public TagsController(ITagService tagService)
+    {
+        this.tagService = tagService;
+    }
 
     // GET: api/tags
     /// <summary>
@@ -21,9 +25,16 @@ public class TagsController : ControllerBase
     /// </summary>
     /// <returns>All tags</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<TagDTO>> GetTags()
+    public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
-        return Ok(tags);
+        try
+        {
+            return Ok(await tagService.GetAllTagsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // GET: api/tags/{id}
@@ -33,14 +44,16 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<TagDTO> GetTag(Guid id)
+    public async Task<ActionResult<TagDto>> GetTag(Guid id)
     {
-        var tag = tags.FirstOrDefault(t => t.Id == id);
-
-        if (tag == null)
-            return NotFound();
-
-        return Ok(tag);
+        try
+        {
+            return Ok(await tagService.GetTagByIdAsync(id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST: api/tags
@@ -50,32 +63,37 @@ public class TagsController : ControllerBase
     /// <param name="tag"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] TagDTO tag)
+    public async Task<ActionResult> Post([FromBody] TagCreateDto tag)
     {
-        tag.Id = Guid.NewGuid();
-        tags.Add(tag);
-
-        return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tag);
+        try
+        {
+            await tagService.CreateTagAsync(tag);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT: api/tags/{id}
+    // PUT: api/tags
     /// <summary>
     /// Update an existing tag
     /// </summary>
-    /// <param name="id"></param>
     /// <param name="updatedTag"></param>
     /// <returns></returns>
-    [HttpPut("{id}")]
-    public ActionResult Put(Guid id, [FromBody] TagDTO updatedTag)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] TagUpdateDto updatedTag)
     {
-        var tag = tags.FirstOrDefault(t => t.Id == id);
-
-        if (tag == null)
-            return NotFound();
-
-        tag.Name = updatedTag.Name;
-
-        return NoContent();
+        try
+        {
+            await tagService.UpdateTagAsync(updatedTag);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // DELETE: api/tags/{id}
@@ -85,15 +103,16 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public ActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var tag = tags.FirstOrDefault(t => t.Id == id);
-
-        if (tag == null)
-            return NotFound();
-
-        tags.Remove(tag);
-
-        return NoContent();
+        try
+        {
+            await tagService.DeleteTagAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

@@ -154,7 +154,7 @@ internal class TicketRepository : ITicketRepository
         var sql = @"INSERT INTO Tickets (Id, ProjectId, PriorityId, ReporterId, Status, Resolution, TicketType, TicketNumber, Title, Description, Version, CreatedAt)
 					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
         entity.Id = Guid.NewGuid();
-        entity.CreatedAt = DateTime.Now;
+        entity.CreatedAt = DateTimeOffset.UtcNow;
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)

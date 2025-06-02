@@ -13,32 +13,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManager_01.WebAPI.Domain\ProjectManager_01.Domain.csproj" PrivateAssets="all" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\Tickets\Commands\" />
-    <Folder Include="Features\Tickets\Queries\" />
-    <Folder Include="Features\TicketTags\Commands\" />
-    <Folder Include="Features\TicketTags\Queries\" />
-    <Folder Include="Features\Users\Commands\" />
-    <Folder Include="Features\Users\Queries\" />
-    <Folder Include="Features\UserRoles\Commands\" />
-    <Folder Include="Features\UserRoles\Queries\" />
-    <Folder Include="Features\TicketRelations\Commands\" />
-    <Folder Include="Features\TicketRelations\Queries\" />
-    <Folder Include="Features\Tags\Commands\" />
-    <Folder Include="Features\Tags\Queries\" />
-    <Folder Include="Features\Roles\Commands\" />
-    <Folder Include="Features\Roles\Queries\" />
-    <Folder Include="Features\ProjectUserRoles\Commands\" />
-    <Folder Include="Features\ProjectUserRoles\Queries\" />
-    <Folder Include="Features\ProjectRolePermissions\Commands\" />
-    <Folder Include="Features\ProjectRolePermissions\Queries\" />
-    <Folder Include="Features\ProjectRoles\Commands\" />
-    <Folder Include="Features\ProjectRoles\Queries\" />
-    <Folder Include="Features\Projects\Commands\" />
-    <Folder Include="Features\Projects\Queries\" />
-    <Folder Include="Features\Priorities\Commands\" />
-    <Folder Include="Features\Priorities\Queries\" />
-    <Folder Include="Features\Permissions\Commands\" />
-    <Folder Include="Features\Permissions\Queries\" />
-  </ItemGroup>
 </Project>

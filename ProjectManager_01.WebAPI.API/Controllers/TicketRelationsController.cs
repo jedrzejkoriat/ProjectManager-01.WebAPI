@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs;
+using ProjectManager_01.Application.DTOs.TicketRelations;
 
 namespace ProjectManager_01.Controllers;
 
@@ -9,11 +12,12 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketRelationsController : ControllerBase
 {
-    private static List<TicketRelationDTO> ticketRelations = new List<TicketRelationDTO>
+    private readonly ITicketRelationService ticketRelationService;
+
+    public TicketRelationsController(ITicketRelationService ticketRelationService)
     {
-        new TicketRelationDTO { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = 1 },
-        new TicketRelationDTO { Id = Guid.NewGuid(), TargetId = Guid.NewGuid(), SourceId = Guid.NewGuid(), RelationType = 1 }
-    };
+        this.ticketRelationService = ticketRelationService;
+    }
 
     // GET: api/ticketrelations
     /// <summary>
@@ -21,27 +25,35 @@ public class TicketRelationsController : ControllerBase
     /// </summary>
     /// <returns>All ticket relations</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<TicketRelationDTO>> GetTicketRelations()
+    public async Task<ActionResult<IEnumerable<TicketRelationDto>>> GetTicketRelations()
     {
-        return Ok(ticketRelations);
+        try
+        {
+            return Ok(await ticketRelationService.GetAllTicketRelationsAsync());
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // GET api/ticketrelations/{targetId}/{sourceId}
+    // GET api/ticketrelations/{Id}
     /// <summary>
-    /// Get a ticket relation by TargetId and SourceId
+    /// Get a ticket relation by Id
     /// </summary>
-    /// <param name="targetId"></param>
-    /// <param name="sourceId"></param>
-    /// <returns>Ticket relation by its composite key</returns>
-    [HttpGet("{targetId}/{sourceId}")]
-    public ActionResult<TicketRelationDTO> GetTicketRelation(Guid targetId, Guid sourceId)
+    /// <param name="Id"></param>
+    /// <returns>Ticket relation by id</returns>
+    [HttpGet("{Id}")]
+    public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id)
     {
-        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
-
-        if (ticketRelation == null)
-            return NotFound();
-
-        return Ok(ticketRelation);
+        try
+        {
+            return Ok(await ticketRelationService.GetTicketRelationByIdAsync(Id));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
     // POST api/ticketrelations
@@ -51,51 +63,56 @@ public class TicketRelationsController : ControllerBase
     /// <param name="ticketRelation"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult Post([FromBody] TicketRelationDTO ticketRelation)
+    public async Task<ActionResult> Post([FromBody] TicketRelationCreateDto ticketRelation)
     {
-        ticketRelations.Add(ticketRelation);
-
-        return CreatedAtAction(nameof(GetTicketRelation), new { targetId = ticketRelation.TargetId, sourceId = ticketRelation.SourceId }, ticketRelation);
+        try
+        {
+            await ticketRelationService.CreateTicketRelationAsync(ticketRelation);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // PUT api/ticketrelations/{targetId}/{sourceId}
+    // PUT api/ticketrelations
     /// <summary>
     /// Update an existing ticket relation
     /// </summary>
-    /// <param name="targetId"></param>
-    /// <param name="sourceId"></param>
     /// <param name="updatedTicketRelation"></param>
     /// <returns></returns>
-    [HttpPut("{targetId}/{sourceId}")]
-    public ActionResult Put(Guid targetId, Guid sourceId, [FromBody] TicketRelationDTO updatedTicketRelation)
+    [HttpPut]
+    public async Task<ActionResult> Put([FromBody] TicketRelationUpdateDto updatedTicketRelation)
     {
-        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
-
-        if (ticketRelation == null)
-            return NotFound();
-
-        ticketRelation.RelationType = updatedTicketRelation.RelationType;
-
-        return NoContent();
+        try
+        {
+            await ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 
-    // DELETE api/ticketrelations/{targetId}/{sourceId}
+    // DELETE api/ticketrelations/{Id}
     /// <summary>
     /// Delete a ticket relation
     /// </summary>
-    /// <param name="targetId"></param>
-    /// <param name="sourceId"></param>
+    /// <param name="Id"></param>
     /// <returns></returns>
-    [HttpDelete("{targetId}/{sourceId}")]
-    public ActionResult Delete(Guid targetId, Guid sourceId)
+    [HttpDelete("{Id}")]
+    public async Task<ActionResult> Delete(Guid Id)
     {
-        TicketRelationDTO ticketRelation = ticketRelations.FirstOrDefault(tr => tr.TargetId == targetId && tr.SourceId == sourceId);
-
-        if (ticketRelation == null)
-            return NotFound();
-
-        ticketRelations.Remove(ticketRelation);
-
-        return NoContent();
+        try
+        {
+            await ticketRelationService.DeleteTicketRelationAsync(Id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
     }
 }

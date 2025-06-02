@@ -29,4 +29,10 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddApplicationMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(cfg => cfg.AddProfile<MapperConfig>());
+        return services;
+    }
 }

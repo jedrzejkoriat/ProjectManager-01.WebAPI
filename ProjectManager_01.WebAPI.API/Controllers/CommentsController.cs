@@ -16,12 +16,6 @@ public class CommentsController : ControllerBase
     {
         this.commentService = commentService;
     }
-
-    private static List<CommentDto> comments = new List<CommentDto>
-    {
-        new CommentDto { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "First comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() },
-        new CommentDto { Id = Guid.NewGuid(), TicketId = Guid.NewGuid(), Content = "Second comment", CreatedAt = DateTime.Now, UserId = Guid.NewGuid() }
-    };
     
     // GET: api/comments
     /// <summary>
@@ -33,7 +27,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            return Ok(await commentService.GetCommentsAsync());
+            return Ok(await commentService.GetAllCommentsAsync());
         }
         catch (Exception ex)
         {
@@ -50,11 +44,6 @@ public class CommentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CommentDto>> GetComment(Guid id)
     {
-        var comment = comments.FirstOrDefault(c => c.Id == id);
-
-        if (comment == null)
-            return NotFound();
-
         try
         {
             return Ok(await commentService.GetCommentAsync(id));
@@ -85,7 +74,7 @@ public class CommentsController : ControllerBase
         }
     }
 
-    // PUT api/comments/{id}
+    // PUT api/comments
     /// <summary>
     /// Update an existing comment
     /// </summary>
@@ -114,11 +103,6 @@ public class CommentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        var comment = comments.FirstOrDefault(c => c.Id == id);
-
-        if (comment == null)
-            return NotFound();
-
         try
         {
             await commentService.DeleteCommentAsync(id);
