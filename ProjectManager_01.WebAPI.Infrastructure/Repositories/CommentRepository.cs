@@ -38,14 +38,17 @@ internal class CommentRepository : ICommentRepository
                     JOIN Tickets t ON c.TicketId = t.Id
                     JOIN Projects p ON t.ProjectId = p.Id
                     WHERE c.UserId = @UserId AND p.Id = @ProjectId";
-        var comments = await dbConnection.QueryAsync<Comment, Ticket, Project, Comment>(sql, (comment, ticket, project) =>
-        {
-            ticket.Project = project;
-            comment.Ticket = ticket;
-            return comment;
-        },
-        new { UserId = userId, ProjectId = projectId },
-        splitOn: "Id,Id"
+        var comments = await dbConnection.QueryAsync<Comment, Ticket, Project, Comment>(
+            sql,
+            (comment, ticket, project) =>
+            {
+                ticket.Project = project;
+                comment.Ticket = ticket;
+
+                return comment;
+            },
+            new { UserId = userId, ProjectId = projectId },
+            splitOn: "Id,Id"
         );
 
         return comments.ToList();
