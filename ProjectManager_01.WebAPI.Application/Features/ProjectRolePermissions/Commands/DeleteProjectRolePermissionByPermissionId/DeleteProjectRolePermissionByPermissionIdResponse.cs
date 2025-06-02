@@ -1,0 +1,3 @@
+﻿namespace ProjectManager_01.Application.Features.ProjectRolePermissions.Commands.DeleteProjectRolePermissionByPermissionId;
+
+public record DeleteProjectRolePermissionByPermissionIdResponse();

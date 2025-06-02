@@ -1,0 +1,3 @@
+﻿namespace ProjectManager_01.Application.Features.TicketRelations.Queries.GetTicketRelationsByTargetId;
+
+public record GetTicketRelationsByTargetIdResponse();

@@ -1,0 +1,5 @@
+﻿using MediatR;
+
+namespace ProjectManager_01.Application.Features.ProjectRolePermissions.Commands.DeleteProjectRolePermissionByPermissionId;
+
+public record DeleteProjectRolePermissionByPermissionIdCommand() : IRequest<DeleteProjectRolePermissionByPermissionIdResponse>;

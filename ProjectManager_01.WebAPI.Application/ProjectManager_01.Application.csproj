@@ -40,31 +40,4 @@
     <Folder Include="Features\Permissions\Commands\" />
     <Folder Include="Features\Permissions\Queries\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentsByUserAndProjectId\GetCommentsByUserAndProjectIdHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentsByUserAndProjectId\GetCommentsByUserAndProjectIdQuery.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentsByUserAndProjectId\GetCommentsByUserAndProjectIdResponse.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdQuery.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetCommentById\GetCommentByIdResponse.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsQuery.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Features\Comments\Queries\GetComments\GetCommentsResponse.cs" />
-  </ItemGroup>
 </Project>
