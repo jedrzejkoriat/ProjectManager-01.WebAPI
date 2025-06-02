@@ -1,10 +1,9 @@
-﻿using ProjectManager_01.Application.Contracts.Repositories.Base;
-using ProjectManager_01.Domain.Models;
+﻿using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
-public interface IUserRepository :
-    ICreateable<User>, IReadable<User>, IUpdateable<User>, IDeleteable, ISoftDeletable
+public interface IUserRepository : IGenericRepository<User>
 {
     Task<List<User>> GetByProjectIdAsync(Guid projectId);
+    Task<bool> SoftDeleteAsync(Guid id);
 }
