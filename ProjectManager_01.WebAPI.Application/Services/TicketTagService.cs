@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.TicketTags;
@@ -15,6 +16,12 @@ public class TicketTagService : ITicketTagService
     {
         this.ticketTagRepository = ticketTagRepository;
         this.mapper = mapper;
+    }
+
+    public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, IDbTransaction dbTransaction)
+    {
+        TicketTag ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
+        await ticketTagRepository.CreateAsync(ticketTag, dbTransaction);
     }
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto)

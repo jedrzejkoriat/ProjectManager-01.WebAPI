@@ -3,7 +3,9 @@ using AutoMapper;
 using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
+using ProjectManager_01.Application.DTOs.UserRoles;
 using ProjectManager_01.Application.DTOs.Users;
+using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -37,8 +39,24 @@ public class UserService : IUserService
 
     public async Task CreateUserAsync(UserCreateDto userCreateDto)
     {
-        User user = mapper.Map<User>(userCreateDto);
-        await userRepository.CreateAsync(user);
+        using var transaction = dbConnection.BeginTransaction();
+
+        try
+        {
+            User user = mapper.Map<User>(userCreateDto);
+            user.PasswordHash = BcryptPasswordHasher.HashPassword(userCreateDto.Password);
+            var userId = await userRepository.CreateAsync(user, transaction);
+
+            var userRoleCreateDto = new UserRoleCreateDto(userId);
+            await userRoleService.CreateUserRoleAsync(userRoleCreateDto, transaction);
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing user creation transaction.");
+        }
     }
 
     public async Task UpdateUserAsync(UserUpdateDto userUpdateDto)

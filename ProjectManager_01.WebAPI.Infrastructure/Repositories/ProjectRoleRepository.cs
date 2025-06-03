@@ -14,6 +14,19 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
+                    VALUES (@Id, @ProjectId, @Name)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating ProjectRole failed");
+    }
+
     public Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRoles 

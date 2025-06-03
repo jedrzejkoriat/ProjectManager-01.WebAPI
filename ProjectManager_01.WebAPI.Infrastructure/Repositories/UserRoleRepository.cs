@@ -2,6 +2,7 @@
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
+using static Dapper.SqlMapper;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
 
@@ -12,6 +13,15 @@ internal class UserRoleRepository : IUserRoleRepository
     public UserRoleRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
+    }
+
+    public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO UserRoles (UserId)
+                    VALUES (@UserId)";
+        var result = await dbConnection.ExecuteAsync(sql, userRole, transaction);
+
+        return result > 0;
     }
 
     public async Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
@@ -35,8 +45,8 @@ internal class UserRoleRepository : IUserRoleRepository
     // ============================= CRUD =============================
     public async Task<bool> CreateAsync(UserRole entity)
     {
-        var sql = @"INSERT INTO UserRoles (UserId, RoleId)
-                    VALUES (@UserId, @RoleId)";
+        var sql = @"INSERT INTO UserRoles (UserId)
+                    VALUES (@UserId)";
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;

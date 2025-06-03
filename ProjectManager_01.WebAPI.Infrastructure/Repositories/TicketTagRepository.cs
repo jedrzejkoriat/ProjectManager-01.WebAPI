@@ -14,6 +14,15 @@ internal class TicketTagRepository : ITicketTagRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> CreateAsync(TicketTag ticketTag, IDbTransaction dbTransaction)
+    {
+        var sql = @"INSERT INTO TicketTags (TicketId, TagId)
+                    VALUES (@TicketId, @TagId)";
+        var result = await dbConnection.ExecuteAsync(sql, ticketTag, dbTransaction);
+
+        return result > 0;
+    }
+
     // ============================= CRUD =============================
     public async Task<bool> CreateAsync(TicketTag ticketTag)
     {

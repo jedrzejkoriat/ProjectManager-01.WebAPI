@@ -15,6 +15,20 @@ internal class TicketRepository : ITicketRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<Guid> CreateAsync(Ticket entity, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO Tickets (Id, ProjectId, PriorityId, ReporterId, Status, Resolution, TicketType, TicketNumber, Title, Description, Version, CreatedAt)
+					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
+        entity.Id = Guid.NewGuid();
+        entity.CreatedAt = DateTimeOffset.UtcNow;
+        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating ticket failed");
+    }
+
     public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction)
     {
         var sql = @"SELECT * FROM Tickets 
@@ -100,9 +114,6 @@ internal class TicketRepository : ITicketRepository
 
         if (ticket == null)
             throw new Exception("Finding ticket failed");
-
-        ticket.TicketTags = (await dbConnection.QueryAsync<TicketTag>
-            ("SELECT * FROM TicketTags WHERE TicketId = @TicketId", new { TicketId = ticket.Id })).ToList();
 
         ticket.Comments = (await dbConnection.QueryAsync<Comment>
             ("SELECT * FROM Comments WHERE TicketId = @TicketId", new { TicketId = ticket.Id })).ToList();

@@ -24,6 +24,12 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
         await projectRolePermissionRepository.CreateAsync(projectRolePermission);
     }
 
+    public async Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto, IDbTransaction transaction)
+    {
+        ProjectRolePermission projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
+        await projectRolePermissionRepository.CreateAsync(projectRolePermission, transaction);
+    }
+
     public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
         await projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, transaction);

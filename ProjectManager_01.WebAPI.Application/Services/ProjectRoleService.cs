@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
+using ProjectManager_01.Application.DTOs.ProjectRolePermissions;
 using ProjectManager_01.Application.DTOs.ProjectRoles;
 using ProjectManager_01.Domain.Models;
 
@@ -32,8 +32,26 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task CreateProjectRoleAsync(ProjectRoleCreateDto projectRoleCreateDto)
     {
-        ProjectRole projectRole = mapper.Map<ProjectRole>(projectRoleCreateDto);
-        await projectRoleRepository.CreateAsync(projectRole);
+        using var transaction = dbConnection.BeginTransaction();
+
+        try
+        {
+            ProjectRole projectRole = mapper.Map<ProjectRole>(projectRoleCreateDto);
+            var projectRoleId = await projectRoleRepository.CreateAsync(projectRole, transaction);
+
+            foreach (var permissionId in projectRoleCreateDto.PermissionIds)
+            {
+                var projectRolePermissionDto = new ProjectRolePermissionCreateDto(projectRoleId, permissionId);
+                await projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermissionDto, transaction);
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing project role creation transaction.");
+        }
     }
 
     public async Task UpdateProjectRoleAsync(ProjectRoleUpdateDto projectRoleUpdateDto)

@@ -14,6 +14,15 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
+                    VALUES (@ProjectRoleId, PermissionId)";
+        var result = await dbConnection.ExecuteAsync(sql, projectRolePermission, transaction);
+
+        return result > 0;
+    }
+
     public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
@@ -24,11 +33,11 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     }
 
     // ============================= CRUD =============================
-    public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermissions)
+    public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission)
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
                     VALUES (@ProjectRoleId, PermissionId)";
-        var result = await dbConnection.ExecuteAsync(sql, projectRolePermissions);
+        var result = await dbConnection.ExecuteAsync(sql, projectRolePermission);
 
         return result > 0;
     }

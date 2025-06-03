@@ -7,4 +7,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.ProjectRoles;
 
-public sealed record ProjectRoleCreateDto (Guid ProjectRoleId, string Name);
+public sealed record ProjectRoleCreateDto (Guid ProjectRoleId, string Name, IEnumerable<Guid> PermissionIds);

@@ -1,10 +1,9 @@
 ﻿using System.Data;
-using System.Transactions;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
+using ProjectManager_01.Application.DTOs.TicketTags;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -16,25 +15,46 @@ public class TicketService : ITicketService
     private readonly IDbConnection dbConnection;
     private readonly ITicketRelationService ticketRelationService;
     private readonly ICommentService commentService;
+    private readonly ITicketTagService ticketTagService;
 
     public TicketService(
-        ITicketRepository ticketRepository, 
+        ITicketRepository ticketRepository,
         IMapper mapper,
         IDbConnection dbConnection,
         ITicketRelationService ticketRelationService,
-        ICommentService commentService)
+        ICommentService commentService,
+        ITicketTagService ticketTagService)
     {
         this.ticketRepository = ticketRepository;
         this.mapper = mapper;
         this.dbConnection = dbConnection;
         this.ticketRelationService = ticketRelationService;
         this.commentService = commentService;
+        this.ticketTagService = ticketTagService;
     }
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
     {
-        Ticket ticket = mapper.Map<Ticket>(ticketCreateDto);
-        await ticketRepository.CreateAsync(ticket);
+        using var transaction = dbConnection.BeginTransaction();
+
+        try
+        {
+            Ticket ticket = mapper.Map<Ticket>(ticketCreateDto);
+            var ticketId = await ticketRepository.CreateAsync(ticket, transaction);
+
+            foreach (var tagId in ticketCreateDto.TagIds)
+            {
+                var ticketTag = new TicketTagCreateDto(tagId, ticketId);
+                await ticketTagService.CreateTicketTagAsync(ticketTag, transaction);
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing ticket creation transaction.");
+        }
     }
 
     public async Task UpdateTicketAsync(TicketUpdateDto ticketUpdateDto)
@@ -69,7 +89,7 @@ public class TicketService : ITicketService
 
         foreach (var ticket in tickets)
         {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id,  transaction);
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
             await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
         }
 

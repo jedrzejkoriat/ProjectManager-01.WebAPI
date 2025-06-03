@@ -14,6 +14,19 @@ internal class UserRepository : IUserRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<Guid> CreateAsync(User entity, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
+                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating user failed.");
+    }
+
     public async Task<List<User>> GetByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT DISTINCT u.* FROM Users u

@@ -13,4 +13,5 @@ public interface IProjectRolePermissionService
     Task<ProjectRolePermissionDto> GetProjectRolePermissionByIdAsync(Guid projectRoleId, Guid permissionId);
     Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction);
     Task DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction);
+    Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto, IDbTransaction transaction);
 }

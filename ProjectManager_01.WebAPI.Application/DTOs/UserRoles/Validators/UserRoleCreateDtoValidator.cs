@@ -13,8 +13,5 @@ public sealed class UserRoleCreateDtoValidator : AbstractValidator<UserRoleCreat
     {
         RuleFor(u => u.UserId)
             .Must(id => id != Guid.Empty).WithMessage("UserId must be a valid GUID.");
-
-        RuleFor(u => u.RoleId)
-            .Must(id => id != Guid.Empty).WithMessage("RoleId must be a valid GUID.");
     }
 }

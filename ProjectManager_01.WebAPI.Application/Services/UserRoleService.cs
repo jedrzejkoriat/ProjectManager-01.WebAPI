@@ -3,6 +3,7 @@ using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.UserRoles;
+using ProjectManager_01.Domain.Constants;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -22,6 +23,12 @@ public class UserRoleService : IUserRoleService
     {
         UserRole userRole = mapper.Map<UserRole>(userRoleCreateDto);
         await userRoleRepository.CreateAsync(userRole);
+    }
+
+    public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto, IDbTransaction transaction)
+    {
+        UserRole userRole = mapper.Map<UserRole>(userRoleCreateDto);
+        await userRoleRepository.CreateAsync(userRole, transaction);
     }
 
     public async Task UpdateUserRoleAsync(UserRoleUpdateDto userRoleUpdateDto)

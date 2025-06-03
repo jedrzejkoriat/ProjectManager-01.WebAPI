@@ -12,4 +12,5 @@ public interface IProjectRolePermissionRepository
     Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId);
     Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction);
     Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction);
+    Task<bool> CreateAsync(ProjectRolePermission projectRolePermission, IDbTransaction transaction);
 }
