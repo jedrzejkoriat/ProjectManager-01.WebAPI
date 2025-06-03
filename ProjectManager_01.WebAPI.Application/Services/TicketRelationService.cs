@@ -9,7 +9,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketRelationService : ITicketRelationService
 {
-
     private readonly ITicketRelationRepository ticketRelationRepository;
     private readonly IMapper mapper;
 
@@ -50,8 +49,8 @@ public class TicketRelationService : ITicketRelationService
         return mapper.Map<List<TicketRelationDto>>(ticketRelations);
     }
 
-    public async Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
-        await ticketRelationRepository.DeleteByTicketIdAsync(ticketId, connection, transaction);
+        await ticketRelationRepository.DeleteByTicketIdAsync(ticketId, transaction);
     }
 }

@@ -8,7 +8,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketTagService : ITicketTagService
 {
-
     private readonly ITicketTagRepository ticketTagRepository;
     private readonly IMapper mapper;
 

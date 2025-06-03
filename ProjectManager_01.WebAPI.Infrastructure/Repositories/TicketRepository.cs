@@ -15,47 +15,56 @@ internal class TicketRepository : ITicketRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction)
+    {
+        var sql = @"SELECT * FROM Tickets 
+                    WHERE ReporterId = @ReporterId";
+        var result = await dbConnection.QueryAsync<Ticket>(sql, new { ReporterId = reporterId }, transaction);
+
+        return result.ToList();
+    }
+
+    public async Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Tickets
                     WHERE PriorityId = @PriorityId";
-        var result = await connection.ExecuteAsync(sql, new { PriorityId = priorityId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { PriorityId = priorityId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Tickets
                     WHERE Id = @Id";
-        var result = await connection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> ClearUserAssignmentAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"UPDATE Tickets
                     SET AssigneeId = NULL
                     WHERE AssigneeId = @UserId";    
-        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Tickets
                     WHERE ReporterId = @UserId";
-        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Tickets
                     WHERE ProjectId = @ProjectId";
-        var result = await connection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }
@@ -130,7 +139,7 @@ internal class TicketRepository : ITicketRepository
         return result;
     }
 
-    public async Task<List<Ticket>> GetByPriorityAsync(Guid priorityId)
+    public async Task<List<Ticket>> GetByPriorityIdAsync(Guid priorityId)
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE PriorityId = @PriorityId";

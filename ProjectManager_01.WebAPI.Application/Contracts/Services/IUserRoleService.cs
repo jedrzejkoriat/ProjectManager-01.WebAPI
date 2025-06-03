@@ -13,6 +13,6 @@ public interface IUserRoleService
     Task DeleteUserRoleAsync(Guid userRoleId);
     Task<UserRoleDto> GetUserRoleByUserIdAsync(Guid userRoleId);
     Task<List<UserRoleDto>> GetAllUserRolesAsync();
-    Task DeleteByRoleIdAsync(Guid roleId, IDbConnection connection, IDbTransaction transaction);
-    Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction);
+    Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
 }

@@ -10,8 +10,6 @@ public interface IProjectRolePermissionRepository
     Task<List<ProjectRolePermission>> GetAllAsync();
     Task<bool> CreateAsync(ProjectRolePermission projectRolePermission);
     Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId);
-    Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId);
-    Task<bool> DeleteByPermissionIdAsync(Guid permissionId);
-    Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction);
-    Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction);
+    Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction);
 }

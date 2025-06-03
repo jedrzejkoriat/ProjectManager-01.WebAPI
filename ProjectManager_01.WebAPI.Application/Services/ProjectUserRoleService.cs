@@ -9,7 +9,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectUserRoleService : IProjectUserRoleService
 {
-
     private readonly IProjectUserRoleRepository projectUserRoleRepository;
     private readonly IMapper mapper;
 
@@ -50,18 +49,18 @@ public class ProjectUserRoleService : IProjectUserRoleService
         return mapper.Map<List<ProjectUserRoleDto>>(projectUserRoles);
     }
 
-    public async Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
-        await projectUserRoleRepository.DeleteByProjectIdAsync(projectId, connection, transaction);
+        await projectUserRoleRepository.DeleteByProjectIdAsync(projectId, transaction);
     }
 
-    public async Task DeleteByProjectRoleId(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByProjectRoleId(Guid projectRoleId, IDbTransaction transaction)
     {
-        await projectUserRoleRepository.DeleteByProjectRoleIdAsync(projectRoleId, connection, transaction);
+        await projectUserRoleRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
     }
 
-    public async Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await projectUserRoleRepository.DeleteByUserIdAsync(userId, connection, transaction);
+        await projectUserRoleRepository.DeleteByUserIdAsync(userId, transaction);
     }
 }

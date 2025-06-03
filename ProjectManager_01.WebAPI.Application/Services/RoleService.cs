@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
-using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Roles;
@@ -10,17 +10,16 @@ namespace ProjectManager_01.Application.Services;
 
 public class RoleService : IRoleService
 {
-
     private readonly IRoleRepository roleRepository;
     private readonly IMapper mapper;
-    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IDbConnection dbConnection;
     private readonly IUserRoleService userRoleService;
 
-    public RoleService(IRoleRepository roleRepository, IMapper mapper, IDbConnectionFactory dbConnectionFactory, IUserRoleService userRoleService)
+    public RoleService(IRoleRepository roleRepository, IMapper mapper, IDbConnection dbConnection, IUserRoleService userRoleService)
     {
         this.roleRepository = roleRepository;
         this.mapper = mapper;
-        this.dbConnectionFactory = dbConnectionFactory;
+        this.dbConnection = dbConnection;
         this.userRoleService = userRoleService;
     }
 
@@ -38,24 +37,12 @@ public class RoleService : IRoleService
 
     public async Task DeleteRoleAsync(Guid roleId)
     {
-        using var connection = dbConnectionFactory.CreateConnection();
-
-        switch (connection)
-        {
-            case SqlConnection sqlConnection:
-                await sqlConnection.OpenAsync();
-                break;
-            default:
-                connection.Open();
-                break;
-        }
-
-        using var transaction = connection.BeginTransaction();
+        using var transaction = dbConnection.BeginTransaction();
 
         try
         { 
-            await roleRepository.DeleteAsync(roleId);
-            await userRoleService.DeleteByRoleIdAsync(roleId, connection, transaction);
+            await roleRepository.DeleteAsync(roleId, transaction);
+            await userRoleService.DeleteByRoleIdAsync(roleId, transaction);
 
             transaction.Commit();
         }

@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using AutoMapper;
 using Microsoft.Data.SqlClient;
-using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Priorities;
@@ -11,21 +10,20 @@ namespace ProjectManager_01.Application.Services;
 
 public class PriorityService : IPriorityService
 {
-
     private readonly IPriorityRepository priorityRepository;
     private readonly IMapper mapper;
-    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IDbConnection dbConnection;
     private readonly ITicketService ticketService;
 
     public PriorityService(
         IPriorityRepository priorityRepository, 
         IMapper mapper,
-        IDbConnectionFactory dbConnectionFactory,
+        IDbConnection dbConnection,
         ITicketService ticketService)
     {
         this.priorityRepository = priorityRepository;
         this.mapper = mapper;
-        this.dbConnectionFactory = dbConnectionFactory;
+        this.dbConnection = dbConnection;
         this.ticketService = ticketService;
     }
 
@@ -37,24 +35,12 @@ public class PriorityService : IPriorityService
 
     public async Task DeletePriorityAsync(Guid priorityId)
     {
-        using var connection = dbConnectionFactory.CreateConnection();
-
-        switch (connection)
-        {
-            case SqlConnection sqlConnection:
-                await sqlConnection.OpenAsync();
-                break;
-            default:
-                connection.Open();
-                break;
-        }
-
-        using var transaction = connection.BeginTransaction();
+        using var transaction = dbConnection.BeginTransaction();
 
         try
         {
-            await ticketService.DeleteTicketByPriorityIdAsync(priorityId, connection, transaction);
-            await priorityRepository.DeleteAsync(priorityId);
+            await ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
+            await priorityRepository.DeleteAsync(priorityId, transaction);
 
             transaction.Commit();
         }

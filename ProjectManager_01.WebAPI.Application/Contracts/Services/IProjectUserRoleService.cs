@@ -12,7 +12,7 @@ public interface IProjectUserRoleService
     Task DeleteProjectUserRoleAsync(Guid projectUserRoleId);
     Task<ProjectUserRoleDto> GetProjectUserRoleByIdAsync(Guid projectUserRoleId);
     Task<List<ProjectUserRoleDto>> GetAllProjectUserRolesAsync();
-    Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction);
-    Task DeleteByProjectRoleId(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction);
-    Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
+    Task DeleteByProjectRoleId(Guid projectRoleId, IDbTransaction transaction);
+    Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
 }

@@ -5,14 +5,14 @@ namespace ProjectManager_01.Application.Contracts.Services;
 
 public interface ITicketService
 {
-    Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction);
+    Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
     Task CreateTicketAsync(TicketCreateDto ticketCreateDto);
     Task UpdateTicketAsync(TicketUpdateDto ticketUpdateDto);
     Task DeleteTicketAsync(Guid ticketId);
     Task<TicketDto> GetTicketByIdAsync(Guid ticketId);
     Task<List<TicketDto>> GetAllTicketsAsync();
-    Task ClearUserAssignmentAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
-    Task DeleteTicketByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction);
+    Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task SoftDeleteTicketAsync(Guid ticketId);
-    Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbConnection connection, IDbTransaction transaction);
+    Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
 }

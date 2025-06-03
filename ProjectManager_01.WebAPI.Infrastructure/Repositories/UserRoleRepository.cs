@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class UserRoleRepository : IUserRoleRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public UserRoleRepository(IDbConnection dbConnection)
@@ -15,31 +14,22 @@ internal class UserRoleRepository : IUserRoleRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE RoleId = @RoleId";
-        var result = await connection.ExecuteAsync(sql, new { RoleId = roleId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { RoleId = roleId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE UserId = @UserId";
-        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
-    }
-
-    public async Task<List<UserRole>> GetByRoleIdAsync(Guid roleId)
-    {
-        var sql = @"SELECT * FROM UserRoles 
-                    WHERE RoleId = @RoleId";
-        var result = await dbConnection.QueryAsync<UserRole>(sql, new { RoleId = roleId });
-
-        return result.ToList();
     }
 
     // ============================= CRUD =============================

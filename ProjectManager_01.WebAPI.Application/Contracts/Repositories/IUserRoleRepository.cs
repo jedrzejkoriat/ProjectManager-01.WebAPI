@@ -11,7 +11,6 @@ public interface IUserRoleRepository
     Task<UserRole> GetByUserIdAsync(Guid userId);
     Task<bool> DeleteAsync(Guid userId);
     Task<bool> UpdateAsync(UserRole userRole);
-    Task<List<UserRole>> GetByRoleIdAsync(Guid roleId);
-    Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbConnection connection, IDbTransaction transaction);
-    Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction);
+    Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
 }

@@ -15,8 +15,6 @@ builder.Services.AddScoped<IDbConnection>(sp =>
     return new SqlConnection(connectionString);
 });
 
-builder.Services.AddDbConnectionFactory(connectionString);
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();

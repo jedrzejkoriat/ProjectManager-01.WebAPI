@@ -9,7 +9,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class CommentService : ICommentService
 {
-
     private readonly ICommentRepository commentRepository;
     private readonly IMapper mapper;
 
@@ -50,13 +49,13 @@ public class CommentService : ICommentService
         await commentRepository.DeleteAsync(commentId);
     }
 
-    public async Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await commentRepository.DeleteByUserIdAsync(userId, connection, transaction);
+        await commentRepository.DeleteByUserIdAsync(userId, transaction);
     }
 
-    public async Task DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
-        await commentRepository.DeleteByTicketIdAsync(ticketId, connection, transaction);
+        await commentRepository.DeleteByTicketIdAsync(ticketId, transaction);
     }
 }

@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class PriorityRepository : IPriorityRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public PriorityRepository(IDbConnection dbConnection)
@@ -61,6 +60,15 @@ internal class PriorityRepository : IPriorityRepository
         var sql = @"DELETE FROM Priorities 
                     WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Priorities 
+                    WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }

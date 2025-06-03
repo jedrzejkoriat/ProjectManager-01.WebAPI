@@ -9,7 +9,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class UserRoleService : IUserRoleService
 {
-
     private readonly IUserRoleRepository userRoleRepository;
     private readonly IMapper mapper;
 
@@ -50,13 +49,13 @@ public class UserRoleService : IUserRoleService
         return mapper.Map<List<UserRoleDto>>(userRoles);
     }
 
-    public async Task DeleteByRoleIdAsync(Guid roleId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
     {
-        await userRoleRepository.DeleteByRoleIdAsync(roleId, connection, transaction);
+        await userRoleRepository.DeleteByRoleIdAsync(roleId, transaction);
     }
 
-    public async Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await userRoleRepository.DeleteByUserIdAsync(userId, connection, transaction);
+        await userRoleRepository.DeleteByUserIdAsync(userId, transaction);
     }
 }

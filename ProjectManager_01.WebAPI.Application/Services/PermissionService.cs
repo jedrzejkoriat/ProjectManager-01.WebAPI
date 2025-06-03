@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
-using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Permissions;
@@ -10,20 +10,19 @@ namespace ProjectManager_01.Application.Services;
 
 public class PermissionService : IPermissionService
 {
-
     private readonly IPermissionRepository permissionRepository;
     private readonly IMapper mapper;
-    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IDbConnection dbConnection;
     private readonly IProjectRolePermissionService projectRolePermissionService;
 
     public PermissionService(IPermissionRepository permissionRepository, 
         IMapper mapper, 
-        IDbConnectionFactory dbConnectionFactory, 
+        IDbConnection dbConnection,
         IProjectRolePermissionService projectRolePermissionService)
     {
         this.permissionRepository = permissionRepository;
         this.mapper = mapper;
-        this.dbConnectionFactory = dbConnectionFactory;
+        this.dbConnection = dbConnection;
         this.projectRolePermissionService = projectRolePermissionService;
     }
 
@@ -35,24 +34,12 @@ public class PermissionService : IPermissionService
 
     public async Task DeletePermissionAsync(Guid permissionId)
     {
-        using var connection = dbConnectionFactory.CreateConnection();
-
-        switch (connection)
-        {
-            case SqlConnection sqlConnection:
-                await sqlConnection.OpenAsync();
-                break;
-            default:
-                connection.Open();
-                break;
-        }
-
-        using var transaction = connection.BeginTransaction();
+        using var transaction = dbConnection.BeginTransaction();
 
         try
         {
-            await permissionRepository.DeleteAsync(permissionId, connection, transaction);
-            await projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, connection, transaction);
+            await permissionRepository.DeleteAsync(permissionId, transaction);
+            await projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
 
             transaction.Commit();
         }

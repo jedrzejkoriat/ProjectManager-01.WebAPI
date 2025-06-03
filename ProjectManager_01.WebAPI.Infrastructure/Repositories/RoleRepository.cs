@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class RoleRepository : IRoleRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public RoleRepository(IDbConnection dbConnection)
@@ -15,11 +14,11 @@ internal class RoleRepository : IRoleRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteAsync(Guid Id, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteAsync(Guid Id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Roles 
                     WHERE Id = @Id";
-        var result = await connection.ExecuteAsync(sql, new { Id = Id }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = Id }, transaction);
 
         return result > 0;
     }

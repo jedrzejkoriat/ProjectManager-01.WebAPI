@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRepository : IProjectRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public ProjectRepository(IDbConnection dbConnection)
@@ -25,11 +24,11 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";
-        var result = await connection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }

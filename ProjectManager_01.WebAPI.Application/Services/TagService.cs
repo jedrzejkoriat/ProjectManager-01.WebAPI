@@ -8,7 +8,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class TagService : ITagService
 {
-
     private readonly ITagRepository tagRepository;
     private readonly IMapper mapper;
 

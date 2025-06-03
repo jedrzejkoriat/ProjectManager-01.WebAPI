@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectUserRoleRepository : IProjectUserRoleRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public ProjectUserRoleRepository(IDbConnection dbConnection)
@@ -15,48 +14,29 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE UserId = @UserId";
-        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectId = @ProjectId";
-        var result = await connection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
-    {
-        var sql = @"SELECT * FROM ProjectUserRoles 
-                    WHERE UserId = @UserId 
-                    AND ProjectId = @ProjectId";
-        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
-
-        return result.ToList();
-    }
-
-    public async Task<List<ProjectUserRole>> GetByUserIdAsync(Guid userId)
-    {
-        var sql = @"SELECT * FROM ProjectUserRoles 
-                    WHERE UserId = @UserId";
-        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId });
-
-        return result.ToList();
-    }
-
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectRoleId = @ProjectRoleId";
-        var result = await connection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
 
         return result > 0;
     }

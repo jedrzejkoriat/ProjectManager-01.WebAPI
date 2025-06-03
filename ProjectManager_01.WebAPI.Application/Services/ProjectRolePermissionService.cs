@@ -9,7 +9,6 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectRolePermissionService : IProjectRolePermissionService
 {
-
     private readonly IProjectRolePermissionRepository projectRolePermissionRepository;
     private readonly IMapper mapper;
 
@@ -25,14 +24,14 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
         await projectRolePermissionRepository.CreateAsync(projectRolePermission);
     }
 
-    public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
-        await projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, connection, transaction);
+        await projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, transaction);
     }
 
-    public async Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
-        await projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, connection, transaction);
+        await projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
     }
 
     public async Task DeleteProjectRolePermissionAsync(Guid projectRoleId, Guid permissionId)

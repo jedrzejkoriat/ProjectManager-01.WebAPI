@@ -6,10 +6,6 @@ public interface ITicketTagRepository
 {
     Task<List<TicketTag>> GetAllAsync();
     Task<TicketTag> GetByIdAsync(Guid ticketId, Guid tagId);
-    Task<List<TicketTag>> GetByTicketIdAsync(Guid ticketId);
-    Task<List<TicketTag>> GetByTagIdAsync(Guid tagId);
     Task<bool> DeleteAsync(Guid ticketId, Guid tagId);
     Task<bool> CreateAsync(TicketTag ticketTag);
-    Task<bool> DeleteByTicketIdAsync(Guid ticketId);
-    Task<bool> DeleteByTagIdAsync(Guid tagId);
 }

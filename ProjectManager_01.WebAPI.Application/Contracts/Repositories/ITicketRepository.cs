@@ -6,18 +6,20 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface ITicketRepository : IRepository<Ticket>
 {
-    Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
     Task<List<Ticket>> GetByProjectIdAsync(Guid projectId);
     Task<Ticket> GetByKeyAndNumberAsync(string key, int ticketNumber);
-    Task<List<Ticket>> GetByPriorityAsync(Guid priorityId);
-    Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> SoftDeleteAsync(Guid id);
+    Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
+    Task<bool> ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction);
+    Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
+    Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
+    Task<List<Ticket>> GetByPriorityIdAsync(Guid priorityId);
+    Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction);
+
+
     Task<List<Ticket>> GetByAssigneeIdAsync(Guid? assigneeId);
     Task<List<Ticket>> GetByStatusAsync(Status status);
     Task<List<Ticket>> GetByTicketTypeAsync(TicketType ticketType);
     Task<List<Ticket>> GetByResolutionAsync(Resolution resolution);
-    Task<bool> SoftDeleteAsync(Guid id);
-    Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction);
-    Task<bool> ClearUserAssignmentAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
-    Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
-    Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbConnection connection, IDbTransaction transaction);
 }

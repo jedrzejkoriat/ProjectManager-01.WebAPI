@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
-using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Projects;
@@ -10,24 +10,23 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectService : IProjectService
 {
-
     private readonly IProjectRepository projectRepository;
     private readonly IMapper mapper;
     private readonly ITicketService ticketService;
+    private readonly IDbConnection dbConnection;
     private readonly IProjectRoleService projectRoleService;
-    private readonly IDbConnectionFactory dbConnectionFactory;
 
     public ProjectService(IProjectRepository projectRepository,
         IMapper mapper,
         ITicketService ticketService,
-        IProjectRoleService projectRoleService,
-        IDbConnectionFactory dbConnectionFactory)
+        IDbConnection dbConnection,
+        IProjectRoleService projectRoleService)
     {
         this.projectRepository = projectRepository;
         this.mapper = mapper;
         this.ticketService = ticketService;
+        this.dbConnection = dbConnection;
         this.projectRoleService = projectRoleService;
-        this.dbConnectionFactory = dbConnectionFactory;
     }
 
     public async Task CreateProjectAsync(ProjectCreateDto projectCreateDto)
@@ -44,25 +43,13 @@ public class ProjectService : IProjectService
 
     public async Task DeleteProjectAsync(Guid projectId)
     {
-        using var connection = dbConnectionFactory.CreateConnection();
-
-        switch (connection)
-        {
-            case SqlConnection sqlConnection:
-                await sqlConnection.OpenAsync();
-                break;
-            default:
-                connection.Open();
-                break;
-        }
-
-        using var transaction = connection.BeginTransaction();
+        using var transaction = dbConnection.BeginTransaction();
 
         try
         {
-            await projectRepository.DeleteAsync(projectId, connection, transaction);
-            await ticketService.DeleteByProjectIdAsync(projectId, connection, transaction);
-            await projectRoleService.DeleteByProjectIdAsync(projectId, connection, transaction);
+            await projectRepository.DeleteAsync(projectId, transaction);
+            await ticketService.DeleteByProjectIdAsync(projectId, transaction);
+            await projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
 
             transaction.Commit();
         }

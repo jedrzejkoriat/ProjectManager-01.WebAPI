@@ -2,7 +2,6 @@
 using System.Transactions;
 using AutoMapper;
 using Microsoft.Data.SqlClient;
-using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
@@ -12,23 +11,22 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketService : ITicketService
 {
-
     private readonly ITicketRepository ticketRepository;
     private readonly IMapper mapper;
-    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IDbConnection dbConnection;
     private readonly ITicketRelationService ticketRelationService;
     private readonly ICommentService commentService;
 
     public TicketService(
         ITicketRepository ticketRepository, 
-        IMapper mapper, 
-        IDbConnectionFactory dbConnectionFactory,
+        IMapper mapper,
+        IDbConnection dbConnection,
         ITicketRelationService ticketRelationService,
         ICommentService commentService)
     {
         this.ticketRepository = ticketRepository;
         this.mapper = mapper;
-        this.dbConnectionFactory = dbConnectionFactory;
+        this.dbConnection = dbConnection;
         this.ticketRelationService = ticketRelationService;
         this.commentService = commentService;
     }
@@ -47,25 +45,13 @@ public class TicketService : ITicketService
 
     public async Task DeleteTicketAsync(Guid ticketId)
     {
-        using var connection = dbConnectionFactory.CreateConnection();
-
-        switch (connection)
-        {
-            case SqlConnection sqlConnection:
-                await sqlConnection.OpenAsync();
-                break;
-            default:
-                connection.Open();
-                break;
-        }
-
-        using var transaction = connection.BeginTransaction();
+        using var transaction = dbConnection.BeginTransaction();
 
         try
         {
-            await ticketRepository.DeleteAsync(ticketId, connection, transaction);
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticketId, connection, transaction);
-            await commentService.DeleteByTicketIdAsync(ticketId, connection, transaction);
+            await ticketRepository.DeleteAsync(ticketId, transaction);
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticketId, transaction);
+            await commentService.DeleteByTicketIdAsync(ticketId, transaction);
 
             transaction.Commit();
         }
@@ -77,43 +63,43 @@ public class TicketService : ITicketService
 
     }
 
-    public async Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var tickets = await ticketRepository.GetByProjectIdAsync(projectId);
 
         foreach (var ticket in tickets)
         {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, connection, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, connection, transaction);
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id,  transaction);
+            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
         }
 
-        await ticketRepository.DeleteByProjectIdAsync(projectId, connection, transaction);
+        await ticketRepository.DeleteByProjectIdAsync(projectId, transaction);
     }
 
-    public async Task DeleteTicketByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        var tickets = await ticketRepository.GetByReporterIdAsync(userId, connection, transaction);
+        var tickets = await ticketRepository.GetByReporterIdAsync(userId, transaction);
 
         foreach (var ticket in tickets)
         {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, connection, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, connection, transaction);
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
+            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
         }
 
-        await ticketRepository.DeleteByUserIdAsync(userId, connection, transaction);
+        await ticketRepository.DeleteByUserIdAsync(userId, transaction);
     }
 
-    public async Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbConnection connection, IDbTransaction transaction)
+    public async Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
     {
-        var tickets = await ticketRepository.GetByPriorityAsync(priorityId);
+        var tickets = await ticketRepository.GetByPriorityIdAsync(priorityId);
 
         foreach (var ticket in tickets)
         {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, connection, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, connection, transaction);
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
+            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
         }
 
-        await ticketRepository.DeleteByPriorityIdAsync(priorityId, connection, transaction);
+        await ticketRepository.DeleteByPriorityIdAsync(priorityId, transaction);
     }
 
     public async Task<TicketDto> GetTicketByIdAsync(Guid ticketId)
@@ -130,9 +116,9 @@ public class TicketService : ITicketService
         return mapper.Map<List<TicketDto>>(tickets);
     }
 
-    public async Task ClearUserAssignmentAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction)
     {
-        await ticketRepository.ClearUserAssignmentAsync(userId, connection, transaction);
+        await ticketRepository.ClearUserAssignmentAsync(userId, transaction);
     }
 
     public async Task SoftDeleteTicketAsync(Guid ticketId)

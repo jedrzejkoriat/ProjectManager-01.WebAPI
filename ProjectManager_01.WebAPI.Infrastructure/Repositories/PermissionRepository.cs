@@ -7,21 +7,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class PermissionRepository : IPermissionRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public PermissionRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
-    }
-
-    public async Task<bool> DeleteAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
-    {
-        var sql = @"DELETE FROM Permissions 
-                        WHERE Id = @Id";
-        var result = await connection.ExecuteAsync(sql, new { Id = permissionId }, transaction);
-
-        return result > 0;
     }
 
     // ============================= CRUD =============================
@@ -70,6 +60,15 @@ internal class PermissionRepository : IPermissionRepository
         var sql = @"DELETE FROM Permissions 
                         WHERE Id = @Id";
         var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid permissionId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Permissions 
+                        WHERE Id = @Id";
+        var result = await dbConnection.ExecuteAsync(sql, new { Id = permissionId }, transaction);
 
         return result > 0;
     }

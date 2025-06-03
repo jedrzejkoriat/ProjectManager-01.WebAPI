@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class CommentRepository : ICommentRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public CommentRepository(IDbConnection dbConnection)
@@ -15,20 +14,20 @@ internal class CommentRepository : ICommentRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Comments
                     WHERE TicketId = @TicketId";
-        var result = await connection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Comments
                     WHERE UserId = @UserId";
-        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
@@ -46,29 +45,6 @@ internal class CommentRepository : ICommentRepository
             return comment;
         },
         splitOn: "UserId");
-
-        return comments.ToList();
-    }
-
-    public async Task<List<Comment>> GetByUserAndProjectIdAsync(Guid userId, Guid projectId)
-    {
-        var sql = @"SELECT c.*, t.Id, t.TicketNumber, t.Title, p.Id, p.Key
-                    FROM Comments c
-                    JOIN Tickets t ON c.TicketId = t.Id
-                    JOIN Projects p ON t.ProjectId = p.Id
-                    WHERE c.UserId = @UserId AND p.Id = @ProjectId";
-        var comments = await dbConnection.QueryAsync<Comment, Ticket, Project, Comment>(
-            sql,
-            (comment, ticket, project) =>
-            {
-                ticket.Project = project;
-                comment.Ticket = ticket;
-
-                return comment;
-            },
-            new { UserId = userId, ProjectId = projectId },
-            splitOn: "Id,Id"
-        );
 
         return comments.ToList();
     }

@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRoleRepository : IProjectRoleRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public ProjectRoleRepository(IDbConnection dbConnection)
@@ -15,27 +14,19 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         this.dbConnection = dbConnection;
     }
 
-    public Task<bool> DeleteAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    public Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRoles 
                     WHERE Id = @Id";
-        var result = connection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
+        var result = dbConnection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
         return result.ContinueWith(t => t.Result > 0);
     }
 
-    public async Task<List<ProjectRole>> GetByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
-    {
-        var sql = @"SELECT * FROM ProjectRoles 
-                    WHERE ProjectId = @ProjectId";
-        var result = await connection.QueryAsync<ProjectRole>(sql, new { ProjectId = projectId }, transaction);
-        return result.ToList();
-    }
-
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRoles
                     WHERE ProjectId = @ProjectId";
-        var result = await connection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
 
         return result > 0;
     }

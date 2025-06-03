@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRolePermissionRepository : IProjectRolePermissionRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public ProjectRolePermissionRepository(IDbConnection dbConnection)
@@ -15,29 +14,11 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId)
-    {
-        var sql = @"DELETE FROM ProjectRolePermissions 
-                    WHERE PermissionId = @PermissionId";
-        var result = await dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId });
-
-        return result > 0;
-    }
-
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId)
+    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE ProjectRoleId = @ProjectRoleId";
-        var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId });
-
-        return result > 0;
-    }
-
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
-    {
-        var sql = @"DELETE FROM ProjectRolePermissions 
-                    WHERE ProjectRoleId = @ProjectRoleId";
-        var result = await connection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
 
         return result > 0;
     }
@@ -79,7 +60,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE PermissionId = @PermissionId";

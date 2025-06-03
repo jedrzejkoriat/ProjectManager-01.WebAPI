@@ -7,7 +7,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketRelationRepository : ITicketRelationRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public TicketRelationRepository(IDbConnection dbConnection)
@@ -15,31 +14,13 @@ internal class TicketRelationRepository : ITicketRelationRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM TicketRelations 
                     WHERE SourceId = @TicketId OR TargetId = @TicketId";
-        var result = await connection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
 
         return result > 0;
-    }
-
-    public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
-    {
-        var sql = @"SELECT * FROM TicketRelations 
-                    WHERE SourceId = @SourceId";
-        var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { SourceId = sourceId });
-
-        return result.ToList();
-    }
-
-    public async Task<List<TicketRelation>> GetByTargetIdAsync(Guid targetId)
-    {
-        var sql = @"SELECT * FROM TicketRelations 
-                    WHERE TargetId = @TargetId";
-        var result = await dbConnection.QueryAsync<TicketRelation>(sql, new { TargetId = targetId });
-
-        return result.ToList();
     }
 
     // ============================= CRUD =============================
