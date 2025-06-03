@@ -10,6 +10,9 @@ public sealed class CommentCreateDtoValidator : AbstractValidator<CommentCreateD
 {
     public CommentCreateDtoValidator()
     {
-        RuleFor(c => c.Content).NotEmpty().MinimumLength(1).MaximumLength(4000);
+        RuleFor(c => c.Content)
+            .NotEmpty().WithMessage("Name cannot be empty.")
+            .MinimumLength(3).WithMessage("Name must be at least 1 characters long.")
+            .MaximumLength(30).WithMessage("Name cannot be longer that 4000 characters.");
     }
 }

@@ -1,7 +1,3 @@
 ﻿namespace ProjectManager_01.Application.DTOs.Comments;
 
-public sealed class CommentUpdateDto
-{
-    public Guid Id { get; set; }
-    public string Content { get; set; }
-}
+public sealed record CommentUpdateDto (Guid Id, string Content);

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace ProjectManager_01.Application.DTOs.Permissions.Validators;
-public sealed class PermissionUpdateDtoValidator : AbstractValidator<PermissionUpdateDto>
+namespace ProjectManager_01.Application.DTOs.ProjectRoles.Validators;
+public sealed class ProjectRoleUpdateDtoValidator : AbstractValidator<ProjectRoleUpdateDto>
 {
-    public PermissionUpdateDtoValidator()
+    public ProjectRoleUpdateDtoValidator()
     {
         RuleFor(p => p.Name)
             .NotEmpty().WithMessage("Name cannot be empty.")

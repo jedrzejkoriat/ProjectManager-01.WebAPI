@@ -7,7 +7,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Permissions;
 
-public sealed class PermissionCreateDto
-{
-    public string Name { get; set; }
-}
+public sealed record PermissionCreateDto (string Name);

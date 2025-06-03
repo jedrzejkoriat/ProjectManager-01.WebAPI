@@ -51,10 +51,15 @@ public class UserService : IUserService
     {
         using var connection = dbConnectionFactory.CreateConnection();
 
-        if (connection is SqlConnection sqlConnection)
-            await sqlConnection.OpenAsync();
-        else
-            connection.Open();
+        switch (connection)
+        {
+            case SqlConnection sqlConnection:
+                await sqlConnection.OpenAsync();
+                break;
+            default:
+                connection.Open();
+                break;
+        }
 
         using var transaction = connection.BeginTransaction();
 

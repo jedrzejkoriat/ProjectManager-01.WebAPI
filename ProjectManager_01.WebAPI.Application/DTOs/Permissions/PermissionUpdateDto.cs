@@ -6,8 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Permissions;
 
-public sealed class PermissionUpdateDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-}
+public sealed record PermissionUpdateDto (Guid Id, string Name);

@@ -10,6 +10,9 @@ public sealed class PriorityCreateDtoValidator : AbstractValidator<PriorityCreat
 {
     public PriorityCreateDtoValidator()
     {
-        RuleFor(p => p.Name).NotEmpty().MinimumLength(2).MaximumLength(20);
+        RuleFor(p => p.Name)
+            .NotEmpty().WithMessage("Name cannot be empty.")
+            .MinimumLength(2).WithMessage("Name must be at least 2 characters long.")
+            .MaximumLength(20).WithMessage("Name cannot be longer that 20 characters.");
     }
 }

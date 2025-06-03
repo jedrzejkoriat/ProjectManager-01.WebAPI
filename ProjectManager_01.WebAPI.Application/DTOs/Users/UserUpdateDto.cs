@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectManager_01.Application.DTOs.Users;
+namespace ProjectManager_01.Application.DTOs.Users; 
 
 public sealed class UserUpdateDto
 {
-    public Guid Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public Guid Id { get; init; }
+    public string UserName { get; init; }
+    public string Email { get; init; }
+    public string Password { get; init; }
 }

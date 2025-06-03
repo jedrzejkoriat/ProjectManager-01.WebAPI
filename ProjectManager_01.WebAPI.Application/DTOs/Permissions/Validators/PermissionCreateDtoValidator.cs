@@ -10,6 +10,9 @@ public sealed class PermissionCreateDtoValidator : AbstractValidator<PermissionC
 {
     public PermissionCreateDtoValidator()
     {
-        RuleFor(p => p.Name).NotEmpty().MinimumLength(3).MaximumLength(30);
+        RuleFor(p => p.Name)
+            .NotEmpty().WithMessage("Name cannot be empty.")
+            .MinimumLength(3).WithMessage("Name must be at least 3 characters long.")
+            .MaximumLength(30).WithMessage("Name cannot be longer that 30 characters.");
     }
 }

@@ -6,9 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Priorities;
 
-public sealed class PriorityDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public int Level { get; set; }
-}
+public sealed record PriorityDto (Guid Id, string Name, int Level);

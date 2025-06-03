@@ -6,8 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Priorities;
 
-public sealed class PriorityCreateDto
-{
-    public string Name { get; set; }
-    public int Level { get; set; }
-}
+public sealed record PriorityCreateDto (string Name, int Level);
