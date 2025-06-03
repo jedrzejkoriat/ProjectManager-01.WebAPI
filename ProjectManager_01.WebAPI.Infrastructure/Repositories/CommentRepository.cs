@@ -14,6 +14,15 @@ internal class CommentRepository : ICommentRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Comments
+                    WHERE UserId = @UserId";
+        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
     {
         var sql = @"SELECT c.Id, c.TicketId, c.UserId, c.Content, c.CreatedAt,

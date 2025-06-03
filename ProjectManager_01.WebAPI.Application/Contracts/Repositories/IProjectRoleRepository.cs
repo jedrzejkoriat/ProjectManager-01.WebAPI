@@ -1,7 +1,12 @@
-﻿using ProjectManager_01.Domain.Models;
+﻿using System.Data;
+using System.Transactions;
+using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface IProjectRoleRepository : IGenericRepository<ProjectRole>
 {
+    Task<bool> DeleteAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction);
+    Task<List<ProjectRole>> GetByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction);
 }

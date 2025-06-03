@@ -14,6 +14,15 @@ internal class PermissionRepository : IPermissionRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Permissions 
+                        WHERE Id = @Id";
+        var result = await connection.ExecuteAsync(sql, new { Id = permissionId }, transaction);
+
+        return result > 0;
+    }
+
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Permission permission)
     {

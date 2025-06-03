@@ -32,6 +32,15 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
+    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRolePermissions 
+                    WHERE ProjectRoleId = @ProjectRoleId";
+        var result = await connection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
+
+        return result > 0;
+    }
+
     // ============================= CRUD =============================
     public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermissions)
     {
@@ -65,6 +74,15 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         var sql = @"DELETE FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId AND PermissionId = @PermissionId";
         var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRolePermissions 
+                    WHERE PermissionId = @PermissionId";
+        var result = await dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId }, transaction);
 
         return result > 0;
     }

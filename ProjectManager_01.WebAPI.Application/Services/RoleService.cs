@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
+using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Roles;
@@ -10,11 +12,15 @@ public class RoleService : IRoleService
 {
     private readonly IRoleRepository roleRepository;
     private readonly IMapper mapper;
+    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IUserRoleService userRoleService;
 
-    public RoleService(IRoleRepository roleRepository, IMapper mapper)
+    public RoleService(IRoleRepository roleRepository, IMapper mapper, IDbConnectionFactory dbConnectionFactory, IUserRoleService userRoleService)
     {
         this.roleRepository = roleRepository;
         this.mapper = mapper;
+        this.dbConnectionFactory = dbConnectionFactory;
+        this.userRoleService = userRoleService;
     }
 
     public async Task CreateRoleAsync(RoleCreateDto roleCreateDto)
@@ -31,7 +37,27 @@ public class RoleService : IRoleService
 
     public async Task DeleteRoleAsync(Guid roleId)
     {
-        await roleRepository.DeleteAsync(roleId);
+        using var connection = dbConnectionFactory.CreateConnection();
+
+        if (connection is SqlConnection sqlConnection)
+            await sqlConnection.OpenAsync();
+        else
+            connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+
+        try
+        { 
+            await roleRepository.DeleteAsync(roleId);
+            await userRoleService.DeleteByRoleIdAsync(roleId, connection, transaction);
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception ("Error while performing role deletion transaction.");
+        }
     }
 
     public async Task<RoleDto> GetRoleByIdAsync(Guid roleId)

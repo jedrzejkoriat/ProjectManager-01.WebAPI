@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using System.Transactions;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
@@ -15,6 +17,12 @@ public class TicketService : ITicketService
     {
         this.ticketRepository = ticketRepository;
         this.mapper = mapper;
+    }
+
+    public async Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await ticketRepository.GetByProjectIdAsync(projectId);
+        await ticketRepository.DeleteByProjectIdAsync(projectId, connection, transaction);
     }
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
@@ -46,5 +54,10 @@ public class TicketService : ITicketService
         List<Ticket> tickets = await ticketRepository.GetAllAsync();
 
         return mapper.Map<List<TicketDto>>(tickets);
+    }
+
+    public async Task ClearUserReferencesAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await ticketRepository.ClearUserReferencesAsync(userId, connection, transaction);
     }
 }

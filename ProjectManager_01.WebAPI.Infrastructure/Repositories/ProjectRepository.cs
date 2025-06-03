@@ -24,6 +24,15 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
+    public async Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Projects 
+                        WHERE Id = @Id";
+        var result = await connection.ExecuteAsync(sql, new { Id = id }, transaction);
+
+        return result > 0;
+    }
+
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Project project)
     {
@@ -66,7 +75,6 @@ internal class ProjectRepository : IProjectRepository
 
         return result > 0;
     }
-
     public async Task<bool> DeleteAsync(Guid id)
     {
         var sql = @"DELETE FROM Projects 

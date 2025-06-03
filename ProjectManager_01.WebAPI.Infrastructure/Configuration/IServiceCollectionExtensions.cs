@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.Services;
+using ProjectManager_01.Infrastructure.Factories;
 using ProjectManager_01.Infrastructure.Repositories;
 
 namespace ProjectManager_01.Infrastructure.Configuration;
@@ -24,6 +26,13 @@ public static class IServiceCollectionExtensions
         services.AddScoped<ITicketTagRepository, TicketTagRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDbConnectionFactory(this IServiceCollection services, string connectionString)
+    {
+        services.AddScoped<IDbConnectionFactory, SqlDbConnectionFactory>(provider => new SqlDbConnectionFactory(connectionString));
 
         return services;
     }

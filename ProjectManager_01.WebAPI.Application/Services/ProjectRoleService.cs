@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
+using Microsoft.Data.SqlClient;
+using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.ProjectRoles;
@@ -10,11 +13,21 @@ public class ProjectRoleService : IProjectRoleService
 {
     private readonly IProjectRoleRepository projectRoleRepository;
     private readonly IMapper mapper;
+    private readonly IProjectUserRoleService projectUserRoleService;
+    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IProjectRolePermissionService projectRolePermissionService;
 
-    public ProjectRoleService(IProjectRoleRepository projectRoleRepository, IMapper mapper)
+    public ProjectRoleService(IProjectRoleRepository projectRoleRepository, 
+        IMapper mapper, 
+        IProjectUserRoleService projectUserRoleService, 
+        IDbConnectionFactory dbConnectionFactory,
+        IProjectRolePermissionService projectRolePermissionService)
     {
         this.projectRoleRepository = projectRoleRepository;
         this.mapper = mapper;
+        this.projectUserRoleService = projectUserRoleService;
+        this.dbConnectionFactory = dbConnectionFactory;
+        this.projectRolePermissionService = projectRolePermissionService;
     }
 
     public async Task CreateProjectRoleAsync(ProjectRoleCreateDto projectRoleCreateDto)
@@ -31,7 +44,28 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task DeleteProjectRoleAsync(Guid projectRoleId)
     {
-        await projectRoleRepository.DeleteAsync(projectRoleId);
+        using var connection = dbConnectionFactory.CreateConnection();
+
+        if (connection is SqlConnection sqlConnection)
+            await sqlConnection.OpenAsync();
+        else
+            connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+
+        try
+        {
+            await projectRoleRepository.DeleteAsync(projectRoleId, connection, transaction);
+            await projectUserRoleService.DeleteByProjectRoleId(projectRoleId, connection, transaction);
+            await projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, connection, transaction);
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing project role deletion transaction.");
+        }
     }
 
     public async Task<ProjectRoleDto> GetProjectRoleByIdAsync(Guid projectRoleId)
@@ -46,6 +80,12 @@ public class ProjectRoleService : IProjectRoleService
         List<ProjectRole> projectRoles = await projectRoleRepository.GetAllAsync();
 
         return mapper.Map<List<ProjectRoleDto>>(projectRoles);
+    }
+
+    public async Task DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await projectRoleRepository.DeleteByProjectIdAsync(projectId, connection, transaction);
+        await projectUserRoleService.DeleteByProjectIdAsync(projectId, connection, transaction);
     }
 }
 

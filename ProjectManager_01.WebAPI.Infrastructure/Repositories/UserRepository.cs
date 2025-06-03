@@ -14,6 +14,15 @@ internal class UserRepository : IUserRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Users 
+                    WHERE Id = @Id";
+        var result = await connection.ExecuteAsync(sql, new { Id = id }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<List<User>> GetByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT DISTINCT u.* FROM Users u

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.ProjectRolePermissions;
@@ -21,6 +22,16 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
     {
         ProjectRolePermission projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
         await projectRolePermissionRepository.CreateAsync(projectRolePermission);
+    }
+
+    public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, connection, transaction);
+    }
+
+    public async Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, connection, transaction);
     }
 
     public async Task DeleteProjectRolePermissionAsync(Guid projectRoleId, Guid permissionId)

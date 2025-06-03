@@ -14,6 +14,24 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectUserRoles 
+                    WHERE UserId = @UserId";
+        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectUserRoles 
+                    WHERE ProjectId = @ProjectId";
+        var result = await connection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<List<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
     {
         var sql = @"SELECT * FROM ProjectUserRoles 
@@ -31,6 +49,15 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         var result = await dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId });
 
         return result.ToList();
+    }
+
+    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectUserRoles 
+                    WHERE ProjectRoleId = @ProjectRoleId";
+        var result = await connection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
+
+        return result > 0;
     }
 
     // ============================= CRUD =============================

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
+using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Users;
@@ -10,11 +12,27 @@ public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
     private readonly IMapper mapper;
+    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly IUserRoleService userRoleService;
+    private readonly IProjectUserRoleService projectUserRoleService;
+    private readonly ICommentService commentService;
+    private readonly ITicketService ticketService;
 
-    public UserService(IUserRepository userRepository, IMapper mapper)
+    public UserService(IUserRepository userRepository, 
+        IMapper mapper, 
+        IDbConnectionFactory dbConnectionFactory, 
+        IUserRoleService userRoleService,
+        IProjectUserRoleService projectUserRoleService,
+        ICommentService commentService,
+        ITicketService ticketService)
     {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.dbConnectionFactory = dbConnectionFactory;
+        this.userRoleService = userRoleService;
+        this.projectUserRoleService = projectUserRoleService;
+        this.commentService = commentService;
+        this.ticketService = ticketService;
     }
 
     public async Task CreateUserAsync(UserCreateDto userCreateDto)
@@ -31,7 +49,30 @@ public class UserService : IUserService
 
     public async Task DeleteUserAsync(Guid userId)
     {
-        await userRepository.DeleteAsync(userId);
+        using var connection = dbConnectionFactory.CreateConnection();
+
+        if (connection is SqlConnection sqlConnection)
+            await sqlConnection.OpenAsync();
+        else
+            connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+
+        try
+        {
+            await userRepository.DeleteAsync(userId, connection, transaction);
+            await userRoleService.DeleteByUserIdAsync(userId, connection, transaction);
+            await projectUserRoleService.DeleteByUserIdAsync(userId, connection, transaction);
+            await commentService.DeleteByUserIdAsync(userId, connection, transaction);
+            await ticketService.ClearUserReferencesAsync(userId, connection, transaction);
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing user deletion transaction.");
+        }
     }
 
     public async Task<UserDto> GetUserByIdAsync(Guid userId)

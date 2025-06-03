@@ -14,6 +14,31 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         this.dbConnection = dbConnection;
     }
 
+    public Task<bool> DeleteAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRoles 
+                    WHERE Id = @Id";
+        var result = connection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
+        return result.ContinueWith(t => t.Result > 0);
+    }
+
+    public async Task<List<ProjectRole>> GetByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"SELECT * FROM ProjectRoles 
+                    WHERE ProjectId = @ProjectId";
+        var result = await connection.QueryAsync<ProjectRole>(sql, new { ProjectId = projectId }, transaction);
+        return result.ToList();
+    }
+
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRoles
+                    WHERE ProjectId = @ProjectId";
+        var result = await connection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
+
+        return result > 0;
+    }
+
     public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
     {
         var sql = @"SELECT pr.*, prp.*, p.*

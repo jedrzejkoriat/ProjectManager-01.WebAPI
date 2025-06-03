@@ -15,6 +15,26 @@ internal class TicketRepository : ITicketRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> ClearUserReferencesAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"UPDATE Tickets
+                    SET AssigneeId = CASE WHEN AssigneeId = @UserId THEN NULL ELSE AssigneeId END,
+                        ReporterId = CASE WHEN ReporterId = @UserId THEN NULL ELSE ReporterId END
+                    WHERE AssigneeId = @UserId OR ReporterId = @UserId";
+        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tickets
+                    WHERE ProjectId = @ProjectId";
+        var result = await connection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<Ticket> GetByKeyAndNumberWithDetailsAsync(string projectKey, int ticketNumber)
     {
         var ticketSql = @"SELECT 

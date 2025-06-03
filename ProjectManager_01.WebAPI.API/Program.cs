@@ -4,14 +4,18 @@ using Microsoft.Data.SqlClient;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
 using ProjectManager_01.Application.Configuration;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddScoped<IDbConnection>(sp =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     return new SqlConnection(connectionString);
 });
+
+builder.Services.AddDbConnectionFactory(connectionString);
 
 builder.Services.AddControllers();
 
@@ -37,8 +41,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Pr
 
 builder.Services.AddApplicationMapper();
 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddDapperRepositories();
 builder.Services.AddServices();
+
 
 var app = builder.Build();
 

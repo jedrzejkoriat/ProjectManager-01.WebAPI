@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Comments;
@@ -46,5 +47,10 @@ public class CommentService : ICommentService
     public async Task DeleteCommentAsync(Guid commentId)
     {
         await commentRepository.DeleteAsync(commentId);
+    }
+
+    public async Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await commentRepository.DeleteByUserIdAsync(userId, connection, transaction);
     }
 }

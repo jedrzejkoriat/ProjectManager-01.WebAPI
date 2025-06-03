@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.UserRoles;
@@ -46,5 +47,15 @@ public class UserRoleService : IUserRoleService
         List<UserRole> userRoles = await userRoleRepository.GetAllAsync();
 
         return mapper.Map<List<UserRoleDto>>(userRoles);
+    }
+
+    public async Task DeleteByRoleIdAsync(Guid roleId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await userRoleRepository.DeleteByRoleIdAsync(roleId, connection, transaction);
+    }
+
+    public async Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await userRoleRepository.DeleteByUserIdAsync(userId, connection, transaction);
     }
 }

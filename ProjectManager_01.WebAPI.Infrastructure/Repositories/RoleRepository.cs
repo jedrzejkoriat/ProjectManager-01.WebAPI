@@ -14,6 +14,15 @@ internal class RoleRepository : IRoleRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteAsync(Guid Id, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Roles 
+                    WHERE Id = @Id";
+        var result = await connection.ExecuteAsync(sql, new { Id = Id }, transaction);
+
+        return result > 0;
+    }
+
     // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Role entity)
     {

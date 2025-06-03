@@ -1,4 +1,6 @@
-﻿using ProjectManager_01.Domain.Models;
+﻿using System.Data;
+using System.Transactions;
+using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
@@ -10,4 +12,6 @@ public interface IProjectRolePermissionRepository
     Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId);
     Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId);
     Task<bool> DeleteByPermissionIdAsync(Guid permissionId);
+    Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbConnection connection, IDbTransaction transaction);
+    Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbConnection connection, IDbTransaction transaction);
 }
