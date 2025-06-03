@@ -10,6 +10,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class UserService : IUserService
 {
+
     private readonly IUserRepository userRepository;
     private readonly IMapper mapper;
     private readonly IDbConnectionFactory dbConnectionFactory;

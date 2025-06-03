@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class CommentRepository : ICommentRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public CommentRepository(IDbConnection dbConnection)

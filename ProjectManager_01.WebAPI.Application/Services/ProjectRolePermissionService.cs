@@ -9,6 +9,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectRolePermissionService : IProjectRolePermissionService
 {
+
     private readonly IProjectRolePermissionRepository projectRolePermissionRepository;
     private readonly IMapper mapper;
 

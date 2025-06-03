@@ -12,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketsController : ControllerBase
 {
+
     private readonly ITicketService ticketService;
 
     public TicketsController(ITicketService ticketService)

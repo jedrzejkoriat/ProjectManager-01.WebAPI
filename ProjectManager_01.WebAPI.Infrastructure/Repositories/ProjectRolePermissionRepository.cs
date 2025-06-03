@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRolePermissionRepository : IProjectRolePermissionRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public ProjectRolePermissionRepository(IDbConnection dbConnection)

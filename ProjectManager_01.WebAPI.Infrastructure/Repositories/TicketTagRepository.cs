@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketTagRepository : ITicketTagRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public TicketTagRepository(IDbConnection dbConnection)

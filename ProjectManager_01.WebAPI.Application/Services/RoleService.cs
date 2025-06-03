@@ -10,6 +10,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class RoleService : IRoleService
 {
+
     private readonly IRoleRepository roleRepository;
     private readonly IMapper mapper;
     private readonly IDbConnectionFactory dbConnectionFactory;

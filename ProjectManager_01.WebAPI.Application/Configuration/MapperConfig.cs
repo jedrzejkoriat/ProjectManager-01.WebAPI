@@ -21,6 +21,7 @@ using ProjectManager_01.Application.DTOs.Users;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Configuration;
+
 public sealed class MapperConfig : Profile
 {
     public MapperConfig()

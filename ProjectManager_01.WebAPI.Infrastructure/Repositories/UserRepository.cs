@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class UserRepository : IUserRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public UserRepository(IDbConnection dbConnection)

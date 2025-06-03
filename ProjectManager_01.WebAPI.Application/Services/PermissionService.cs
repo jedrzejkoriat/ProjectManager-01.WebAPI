@@ -10,6 +10,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class PermissionService : IPermissionService
 {
+
     private readonly IPermissionRepository permissionRepository;
     private readonly IMapper mapper;
     private readonly IDbConnectionFactory dbConnectionFactory;

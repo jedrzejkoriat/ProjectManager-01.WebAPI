@@ -2,7 +2,7 @@
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
-public interface ITicketRelationRepository : IGenericRepository<TicketRelation>
+public interface ITicketRelationRepository : IRepository<TicketRelation>
 {
     Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId);
     Task<List<TicketRelation>> GetByTargetIdAsync(Guid targetId);

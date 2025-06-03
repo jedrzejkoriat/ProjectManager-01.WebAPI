@@ -12,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TagsController : ControllerBase
 {
+
     private readonly ITagService tagService;
 
     public TagsController(ITagService tagService)

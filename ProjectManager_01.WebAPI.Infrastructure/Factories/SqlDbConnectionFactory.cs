@@ -9,8 +9,10 @@ using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Factories;
 
 namespace ProjectManager_01.Infrastructure.Factories;
+
 public sealed class SqlDbConnectionFactory : IDbConnectionFactory
 {
+
     private readonly string connectionString;
 
     public SqlDbConnectionFactory(string connectionString)

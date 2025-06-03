@@ -2,6 +2,6 @@
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
-public interface IPriorityRepository : IGenericRepository<Priority>
+public interface IPriorityRepository : IRepository<Priority>
 {
 }

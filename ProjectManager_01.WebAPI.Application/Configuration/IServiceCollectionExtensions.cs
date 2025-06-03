@@ -8,6 +8,7 @@ using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.Services;
 
 namespace ProjectManager_01.Application.Configuration;
+
 public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)

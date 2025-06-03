@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 
 namespace ProjectManager_01.Application.Contracts.Factories;
+
 public interface IDbConnectionFactory
 {
     IDbConnection CreateConnection();

@@ -4,7 +4,7 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Contracts.Repositories;
 
-public interface ITicketRepository : IGenericRepository<Ticket>
+public interface ITicketRepository : IRepository<Ticket>
 {
     Task<List<Ticket>> GetByProjectIdAsync(Guid projectId);
     Task<Ticket> GetByKeyAndNumberAsync(string key, int ticketNumber);

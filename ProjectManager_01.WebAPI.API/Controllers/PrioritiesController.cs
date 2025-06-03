@@ -12,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PrioritiesController : ControllerBase
 {
+
     private readonly IPriorityService priorityService;
 
     public PrioritiesController(IPriorityService priorityService)

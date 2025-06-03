@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager_01.Application.Contracts.Repositories;
 
-public interface IGenericRepository<T>
+public interface IRepository<T>
 {
     Task<Guid> CreateAsync(T entity);
     Task<T> GetByIdAsync(Guid id);

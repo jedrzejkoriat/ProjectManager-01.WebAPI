@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TagRepository : ITagRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public TagRepository(IDbConnection dbConnection)

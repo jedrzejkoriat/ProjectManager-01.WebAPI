@@ -12,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase
 {
+
     private readonly IProjectRolePermissionService projectRolePermissionService;
 
     public ProjectRolePermissionsController(IProjectRolePermissionService projectRolePermissionService)

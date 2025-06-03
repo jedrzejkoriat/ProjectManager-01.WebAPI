@@ -12,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PermissionsController : ControllerBase
 {
+
     private readonly IPermissionService permissionService;
 
     public PermissionsController(IPermissionService permissionService)

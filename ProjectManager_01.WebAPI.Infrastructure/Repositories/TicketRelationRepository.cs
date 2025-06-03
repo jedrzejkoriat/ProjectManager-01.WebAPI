@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketRelationRepository : ITicketRelationRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public TicketRelationRepository(IDbConnection dbConnection)

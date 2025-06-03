@@ -8,6 +8,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class PriorityService : IPriorityService
 {
+
     private readonly IPriorityRepository priorityRepository;
     private readonly IMapper mapper;
 

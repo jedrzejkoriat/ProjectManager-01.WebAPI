@@ -8,6 +8,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketRelationService : ITicketRelationService
 {
+
     private readonly ITicketRelationRepository ticketRelationRepository;
     private readonly IMapper mapper;
 

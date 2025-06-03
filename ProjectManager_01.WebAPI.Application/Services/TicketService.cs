@@ -10,6 +10,7 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketService : ITicketService
 {
+
     private readonly ITicketRepository ticketRepository;
     private readonly IMapper mapper;
 

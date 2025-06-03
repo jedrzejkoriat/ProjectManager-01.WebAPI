@@ -7,6 +7,7 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class PriorityRepository : IPriorityRepository
 {
+
     private readonly IDbConnection dbConnection;
 
     public PriorityRepository(IDbConnection dbConnection)
