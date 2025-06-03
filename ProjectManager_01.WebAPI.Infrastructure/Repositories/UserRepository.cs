@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Azure.Core;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
@@ -13,45 +14,7 @@ internal class UserRepository : IUserRepository
     {
         this.dbConnection = dbConnection;
     }
-
-    public async Task<Guid> CreateAsync(User entity, IDbTransaction transaction)
-    {
-        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
-                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
-
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
-    }
-
-    public async Task<List<User>> GetByProjectIdAsync(Guid projectId)
-    {
-        var sql = @"SELECT DISTINCT u.* FROM Users u
-                    JOIN ProjectUserRoles pur ON u.Id = pur.UserId
-                    WHERE pur.ProjectId = @ProjectId
-                    AND u.IsDeleted = 0";
-        var result = await dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
-
-        return result.ToList();
-    }
-
-    // ============================= CRUD =============================
-    public async Task<Guid> CreateAsync(User entity)
-    {
-        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
-                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
-
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
-    }
-
+    // ============================= QUERIES =============================
     public async Task<List<User>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Users";
@@ -67,6 +30,55 @@ internal class UserRepository : IUserRepository
         var result = await dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
 
         return result;
+    }
+
+    public async Task<List<User>> GetByProjectIdAsync(Guid projectId)
+    {
+        var sql = @"SELECT DISTINCT u.* FROM Users u
+                    JOIN ProjectUserRoles pur ON u.Id = pur.UserId
+                    WHERE pur.ProjectId = @ProjectId
+                    AND u.IsDeleted = 0";
+        var result = await dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    public async Task<IEnumerable<User>> GetUsersByProjectIdAsync(Guid projectId)
+    {
+        var sql = @"SELECT DISTINCT u.*
+                    FROM Users u
+                    INNER JOIN ProjectUserRole pur ON pur.UserId = u.Id
+                    WHERE pur.ProjectId = @ProjectId;";
+        var result = await dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    // ============================= COMMANDS =============================
+    public async Task<Guid> CreateAsync(User entity, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
+                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating user failed.");
+    }
+
+    public async Task<Guid> CreateAsync(User entity)
+    {
+        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
+                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating user failed.");
     }
 
     public async Task<bool> UpdateAsync(User entity)

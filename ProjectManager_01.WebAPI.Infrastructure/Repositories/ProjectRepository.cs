@@ -14,6 +14,25 @@ internal class ProjectRepository : IProjectRepository
         this.dbConnection = dbConnection;
     }
 
+    // ============================= QUERIES =============================
+    public async Task<List<Project>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM Projects";
+        var result = await dbConnection.QueryAsync<Project>(sql);
+
+        return result.ToList();
+    }
+
+    public async Task<Project> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM Projects 
+                        WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
+
+        return result;
+    }
+
+    // ============================= COMMANDS =============================
     public async Task<bool> SoftDeleteAsync(Guid id)
     {
         var sql = @"UPDATE Projects
@@ -33,7 +52,6 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Project project)
     {
         var sql = @"INSERT INTO Projects(Id, Name, [Key], CreatedAt, IsDeleted)
@@ -46,23 +64,6 @@ internal class ProjectRepository : IProjectRepository
             return project.Id;
         else
             throw new Exception("Insert to projects table failed.");
-    }
-
-    public async Task<List<Project>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM Projects";
-        var result = await dbConnection.QueryAsync<Project>(sql);
-
-        return result.ToList();
-    }
-
-    public async Task<Project> GetByIdAsync(Guid id)
-    {
-        var sql = @"SELECT * FROM Projects 
-                        WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
-
-        return result;
     }
 
     public async Task<bool> UpdateAsync(Project project)

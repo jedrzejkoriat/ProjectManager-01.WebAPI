@@ -14,25 +14,7 @@ internal class TicketTagRepository : ITicketTagRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> CreateAsync(TicketTag ticketTag, IDbTransaction dbTransaction)
-    {
-        var sql = @"INSERT INTO TicketTags (TicketId, TagId)
-                    VALUES (@TicketId, @TagId)";
-        var result = await dbConnection.ExecuteAsync(sql, ticketTag, dbTransaction);
-
-        return result > 0;
-    }
-
-    // ============================= CRUD =============================
-    public async Task<bool> CreateAsync(TicketTag ticketTag)
-    {
-        var sql = @"INSERT INTO TicketTags (TicketId, TagId)
-                    VALUES (@TicketId, @TagId)";
-        var result = await dbConnection.ExecuteAsync(sql, ticketTag);
-
-        return result > 0;
-    }
-
+    // ============================= QUERIES =============================
     public async Task<List<TicketTag>> GetAllAsync()
     {
         var sql = @"SELECT * FROM TicketTags";
@@ -49,6 +31,25 @@ internal class TicketTagRepository : ITicketTagRepository
         var result = await dbConnection.QueryFirstAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result;
+    }
+
+    // ============================= COMMANDS =============================
+    public async Task<bool> CreateAsync(TicketTag ticketTag, IDbTransaction dbTransaction)
+    {
+        var sql = @"INSERT INTO TicketTags (TicketId, TagId)
+                    VALUES (@TicketId, @TagId)";
+        var result = await dbConnection.ExecuteAsync(sql, ticketTag, dbTransaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> CreateAsync(TicketTag ticketTag)
+    {
+        var sql = @"INSERT INTO TicketTags (TicketId, TagId)
+                    VALUES (@TicketId, @TagId)";
+        var result = await dbConnection.ExecuteAsync(sql, ticketTag);
+
+        return result > 0;
     }
 
     public async Task<bool> DeleteAsync(Guid ticketId, Guid tagId)

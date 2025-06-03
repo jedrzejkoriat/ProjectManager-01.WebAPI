@@ -14,6 +14,26 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         this.dbConnection = dbConnection;
     }
 
+    // ============================= QUERIES =============================
+    public async Task<List<ProjectRolePermission>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM ProjectRolePermissions";
+        var result = await dbConnection.QueryAsync<ProjectRolePermission>(sql);
+
+        return result.ToList();
+    }
+
+    public async Task<ProjectRolePermission> GetByIdAsync(Guid projectRoleId, Guid permissionId)
+    {
+        var sql = @"SELECT * FROM ProjectRolePermissions
+                    WHERE ProjectRoleId = @ProjectRoleId 
+                    AND PermissionId = @PermissionId";
+        var result = await dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
+
+        return result;
+    }
+
+    // ============================= COMMANDS =============================
     public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
@@ -32,7 +52,6 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    // ============================= CRUD =============================
     public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission)
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
@@ -40,24 +59,6 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         var result = await dbConnection.ExecuteAsync(sql, projectRolePermission);
 
         return result > 0;
-    }
-
-    public async Task<List<ProjectRolePermission>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM ProjectRolePermissions";
-        var result = await dbConnection.QueryAsync<ProjectRolePermission>(sql);
-
-        return result.ToList();
-    }
-
-    public async Task<ProjectRolePermission> GetByIdAsync(Guid projectRoleId, Guid permissionId)
-    {
-        var sql = @"SELECT * FROM ProjectRolePermissions
-                    WHERE ProjectRoleId = @ProjectRoleId 
-                    AND PermissionId = @PermissionId";
-        var result = await dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
-
-        return result;
     }
 
     public async Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId)

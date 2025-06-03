@@ -14,6 +14,41 @@ internal class CommentRepository : ICommentRepository
         this.dbConnection = dbConnection;
     }
 
+    // ============================== QUERIES =============================
+    public async Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
+    {
+        var sql = @"SELECT c.Id, c.TicketId, c.UserId, c.Content, c.CreatedAt,
+                    u.Id, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
+                    FROM Comments c
+                    JOIN Users u ON c.UserId = u.Id
+                    WHERE c.TicketId = @TicketId";
+        var comments = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        {
+            comment.User = user;
+            return comment;
+        },
+        splitOn: "UserId");
+
+        return comments.ToList();
+    }
+
+    public async Task<Comment> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM Comments WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<Comment>(sql, new { Id = id });
+
+        return result;
+    }
+
+    public async Task<List<Comment>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM Comments";
+        var result = await dbConnection.QueryAsync<Comment>(sql);
+
+        return result.ToList();
+    }
+
+    // ============================== COMMANDS ============================
     public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Comments
@@ -32,24 +67,6 @@ internal class CommentRepository : ICommentRepository
         return result > 0;
     }
 
-    public async Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
-    {
-        var sql = @"SELECT c.Id, c.TicketId, c.UserId, c.Content, c.CreatedAt,
-                    u.Id, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
-                    FROM Comments c
-                    JOIN Users u ON c.UserId = u.Id
-                    WHERE c.TicketId = @TicketId";
-        var comments = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
-        {
-            comment.User = user;
-            return comment;
-        },
-        splitOn: "UserId");
-
-        return comments.ToList();
-    }
-
-    // ============================= CRUD =============================
     public async Task<Guid> CreateAsync(Comment comment)
     {
         var sql = @"INSERT INTO Comments (Id, TicketId, UserId, Content, CreatedAt)
@@ -62,22 +79,6 @@ internal class CommentRepository : ICommentRepository
             return comment.Id;
         else
             throw new Exception("Insert failed");
-    }
-
-    public async Task<Comment> GetByIdAsync(Guid id)
-    {
-        var sql = @"SELECT * FROM Comments WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Comment>(sql, new { Id = id });
-
-        return result;
-    }
-
-    public async Task<List<Comment>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM Comments";
-        var result = await dbConnection.QueryAsync<Comment>(sql);
-
-        return result.ToList();
     }
 
     public async Task<bool> UpdateAsync(Comment comment)

@@ -14,6 +14,25 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         this.dbConnection = dbConnection;
     }
 
+    // ============================= QUERIES =============================
+    public async Task<List<ProjectUserRole>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles";
+        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql);
+
+        return result.ToList();
+    }
+
+    public async Task<ProjectUserRole> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE Id = @Id";
+        var result = await dbConnection.QueryFirstAsync<ProjectUserRole>(sql);
+
+        return result;
+    }
+
+    // ============================= COMMANDS =============================
     public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
@@ -41,8 +60,6 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    // ============================= CRUD =============================
-
     public async Task<Guid> CreateAsync(ProjectUserRole entity)
     {
         var sql = @"INSERT INTO ProjectUserRoles (Id, ProjectId, ProjectRoleId, UserId)
@@ -54,23 +71,6 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
             return entity.Id;
         else
             throw new Exception("Creating ProjectUserRoles failed.");
-    }
-
-    public async Task<List<ProjectUserRole>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM ProjectUserRoles";
-        var result = await dbConnection.QueryAsync<ProjectUserRole>(sql);
-
-        return result.ToList();
-    }
-
-    public async Task<ProjectUserRole> GetByIdAsync(Guid id)
-    {
-        var sql = @"SELECT * FROM ProjectUserRoles 
-                    WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<ProjectUserRole>(sql);
-
-        return result;
     }
 
     public async Task<bool> UpdateAsync(ProjectUserRole entity)

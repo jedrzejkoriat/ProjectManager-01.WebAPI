@@ -145,4 +145,18 @@ public class TicketService : ITicketService
     {
         await ticketRepository.SoftDeleteAsync(ticketId);
     }
+
+    public async Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber)
+    {
+        var ticket = await ticketRepository.GetByKeyAndNumberAsync(projectKey, ticketNumber);
+
+        return mapper.Map<TicketDto>(ticket);
+    }
+
+    public async Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId)
+    {
+        var tickets = await ticketRepository.GetByProjectIdAsync(projectId);
+
+        return mapper.Map<IEnumerable<TicketDto>>(tickets);
+    }
 }

@@ -56,6 +56,26 @@ public class UsersController : ControllerBase
         }
     }
 
+    // GET: api/users/project/{projectId}
+    /// <summary>
+    /// Get users by project ID
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    [HttpGet("project/{projectId}")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByProjectId(Guid projectId)
+    {
+        try
+        {
+            var users = await userService.GetUsersByProjectIdAsync(projectId);
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
     // POST: api/users
     /// <summary>
     /// Create a new user

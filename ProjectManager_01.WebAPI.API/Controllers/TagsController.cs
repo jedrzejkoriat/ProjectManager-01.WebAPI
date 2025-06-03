@@ -56,6 +56,25 @@ public class TagsController : ControllerBase
         }
     }
 
+    // GET: api/tags/project/{projectId}
+    /// <summary>
+    /// Get all tags by project ID
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    [HttpGet("project/{projectId}")]
+    public async Task<ActionResult<IEnumerable<TagDto>>> GetTagsByProjectId(Guid projectId)
+    {
+        try
+        {
+            return Ok(await tagService.GetTagsByProjectIdAsync(projectId));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
     // POST: api/tags
     /// <summary>
     /// Create a new tag

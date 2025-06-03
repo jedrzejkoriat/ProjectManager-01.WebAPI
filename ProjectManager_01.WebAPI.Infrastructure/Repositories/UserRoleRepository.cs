@@ -14,6 +14,25 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+    // ============================= QUERIES =============================
+    public async Task<UserRole> GetByUserIdAsync(Guid userId)
+    {
+        var sql = @"SELECT * FROM UserRoles 
+                    WHERE UserId = @UserId";
+        var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
+
+        return result;
+    }
+
+    public async Task<List<UserRole>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM UserRoles";
+        var result = await dbConnection.QueryAsync<UserRole>(sql);
+
+        return result.ToList();
+    }
+
+    // ============================= COMMANDS =============================
 
     public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
     {
@@ -42,7 +61,6 @@ internal class UserRoleRepository : IUserRoleRepository
         return result > 0;
     }
 
-    // ============================= CRUD =============================
     public async Task<bool> CreateAsync(UserRole entity)
     {
         var sql = @"INSERT INTO UserRoles (UserId)
@@ -50,23 +68,6 @@ internal class UserRoleRepository : IUserRoleRepository
         var result = await dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
-    }
-
-    public async Task<UserRole> GetByUserIdAsync(Guid userId)
-    {
-        var sql = @"SELECT * FROM UserRoles 
-                    WHERE UserId = @UserId";
-        var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
-
-        return result;
-    }
-
-    public async Task<List<UserRole>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM UserRoles";
-        var result = await dbConnection.QueryAsync<UserRole>(sql);
-
-        return result.ToList();
     }
 
     public async Task<bool> UpdateAsync(UserRole userRole)

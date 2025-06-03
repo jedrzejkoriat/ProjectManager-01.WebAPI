@@ -15,4 +15,6 @@ public interface ITicketService
     Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task SoftDeleteTicketAsync(Guid ticketId);
     Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
+    Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber);
+    Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId);
 }

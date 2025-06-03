@@ -13,30 +13,7 @@ internal class TagRepository : ITagRepository
     {
         this.dbConnection = dbConnection;
     }
-
-    public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
-    {
-        var sql = @"SELECT * FROM Tags 
-                    WHERE ProjectId = @ProjectId";
-        var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
-
-        return result.ToList();
-    }
-
-    // ============================= CRUD =============================
-    public async Task<Guid> CreateAsync(Tag entity)
-    {
-        var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
-					VALUES (@Id, @Name, @ProjectId)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
-
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating tag failed.");
-    }
-
+    // ============================= QUERIES =============================
     public async Task<List<Tag>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Tags";
@@ -52,6 +29,28 @@ internal class TagRepository : ITagRepository
         var result = await dbConnection.QueryFirstAsync<Tag>(sql, new { Id = id });
 
         return result;
+    }
+    public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+    {
+        var sql = @"SELECT * FROM Tags 
+                    WHERE ProjectId = @ProjectId";
+        var result = await dbConnection.QueryAsync<Tag>(sql, new { ProjectId = projectId });
+
+        return result.ToList();
+    }
+
+    // ============================= COMMANDS =============================
+    public async Task<Guid> CreateAsync(Tag entity)
+    {
+        var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
+					VALUES (@Id, @Name, @ProjectId)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating tag failed.");
     }
 
     public async Task<bool> UpdateAsync(Tag entity)

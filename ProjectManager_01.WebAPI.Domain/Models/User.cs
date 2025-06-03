@@ -9,5 +9,5 @@ public sealed class User
     public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public UserRole UserRole { get; set; }
-    public List<ProjectUserRole> ProjectUserRole { get; set; }
+    public List<ProjectUserRole> ProjectUserRoles { get; set; }
 }

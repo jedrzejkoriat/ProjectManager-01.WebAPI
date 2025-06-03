@@ -13,35 +13,23 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+    // ============================= QUERIES =============================
 
-    public async Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction)
+    public async Task<List<ProjectRole>> GetAllAsync()
     {
-        var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
-                    VALUES (@Id, @ProjectId, @Name)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+        var sql = @"SELECT * FROM ProjectRoles";
+        var result = await dbConnection.QueryAsync<ProjectRole>(sql);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ProjectRole failed");
+        return result.ToList();
     }
 
-    public Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction)
+    public async Task<ProjectRole> GetByIdAsync(Guid id)
     {
-        var sql = @"DELETE FROM ProjectRoles 
+        var sql = @"SELECT * FROM ProjectRoles 
                     WHERE Id = @Id";
-        var result = dbConnection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
-        return result.ContinueWith(t => t.Result > 0);
-    }
+        var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new { Id = id });
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
-    {
-        var sql = @"DELETE FROM ProjectRoles
-                    WHERE ProjectId = @ProjectId";
-        var result = await dbConnection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
-
-        return result > 0;
+        return result;
     }
 
     public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
@@ -74,8 +62,37 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 
         return projectRoleDict.Values.FirstOrDefault();
     }
+    // ============================= COMMANDS =============================
+    public async Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
+                    VALUES (@Id, @ProjectId, @Name)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
 
-    // ============================= CRUD =============================
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating ProjectRole failed");
+    }
+
+    public Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRoles 
+                    WHERE Id = @Id";
+        var result = dbConnection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
+        return result.ContinueWith(t => t.Result > 0);
+    }
+
+    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM ProjectRoles
+                    WHERE ProjectId = @ProjectId";
+        var result = await dbConnection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
+
+        return result > 0;
+    }
+
     public async Task<Guid> CreateAsync(ProjectRole entity)
     {
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
@@ -87,23 +104,6 @@ internal class ProjectRoleRepository : IProjectRoleRepository
             return entity.Id;
         else
             throw new Exception("Creating ProjectRole failed");
-    }
-
-    public async Task<List<ProjectRole>> GetAllAsync()
-    {
-        var sql = @"SELECT * FROM ProjectRoles";
-        var result = await dbConnection.QueryAsync<ProjectRole>(sql);
-
-        return result.ToList();
-    }
-
-    public async Task<ProjectRole> GetByIdAsync(Guid id)
-    {
-        var sql = @"SELECT * FROM ProjectRoles 
-                    WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new { Id = id });
-
-        return result;
     }
 
     public async Task<bool> UpdateAsync(ProjectRole entity)

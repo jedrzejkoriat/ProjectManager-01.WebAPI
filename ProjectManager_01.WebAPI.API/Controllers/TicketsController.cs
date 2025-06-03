@@ -56,6 +56,46 @@ public class TicketsController : ControllerBase
         }
     }
 
+    // GET: api/tickets/{projectKey}-{ticketNumber}
+    /// <summary>
+    /// Get a ticket by project key and ticket number
+    /// </summary>
+    /// <param name="projectKey"></param>
+    /// <param name="ticketnumber"></param>
+    /// <returns></returns>
+    [HttpGet("{projectKey}-{ticketNumber}")]
+    public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber(string projectKey, int ticketnumber)
+    {
+        try
+        {
+            return Ok(await ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
+    // GET: api/tickets/project/{projectId}
+    /// <summary>
+    /// Get all tickets by project ID
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    [HttpGet("project/{projectId}")]
+    public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
+    {
+        try
+        {
+            var tickets = await ticketService.GetTicketsByProjectIdAsync(projectId);
+            return Ok(tickets);
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
     // POST: api/tickets
     /// <summary>
     /// Create a new ticket

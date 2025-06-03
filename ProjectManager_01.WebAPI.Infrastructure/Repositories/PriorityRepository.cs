@@ -14,20 +14,7 @@ internal class PriorityRepository : IPriorityRepository
         this.dbConnection = dbConnection;
     }
 
-    // ============================= CRUD =============================
-    public async Task<Guid> CreateAsync(Priority entity)
-    {
-        var sql = @"INSERT INTO Priorities (Id, Name) 
-                    VALUES (@Id, @Name)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
-
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating new Priority failed.");
-    }
-
+    // ============================= QUERIES =============================
     public async Task<List<Priority>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Priorities";
@@ -43,6 +30,20 @@ internal class PriorityRepository : IPriorityRepository
         var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
 
         return result;
+    }
+
+    // ============================= COMMANDS =============================
+    public async Task<Guid> CreateAsync(Priority entity)
+    {
+        var sql = @"INSERT INTO Priorities (Id, Name) 
+                    VALUES (@Id, @Name)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating new Priority failed.");
     }
 
     public async Task<bool> UpdateAsync(Priority entity)

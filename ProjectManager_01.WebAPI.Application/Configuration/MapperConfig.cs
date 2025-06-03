@@ -67,6 +67,7 @@ public sealed class MapperConfig : Profile
 
         CreateMap<TicketCreateDto, Ticket>().ReverseMap();
         CreateMap<TicketDto, Ticket>().ReverseMap();
+        CreateMap<TicketOverviewDto, Ticket>().ReverseMap();
         CreateMap<TicketUpdateDto, Ticket>().ReverseMap();
 
         CreateMap<TicketTagCreateDto, TicketTag>().ReverseMap();

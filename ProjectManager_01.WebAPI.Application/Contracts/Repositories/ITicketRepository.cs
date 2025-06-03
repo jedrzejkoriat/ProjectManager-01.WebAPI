@@ -17,10 +17,4 @@ public interface ITicketRepository : IRepository<Ticket>
     Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
     Task<List<Ticket>> GetByPriorityIdAsync(Guid priorityId);
     Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction);
-
-
-    Task<List<Ticket>> GetByAssigneeIdAsync(Guid? assigneeId);
-    Task<List<Ticket>> GetByStatusAsync(Status status);
-    Task<List<Ticket>> GetByTicketTypeAsync(TicketType ticketType);
-    Task<List<Ticket>> GetByResolutionAsync(Resolution resolution);
 }

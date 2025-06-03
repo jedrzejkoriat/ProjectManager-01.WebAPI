@@ -13,30 +13,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
     {
         this.dbConnection = dbConnection;
     }
-
-    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
-    {
-        var sql = @"DELETE FROM TicketRelations 
-                    WHERE SourceId = @TicketId OR TargetId = @TicketId";
-        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
-
-        return result > 0;
-    }
-
-    // ============================= CRUD =============================
-    public async Task<Guid> CreateAsync(TicketRelation entity)
-    {
-        var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
-					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
-        entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
-
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating TicketRelation failed.");
-    }
-
+    // ============================= QUERIES =============================
     public async Task<List<TicketRelation>> GetAllAsync()
     {
         var sql = @"SELECT * FROM TicketRelations";
@@ -52,6 +29,29 @@ internal class TicketRelationRepository : ITicketRelationRepository
         var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new { Id = id });
 
         return result;
+    }
+
+    // ============================= COMMANDS =============================
+    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM TicketRelations 
+                    WHERE SourceId = @TicketId OR TargetId = @TicketId";
+        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<Guid> CreateAsync(TicketRelation entity)
+    {
+        var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
+					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
+        entity.Id = Guid.NewGuid();
+        var result = await dbConnection.ExecuteAsync(sql, entity);
+
+        if (result > 0)
+            return entity.Id;
+        else
+            throw new Exception("Creating TicketRelation failed.");
     }
 
     public async Task<bool> UpdateAsync(TicketRelation entity)

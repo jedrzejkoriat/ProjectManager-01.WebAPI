@@ -9,4 +9,5 @@ public interface IUserRepository : IRepository<User>
     Task<bool> SoftDeleteAsync(Guid id);
     Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
     Task<Guid> CreateAsync(User entity, IDbTransaction transaction);
+    Task<IEnumerable<User>> GetUsersByProjectIdAsync(Guid projectId);
 }

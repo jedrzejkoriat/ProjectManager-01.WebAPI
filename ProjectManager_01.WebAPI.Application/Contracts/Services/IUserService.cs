@@ -10,4 +10,5 @@ public interface IUserService
     Task<UserDto> GetUserByIdAsync(Guid userId);
     Task<List<UserDto>> GetAllUsersAsync();
     Task SoftDeleteUserAsync(Guid userId);
+    Task<IEnumerable<UserDto>> GetUsersByProjectIdAsync(Guid projectId);
 }
