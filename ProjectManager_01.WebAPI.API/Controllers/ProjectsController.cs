@@ -128,7 +128,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            // await projectService.SoftDeleteProjectAsync(id);
+            await projectService.SoftDeleteProjectAsync(id);
             return Ok();
         }
         catch (Exception ex)

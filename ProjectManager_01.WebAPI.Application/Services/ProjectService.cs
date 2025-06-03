@@ -86,4 +86,9 @@ public class ProjectService : IProjectService
 
         return mapper.Map<List<ProjectDto>>(projects);
     }
+
+    public async Task SoftDeleteProjectAsync(Guid projectId)
+    {
+        await projectRepository.SoftDeleteAsync(projectId);
+    }
 }

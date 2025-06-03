@@ -12,4 +12,5 @@ public interface ITicketService
     Task<TicketDto> GetTicketByIdAsync(Guid ticketId);
     Task<List<TicketDto>> GetAllTicketsAsync();
     Task ClearUserReferencesAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task SoftDeleteTicketAsync(Guid ticketId);
 }

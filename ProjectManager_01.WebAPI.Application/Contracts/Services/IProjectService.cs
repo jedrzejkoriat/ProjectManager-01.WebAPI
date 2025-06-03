@@ -9,4 +9,5 @@ public interface IProjectService
     Task DeleteProjectAsync(Guid projectId);
     Task<ProjectDto> GetProjectByIdAsync(Guid projectId);
     Task<List<ProjectDto>> GetAllProjectsAsync();
+    Task SoftDeleteProjectAsync(Guid projectId);
 }

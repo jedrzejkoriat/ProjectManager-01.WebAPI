@@ -127,7 +127,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            // await userService.SoftDeleteUserAsync(id);
+            await userService.SoftDeleteUserAsync(id);
             return Ok();
         }
         catch (Exception ex)

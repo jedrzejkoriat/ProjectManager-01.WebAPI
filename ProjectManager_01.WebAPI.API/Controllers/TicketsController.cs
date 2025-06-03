@@ -127,7 +127,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            // await ticketService.SoftDeleteTicketAsync(id);
+            await ticketService.SoftDeleteTicketAsync(id);
             return Ok();
         }
         catch (Exception ex)

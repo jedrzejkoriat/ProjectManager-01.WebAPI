@@ -61,4 +61,9 @@ public class TicketService : ITicketService
     {
         await ticketRepository.ClearUserReferencesAsync(userId, connection, transaction);
     }
+
+    public async Task SoftDeleteTicketAsync(Guid ticketId)
+    {
+        await ticketRepository.SoftDeleteAsync(ticketId);
+    }
 }

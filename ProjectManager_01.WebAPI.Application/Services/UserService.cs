@@ -94,4 +94,9 @@ public class UserService : IUserService
 
         return mapper.Map<List<UserDto>>(users);
     }
+
+    public async Task SoftDeleteUserAsync(Guid userId)
+    {
+        await userRepository.SoftDeleteAsync(userId);
+    }
 }
