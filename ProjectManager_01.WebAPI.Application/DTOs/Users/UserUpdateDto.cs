@@ -6,10 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Users; 
 
-public sealed class UserUpdateDto
-{
-    public Guid Id { get; init; }
-    public string UserName { get; init; }
-    public string Email { get; init; }
-    public string Password { get; init; }
-}
+public sealed record UserUpdateDto (Guid Id, string UserName, string Email, string Password);

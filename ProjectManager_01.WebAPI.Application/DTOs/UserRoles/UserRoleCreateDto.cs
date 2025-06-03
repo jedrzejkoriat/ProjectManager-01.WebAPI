@@ -6,8 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.UserRoles;
 
-public sealed class UserRoleCreateDto
-{
-    public Guid UserId { get; set; }
-    public Guid RoleId { get; set; }
-}
+public sealed record UserRoleCreateDto (Guid UserId, Guid RoleId);

@@ -7,8 +7,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.TicketTags;
 
-public sealed class TicketTagCreateDto
-{
-    public Guid TagId { get; set; }
-    public Guid TicketId { get; set; }
-}
+public sealed record TicketTagCreateDto (Guid TagId, Guid TicketId);

@@ -6,10 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.TicketRelations;
 
-public sealed class TicketRelationUpdateDto
-{
-    public Guid Id { get; set; }
-    public Guid SourceId { get; set; }
-    public Guid TargetId { get; set; }
-    public int RelationType { get; set; }
-}
+public sealed record TicketRelationUpdateDto (Guid Id, Guid SourceId, Guid TargetId, int RelationType);

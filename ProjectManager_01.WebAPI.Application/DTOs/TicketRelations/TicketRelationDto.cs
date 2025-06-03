@@ -8,10 +8,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.TicketRelations;
 
-public sealed class TicketRelationDto
-{
-    public Guid Id { get; set; }
-    public Guid SourceId { get; set; }
-    public Guid TargetId { get; set; }
-    public int RelationType { get; set; }
-}
+public sealed record TicketRelationDto (Guid Id, Guid SourceId, Guid TargetId, int RelationType);

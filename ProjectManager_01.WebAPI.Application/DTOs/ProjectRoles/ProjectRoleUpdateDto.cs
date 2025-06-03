@@ -7,9 +7,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.ProjectRoles;
 
-public sealed class ProjectRoleUpdateDto
-{
-    public Guid Id { get; set; }
-    public Guid ProjectId { get; set; }
-    public string Name { get; set; }
-}
+public sealed record ProjectRoleUpdateDto (Guid Id, Guid ProjectId, string Name);

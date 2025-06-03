@@ -6,8 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.ProjectRolePermissions;
 
-public sealed class ProjectRolePermissionCreateDto
-{
-    public Guid ProjectRoleId { get; set; }
-    public Guid PermissionId { get; set; }
-}
+public sealed record ProjectRolePermissionCreateDto (Guid ProjectRoleId, Guid PermissionId);

@@ -6,7 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.Roles;
 
-public sealed class RoleCreateDto
-{
-    public string Name { get; set; }
-}
+public sealed record RoleCreateDto (string Name);

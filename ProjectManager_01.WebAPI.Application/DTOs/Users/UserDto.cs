@@ -7,11 +7,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.Users;
 
-public sealed class UserDto
-{
-    public Guid Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
-}
+public sealed record UserDto(Guid Id, string UserName, string Email, bool IsDeleted, DateTimeOffset CreatedAt);

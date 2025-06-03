@@ -6,10 +6,4 @@ using System.Threading.Tasks;
 
 namespace ProjectManager_01.Application.DTOs.ProjectUserRoles;
 
-public sealed class ProjectUserRoleUpdateDto
-{
-    public Guid Id { get; set; }
-    public Guid ProjectId { get; set; }
-    public Guid ProjectRoleId { get; set; }
-    public Guid UserId { get; set; }
-}
+public sealed record ProjectUserRoleUpdateDto (Guid Id, Guid ProjectId, Guid ProjectRoleId, Guid UserId);

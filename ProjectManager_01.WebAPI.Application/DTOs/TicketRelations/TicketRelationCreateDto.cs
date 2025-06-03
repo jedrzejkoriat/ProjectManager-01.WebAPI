@@ -7,9 +7,4 @@ using ProjectManager_01.Domain.Enums;
 
 namespace ProjectManager_01.Application.DTOs.TicketRelations;
 
-public sealed class TicketRelationCreateDto
-{
-    public Guid SourceId { get; set; }
-    public Guid TargetId { get; set; }
-    public int RelationType { get; set; }
-}
+public sealed record TicketRelationCreateDto (Guid SourceId, Guid TargetId, int RelationType);

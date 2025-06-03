@@ -7,8 +7,4 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.ProjectRoles;
 
-public sealed class ProjectRoleCreateDto
-{
-    public Guid ProjectId { get; set; }
-    public string Name { get; set; }
-}
+public sealed record ProjectRoleCreateDto (Guid ProjectRoleId, string Name);
