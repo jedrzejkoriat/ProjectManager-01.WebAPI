@@ -54,4 +54,9 @@ public class CommentService : ICommentService
     {
         await commentRepository.DeleteByUserIdAsync(userId, connection, transaction);
     }
+
+    public async Task DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await commentRepository.DeleteByTicketIdAsync(ticketId, connection, transaction);
+    }
 }

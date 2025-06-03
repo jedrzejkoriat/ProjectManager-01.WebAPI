@@ -11,4 +11,5 @@ public interface ICommentService
     Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto);
     Task DeleteCommentAsync(Guid commentId);
     Task DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction);
+    Task DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction);
 }

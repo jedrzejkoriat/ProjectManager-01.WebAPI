@@ -70,7 +70,8 @@ public class UserService : IUserService
             await userRoleService.DeleteByUserIdAsync(userId, connection, transaction);
             await projectUserRoleService.DeleteByUserIdAsync(userId, connection, transaction);
             await commentService.DeleteByUserIdAsync(userId, connection, transaction);
-            await ticketService.ClearUserReferencesAsync(userId, connection, transaction);
+            await ticketService.ClearUserAssignmentAsync(userId, connection, transaction);
+            await ticketService.DeleteTicketByUserIdAsync(userId, connection, transaction);
 
             transaction.Commit();
         }

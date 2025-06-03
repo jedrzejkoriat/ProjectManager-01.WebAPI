@@ -15,6 +15,15 @@ internal class TicketRelationRepository : ITicketRelationRepository
         this.dbConnection = dbConnection;
     }
 
+    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM TicketRelations 
+                    WHERE SourceId = @TicketId OR TargetId = @TicketId";
+        var result = await connection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<List<TicketRelation>> GetBySourceIdAsync(Guid sourceId)
     {
         var sql = @"SELECT * FROM TicketRelations 

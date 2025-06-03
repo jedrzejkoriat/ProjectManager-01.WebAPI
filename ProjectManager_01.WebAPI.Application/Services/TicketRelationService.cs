@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.TicketRelations;
@@ -47,5 +48,10 @@ public class TicketRelationService : ITicketRelationService
         List<TicketRelation> ticketRelations = await ticketRelationRepository.GetAllAsync();
 
         return mapper.Map<List<TicketRelationDto>>(ticketRelations);
+    }
+
+    public async Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbConnection connection, IDbTransaction transaction)
+    {
+        await ticketRelationRepository.DeleteByTicketIdAsync(ticketId, connection, transaction);
     }
 }

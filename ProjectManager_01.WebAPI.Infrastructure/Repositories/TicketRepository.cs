@@ -8,7 +8,6 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketRepository : ITicketRepository
 {
-
     private readonly IDbConnection dbConnection;
 
     public TicketRepository(IDbConnection dbConnection)
@@ -16,14 +15,39 @@ internal class TicketRepository : ITicketRepository
         this.dbConnection = dbConnection;
     }
 
-    public async Task<bool> ClearUserReferencesAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    public async Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tickets
+                    WHERE PriorityId = @PriorityId";
+        var result = await connection.ExecuteAsync(sql, new { PriorityId = priorityId }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tickets
+                    WHERE Id = @Id";
+        var result = await connection.ExecuteAsync(sql, new { Id = id }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> ClearUserAssignmentAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
     {
         var sql = @"UPDATE Tickets
-                    SET AssigneeId = CASE WHEN AssigneeId = @UserId THEN NULL ELSE AssigneeId END,
-                        ReporterId = CASE WHEN ReporterId = @UserId THEN NULL ELSE ReporterId END
-                    WHERE AssigneeId = @UserId OR ReporterId = @UserId";
+                    SET AssigneeId = NULL
+                    WHERE AssigneeId = @UserId";    
         var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbConnection connection, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tickets
+                    WHERE ReporterId = @UserId";
+        var result = await connection.ExecuteAsync(sql, new { UserId = userId }, transaction);
         return result > 0;
     }
 
@@ -124,11 +148,11 @@ internal class TicketRepository : ITicketRepository
         return result.ToList();
     }
 
-    public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId)
+    public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbConnection connection, IDbTransaction transaction)
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE ReporterId = @ReporterId";
-        var result = await dbConnection.QueryAsync<Ticket>(sql, new { ReporterId = reporterId });
+        var result = await connection.QueryAsync<Ticket>(sql, new { ReporterId = reporterId }, transaction);
 
         return result.ToList();
     }

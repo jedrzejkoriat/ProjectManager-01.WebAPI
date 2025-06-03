@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
+using Microsoft.Data.SqlClient;
+using ProjectManager_01.Application.Contracts.Factories;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Priorities;
@@ -11,11 +14,19 @@ public class PriorityService : IPriorityService
 
     private readonly IPriorityRepository priorityRepository;
     private readonly IMapper mapper;
+    private readonly IDbConnectionFactory dbConnectionFactory;
+    private readonly ITicketService ticketService;
 
-    public PriorityService(IPriorityRepository priorityRepository, IMapper mapper)
+    public PriorityService(
+        IPriorityRepository priorityRepository, 
+        IMapper mapper,
+        IDbConnectionFactory dbConnectionFactory,
+        ITicketService ticketService)
     {
         this.priorityRepository = priorityRepository;
         this.mapper = mapper;
+        this.dbConnectionFactory = dbConnectionFactory;
+        this.ticketService = ticketService;
     }
 
     public async Task CreatePriorityAsync(PriorityCreateDto priorityCreateDto)
@@ -26,7 +37,33 @@ public class PriorityService : IPriorityService
 
     public async Task DeletePriorityAsync(Guid priorityId)
     {
-        await priorityRepository.DeleteAsync(priorityId);
+        using var connection = dbConnectionFactory.CreateConnection();
+
+        switch (connection)
+        {
+            case SqlConnection sqlConnection:
+                await sqlConnection.OpenAsync();
+                break;
+            default:
+                connection.Open();
+                break;
+        }
+
+        using var transaction = connection.BeginTransaction();
+
+        try
+        {
+            await ticketService.DeleteTicketByPriorityIdAsync(priorityId, connection, transaction);
+            await priorityRepository.DeleteAsync(priorityId);
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw new Exception("Error while performing priority deletion transaction.");
+        }
+
     }
 
     public async Task<List<PriorityDto>> GetAllPrioritiesAsync()
