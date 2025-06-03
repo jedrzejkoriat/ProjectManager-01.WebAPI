@@ -8,5 +8,4 @@ public sealed class Comment
     public User User { get; set; }
     public string Content { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    public Ticket Ticket { get; set; }
 }

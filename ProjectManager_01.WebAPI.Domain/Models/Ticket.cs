@@ -22,7 +22,7 @@ public sealed class Ticket
     public string? Version { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    public List<TicketTag> TicketTags { get; set; }
+    public List<Tag> Tags { get; set; }
     public List<Comment> Comments { get; set; }
     public List<TicketRelation> RelationsAsSource { get; set; }
     public List<TicketRelation> RelationsAsTarget { get; set; }
