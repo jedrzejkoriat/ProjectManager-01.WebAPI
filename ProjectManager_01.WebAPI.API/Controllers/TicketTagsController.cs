@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketTagsController : ControllerBase
 {
-
     private readonly ITicketTagService ticketTagService;
 
     public TicketTagsController(ITicketTagService ticketTagService)
@@ -65,7 +64,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="ticketTag"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] TicketTagCreateDto ticketTag)
+    public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag)
     {
         try
         {
@@ -86,7 +85,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns></returns>
     [HttpDelete("{ticketId}/{tagId}")]
-    public async Task<ActionResult> Delete(Guid ticketId, Guid tagId)
+    public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId)
     {
         try
         {

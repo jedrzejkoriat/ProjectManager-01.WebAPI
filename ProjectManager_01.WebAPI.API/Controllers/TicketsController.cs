@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketsController : ControllerBase
 {
-
     private readonly ITicketService ticketService;
 
     public TicketsController(ITicketService ticketService)
@@ -64,7 +63,7 @@ public class TicketsController : ControllerBase
     /// <param name="ticket"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] TicketCreateDto ticket)
+    public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket)
     {
         try
         {
@@ -84,7 +83,7 @@ public class TicketsController : ControllerBase
     /// <param name="updatedTicket"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] TicketUpdateDto updatedTicket)
+    public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket)
     {
         try
         {
@@ -104,11 +103,31 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteTicket(Guid id)
     {
         try
         {
             await ticketService.DeleteTicketAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
+    // PATCH api/tickets/{id}/soft-delete
+    /// <summary>
+    /// Soft delete a ticket
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpPatch("{id}")]
+    public async Task<ActionResult> SoftDeleteTicket(Guid id)
+    {
+        try
+        {
+            // await ticketService.SoftDeleteTicketAsync(id);
             return Ok();
         }
         catch (Exception ex)

@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PermissionsController : ControllerBase
 {
-
     private readonly IPermissionService permissionService;
 
     public PermissionsController(IPermissionService permissionService)
@@ -64,7 +63,7 @@ public class PermissionsController : ControllerBase
     /// <param name="permission"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] PermissionCreateDto permission)
+    public async Task<ActionResult> CreatePermission([FromBody] PermissionCreateDto permission)
     {
         try
         {
@@ -84,7 +83,7 @@ public class PermissionsController : ControllerBase
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] PermissionUpdateDto updatedPermission)
+    public async Task<ActionResult> UpdatePermission([FromBody] PermissionUpdateDto updatedPermission)
     {
         try
         {
@@ -104,7 +103,7 @@ public class PermissionsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeletePermission(Guid id)
     {
         try
         {

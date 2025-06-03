@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolesController : ControllerBase
 {
-
     private readonly IProjectRoleService projectRoleService;
 
     public ProjectRolesController(IProjectRoleService projectRoleService)
@@ -64,7 +63,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="projectRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProjectRoleCreateDto projectRole)
+    public async Task<ActionResult> CreateProjectRole([FromBody] ProjectRoleCreateDto projectRole)
     {
         try
         {
@@ -84,7 +83,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="updatedProjectRole"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] ProjectRoleUpdateDto updatedProjectRole)
+    public async Task<ActionResult> UpdateProjectRole([FromBody] ProjectRoleUpdateDto updatedProjectRole)
     {
         try
         {
@@ -104,7 +103,7 @@ public class ProjectRolesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteProjectRole(Guid id)
     {
         try
         {

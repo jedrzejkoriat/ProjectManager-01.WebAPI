@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class UserRolesController : ControllerBase
 {
-
     private readonly IUserRoleService userRoleService;
 
     public UserRolesController(IUserRoleService userRoleService)
@@ -64,7 +63,7 @@ public class UserRolesController : ControllerBase
     /// <param name="userRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] UserRoleCreateDto userRole)
+    public async Task<ActionResult> CreateUserRole([FromBody] UserRoleCreateDto userRole)
     {
         try
         {
@@ -84,7 +83,7 @@ public class UserRolesController : ControllerBase
     /// <param name="updatedUserRole"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] UserRoleUpdateDto updatedUserRole)
+    public async Task<ActionResult> UpdateUserRole([FromBody] UserRoleUpdateDto updatedUserRole)
     {
         try
         {
@@ -104,7 +103,7 @@ public class UserRolesController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpDelete("{userId}")]
-    public async Task<ActionResult> Delete(Guid userId)
+    public async Task<ActionResult> DeleteUserRole(Guid userId)
     {
         try
         {

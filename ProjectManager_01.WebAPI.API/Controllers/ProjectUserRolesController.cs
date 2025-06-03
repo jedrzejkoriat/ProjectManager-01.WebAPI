@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectUserRolesController : ControllerBase
 {
-
     private readonly IProjectUserRoleService projectUserRoleService;
 
     public ProjectUserRolesController(IProjectUserRoleService projectUserRoleService)
@@ -19,13 +18,13 @@ public class ProjectUserRolesController : ControllerBase
         this.projectUserRoleService = projectUserRoleService;
     }
 
-    // GET api/projectmembers
+    // GET api/projectuserroles
     /// <summary>
-    /// Get all project members
+    /// Get all project user roles
     /// </summary>
-    /// <returns>All project members</returns>
+    /// <returns>All project user roles</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProjectUserRoleDto>>> GetProjectMembers()
+    public async Task<ActionResult<IEnumerable<ProjectUserRoleDto>>> GetProjectUserRoles()
     {
         try
         {
@@ -37,14 +36,14 @@ public class ProjectUserRolesController : ControllerBase
         }
     }
 
-    // GET api/projectmembers/{id}
+    // GET api/projectuserroles/{id}
     /// <summary>
-    /// Get a project member by ID
+    /// Get a project user role by ID
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Project member by id</returns>
+    /// <returns>Project user role by id</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProjectUserRoleDto>> GetProjectMember(Guid id)
+    public async Task<ActionResult<ProjectUserRoleDto>> GetProjectUserRole(Guid id)
     {
         try
         {
@@ -56,18 +55,18 @@ public class ProjectUserRolesController : ControllerBase
         }
     }
 
-    // POST api/projectmembers
+    // POST api/projectuserroles
     /// <summary>
-    /// Create a new project member
+    /// Create a new project user role
     /// </summary>
-    /// <param name="projectMember"></param>
+    /// <param name="projectUserRole"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProjectUserRoleCreateDto projectMember)
+    public async Task<ActionResult> CreateProjectUserRole([FromBody] ProjectUserRoleCreateDto projectUserRole)
     {
         try
         {
-            await projectUserRoleService.CreateProjectUserRoleAsync(projectMember);
+            await projectUserRoleService.CreateProjectUserRoleAsync(projectUserRole);
             return Ok();
         }
         catch (Exception ex)
@@ -76,18 +75,18 @@ public class ProjectUserRolesController : ControllerBase
         }
     }
 
-    // PUT api/projectmembers
+    // PUT api/projectuserrole
     /// <summary>
-    /// Update an existing project member
+    /// Update an existing project user role
     /// </summary>
-    /// <param name="updatedProjectMember"></param>
+    /// <param name="updatedProjectUserRole"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] ProjectUserRoleUpdateDto updatedProjectMember)
+    public async Task<ActionResult> UpdateProjectUserRole([FromBody] ProjectUserRoleUpdateDto updatedProjectUserRole)
     {
         try
         {
-            await projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectMember);
+            await projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectUserRole);
             return Ok();
         }
         catch (Exception ex)
@@ -96,14 +95,14 @@ public class ProjectUserRolesController : ControllerBase
         }
     }
 
-    // DELETE api/projectmembers/{id}
+    // DELETE api/projectuserrole/{id}
     /// <summary>
-    /// Delete a project member
+    /// Delete a project user role
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteProjectUserRole(Guid id)
     {
         try
         {

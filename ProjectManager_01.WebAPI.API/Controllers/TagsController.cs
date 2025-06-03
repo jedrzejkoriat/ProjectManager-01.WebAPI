@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TagsController : ControllerBase
 {
-
     private readonly ITagService tagService;
 
     public TagsController(ITagService tagService)
@@ -64,7 +63,7 @@ public class TagsController : ControllerBase
     /// <param name="tag"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] TagCreateDto tag)
+    public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag)
     {
         try
         {
@@ -84,7 +83,7 @@ public class TagsController : ControllerBase
     /// <param name="updatedTag"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] TagUpdateDto updatedTag)
+    public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag)
     {
         try
         {
@@ -104,7 +103,7 @@ public class TagsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteTag(Guid id)
     {
         try
         {

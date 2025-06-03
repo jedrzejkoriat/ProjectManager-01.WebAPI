@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase
 {
-
     private readonly IProjectRolePermissionService projectRolePermissionService;
 
     public ProjectRolePermissionsController(IProjectRolePermissionService projectRolePermissionService)
@@ -65,7 +64,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="projectRolePermission"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProjectRolePermissionCreateDto projectRolePermission)
+    public async Task<ActionResult> CreateProjectRolePermission([FromBody] ProjectRolePermissionCreateDto projectRolePermission)
     {
         try
         {
@@ -86,7 +85,7 @@ public class ProjectRolePermissionsController : ControllerBase
     /// <param name="permissionId"></param>
     /// <returns></returns>
     [HttpDelete("{projectRoleId}/{permissionId}")]
-    public async Task<ActionResult> Delete(Guid projectRoleId, Guid permissionId)
+    public async Task<ActionResult> DeleteProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
         try
         {

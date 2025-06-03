@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class CommentsController : ControllerBase
 {
-
     private readonly ICommentService commentService;
 
     public CommentsController(ICommentService commentService)
@@ -63,7 +62,7 @@ public class CommentsController : ControllerBase
     /// <param name="comment"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] CommentCreateDto commentCreateDto)
+    public async Task<ActionResult> CreateComment([FromBody] CommentCreateDto commentCreateDto)
     {
         try
         {
@@ -83,7 +82,7 @@ public class CommentsController : ControllerBase
     /// <param name="updatedComment"></param>
     /// <returns></returns>
     [HttpPut]
-    public ActionResult Put([FromBody] CommentUpdateDto updatedComment)
+    public ActionResult UpdateComment([FromBody] CommentUpdateDto updatedComment)
     {
         try
         {
@@ -103,7 +102,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteComment(Guid id)
     {
         try
         {

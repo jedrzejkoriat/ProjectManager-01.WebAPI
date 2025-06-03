@@ -12,7 +12,6 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketRelationsController : ControllerBase
 {
-
     private readonly ITicketRelationService ticketRelationService;
 
     public TicketRelationsController(ITicketRelationService ticketRelationService)
@@ -64,7 +63,7 @@ public class TicketRelationsController : ControllerBase
     /// <param name="ticketRelation"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] TicketRelationCreateDto ticketRelation)
+    public async Task<ActionResult> CreateTicketRelation([FromBody] TicketRelationCreateDto ticketRelation)
     {
         try
         {
@@ -84,7 +83,7 @@ public class TicketRelationsController : ControllerBase
     /// <param name="updatedTicketRelation"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<ActionResult> Put([FromBody] TicketRelationUpdateDto updatedTicketRelation)
+    public async Task<ActionResult> UpdateTicketRelation([FromBody] TicketRelationUpdateDto updatedTicketRelation)
     {
         try
         {
@@ -104,7 +103,7 @@ public class TicketRelationsController : ControllerBase
     /// <param name="Id"></param>
     /// <returns></returns>
     [HttpDelete("{Id}")]
-    public async Task<ActionResult> Delete(Guid Id)
+    public async Task<ActionResult> DeleteTicketRelation(Guid Id)
     {
         try
         {
