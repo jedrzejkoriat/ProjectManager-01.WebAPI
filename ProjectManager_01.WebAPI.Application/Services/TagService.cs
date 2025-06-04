@@ -54,4 +54,11 @@ public class TagService : ITagService
 
         return mapper.Map<IEnumerable<TagDto>>(tags);
     }
+
+    public async Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId)
+    {
+        var tags = tagRepository.GetByTicketIdAsync(ticketId);
+
+        return mapper.Map<IEnumerable<TagDto>>(tags);
+    }
 }

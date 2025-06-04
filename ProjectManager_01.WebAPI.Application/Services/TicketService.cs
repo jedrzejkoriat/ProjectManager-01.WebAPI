@@ -16,6 +16,7 @@ public class TicketService : ITicketService
     private readonly ITicketRelationService ticketRelationService;
     private readonly ICommentService commentService;
     private readonly ITicketTagService ticketTagService;
+    private readonly ITagService tagService;
 
     public TicketService(
         ITicketRepository ticketRepository,
@@ -23,7 +24,8 @@ public class TicketService : ITicketService
         IDbConnection dbConnection,
         ITicketRelationService ticketRelationService,
         ICommentService commentService,
-        ITicketTagService ticketTagService)
+        ITicketTagService ticketTagService,
+        ITagService tagService)
     {
         this.ticketRepository = ticketRepository;
         this.mapper = mapper;
@@ -31,6 +33,7 @@ public class TicketService : ITicketService
         this.ticketRelationService = ticketRelationService;
         this.commentService = commentService;
         this.ticketTagService = ticketTagService;
+        this.tagService = tagService;
     }
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
@@ -124,9 +127,15 @@ public class TicketService : ITicketService
 
     public async Task<TicketDto> GetTicketByIdAsync(Guid ticketId)
     {
-        Ticket ticket = await ticketRepository.GetByIdAsync(ticketId);
+        var ticket = await ticketRepository.GetByIdAsync(ticketId);
 
-        return mapper.Map<TicketDto>(ticket);
+        var ticketDto = mapper.Map<TicketDto>(ticket);
+        ticketDto.Comments = await commentService.GetByTicketIdAsync(ticketId);
+        ticketDto.Tags = await tagService.GetTagsByTicketIdAsync(ticketId);
+        ticketDto.RelationsAsSource = await ticketRelationService.GetTicketRelationsBySourceIdAsync(ticketId);
+        ticketDto.RelationsAsTarget = await ticketRelationService.GetTicketRelationsByTargetIdAsync(ticketId);
+
+        return ticketDto;
     }
 
     public async Task<List<TicketDto>> GetAllTicketsAsync()

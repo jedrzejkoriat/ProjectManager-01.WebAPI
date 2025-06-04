@@ -11,4 +11,6 @@ public interface ITicketRelationService
     Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId);
     Task<List<TicketRelationDto>> GetAllTicketRelationsAsync();
     Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbTransaction transaction);
+    Task<IEnumerable<TicketRelationDto>> GetTicketRelationsBySourceIdAsync(Guid ticketId);
+    Task<IEnumerable<TicketRelationDto>> GetTicketRelationsByTargetIdAsync(Guid ticketId);
 }

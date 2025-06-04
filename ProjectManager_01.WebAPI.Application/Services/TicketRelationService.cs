@@ -53,4 +53,18 @@ public class TicketRelationService : ITicketRelationService
     {
         await ticketRelationRepository.DeleteByTicketIdAsync(ticketId, transaction);
     }
+
+    public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsBySourceIdAsync(Guid ticketId)
+    {
+        var ticketRelations = await ticketRelationRepository.GetBySourceIdAsync(ticketId);
+
+        return mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
+    }
+
+    public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsByTargetIdAsync(Guid ticketId)
+    {
+        var ticketRelations = await ticketRelationRepository.GetByTargetIdAsync(ticketId);
+
+        return mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
+    }
 }

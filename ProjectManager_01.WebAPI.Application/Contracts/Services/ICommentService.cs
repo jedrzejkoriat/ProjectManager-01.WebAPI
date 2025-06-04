@@ -12,4 +12,5 @@ public interface ICommentService
     Task DeleteCommentAsync(Guid commentId);
     Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction);
+    Task<IEnumerable<CommentDto>> GetByTicketIdAsync(Guid ticketId);
 }

@@ -10,4 +10,5 @@ public interface ITagService
     Task<TagDto> GetTagByIdAsync(Guid tagId);
     Task<List<TagDto>> GetAllTagsAsync();
     Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId);
+    Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId);
 }

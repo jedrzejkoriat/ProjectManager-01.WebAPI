@@ -39,6 +39,17 @@ internal class TagRepository : ITagRepository
         return result.ToList();
     }
 
+    public async Task<IEnumerable<Tag>> GetByTicketIdAsync(Guid ticketId)
+    {
+        var sql = @"SELECT t.*
+                    FROM Tags t
+                    INNER JOIN TicketTag tt ON t.Id = tt.TagId
+                    WHERE tt.TicketId = @TicketId";
+        var result = await dbConnection.QueryAsync<Tag>(sql, new { TicketId = ticketId });
+
+        return result.ToList();
+    }
+
     // ============================= COMMANDS =============================
     public async Task<Guid> CreateAsync(Tag entity)
     {

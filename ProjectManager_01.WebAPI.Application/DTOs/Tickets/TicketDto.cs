@@ -14,9 +14,24 @@ using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.DTOs.Tickets;
 
-public sealed record TicketDto
-    (Guid Id, ProjectDto Project, PriorityDto Priority, UserDto Assignee, UserDto Reporter, 
-    string Status, string Resolution, string TicketType, int TicketNumber,
-    string Title, string? Description, string? Version, bool IsDeleted, DateTimeOffset CreatedAt,
-    IEnumerable<TagDto> Tags, IEnumerable<CommentDto> Comments, 
-    IEnumerable<TicketRelationDto> RelationsAsSource, IEnumerable<TicketRelationDto> RelationsAsTarget);
+public sealed class TicketDto
+{
+    public Guid Id { get; init; }
+    public ProjectDto Project { get; init; }
+    public PriorityDto Priority { get; init; }
+    public UserDto Assignee { get; init; }
+    public UserDto Reporter { get; init; }
+    public string Status { get; init; }
+    public string Resolution { get; init; }
+    public string TicketType { get; init; }
+    public int TicketNumber { get; init; }
+    public string Title { get; init; }
+    public string? Description { get; init; }
+    public string? Version { get; init; }
+    public bool IsDeleted { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
+    public IEnumerable<TagDto> Tags { get; set; }
+    public IEnumerable<CommentDto> Comments { get; set; }
+    public IEnumerable<TicketRelationDto> RelationsAsSource { get; set; }
+    public IEnumerable<TicketRelationDto> RelationsAsTarget { get; set; }
+}

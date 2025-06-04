@@ -22,8 +22,8 @@ public sealed class Ticket
     public string? Version { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    public List<Tag> Tags { get; set; }
-    public List<Comment> Comments { get; set; }
-    public List<TicketRelation> RelationsAsSource { get; set; }
-    public List<TicketRelation> RelationsAsTarget { get; set; }
+    public IEnumerable<Tag> Tags { get; set; }
+    public IEnumerable<Comment> Comments { get; set; }
+    public IEnumerable<TicketRelation> RelationsAsSource { get; set; }
+    public IEnumerable<TicketRelation> RelationsAsTarget { get; set; }
 }

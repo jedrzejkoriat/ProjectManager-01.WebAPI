@@ -20,27 +20,27 @@ public class CommentService : ICommentService
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto)
     {
-        Comment comment = mapper.Map<Comment>(commentCreateDto);
+        var comment = mapper.Map<Comment>(commentCreateDto);
         await commentRepository.CreateAsync(comment);
     }
 
     public async Task<CommentDto> GetCommentAsync(Guid commentId)
     {
-        Comment comment = await commentRepository.GetByIdAsync(commentId);
+        var comment = await commentRepository.GetByIdAsync(commentId);
 
         return mapper.Map<CommentDto>(comment);
     }
 
     public async Task<List<CommentDto>> GetAllCommentsAsync()
     {
-        List<Comment> comments = await commentRepository.GetAllAsync();
+        var comments = await commentRepository.GetAllAsync();
 
         return mapper.Map<List<CommentDto>>(comments);
     }
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto)
     {
-        Comment comment = mapper.Map<Comment>(commentUpdateDto);
+        var comment = mapper.Map<Comment>(commentUpdateDto);
         await commentRepository.UpdateAsync(comment);
     }
 
@@ -57,5 +57,11 @@ public class CommentService : ICommentService
     public async Task DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         await commentRepository.DeleteByTicketIdAsync(ticketId, transaction);
+    }
+
+    public async Task<IEnumerable<CommentDto>> GetByTicketIdAsync(Guid ticketId)
+    {
+        var comments = await commentRepository.GetByTicketIdAsync(ticketId);
+        return mapper.Map<List<CommentDto>>(comments);
     }
 }

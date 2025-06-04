@@ -84,6 +84,82 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return relation;
     }
 
+    public async Task<IEnumerable<TicketRelation>> GetBySourceIdAsync(Guid ticketId)
+    {
+        var sql = @"SELECT tr.*, 
+                       s.*, sp.*, 
+                       t.*, tp.*
+                    FROM TicketRelations tr
+                    JOIN Tickets s ON tr.SourceId = s.Id
+                    JOIN Projects sp ON s.ProjectId = sp.Id
+                    JOIN Tickets t ON tr.TargetId = t.Id
+                    JOIN Projects tp ON t.ProjectId = tp.Id
+                    WHERE tr.SourceId = @TicketId";
+
+        var relationDict = new Dictionary<Guid, TicketRelation>();
+
+        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+            sql,
+            (relation, source, sourceProject, target, targetProject) =>
+            {
+                if (!relationDict.TryGetValue(relation.Id, out var r))
+                {
+                    r = relation;
+                    r.Source = source;
+                    r.Target = target;
+                    relationDict[r.Id] = r;
+                }
+
+                r.Source.Project = sourceProject;
+                r.Target.Project = targetProject;
+
+                return r;
+            },
+            new { TicketId = ticketId },
+            splitOn: "Id,Id,Id,Id"
+        );
+
+        return relationDict.Values.ToList();
+    }
+
+    public async Task<IEnumerable<TicketRelation>> GetByTargetIdAsync(Guid ticketId)
+    {
+        var sql = @"SELECT tr.*, 
+                       s.*, sp.*, 
+                       t.*, tp.*
+                    FROM TicketRelations tr
+                    JOIN Tickets s ON tr.SourceId = s.Id
+                    JOIN Projects sp ON s.ProjectId = sp.Id
+                    JOIN Tickets t ON tr.TargetId = t.Id
+                    JOIN Projects tp ON t.ProjectId = tp.Id
+                    WHERE tr.TargetId = @TicketId";
+
+        var relationDict = new Dictionary<Guid, TicketRelation>();
+
+        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+            sql,
+            (relation, source, sourceProject, target, targetProject) =>
+            {
+                if (!relationDict.TryGetValue(relation.Id, out var r))
+                {
+                    r = relation;
+                    r.Source = source;
+                    r.Target = target;
+                    relationDict[r.Id] = r;
+                }
+
+                r.Source.Project = sourceProject;
+                r.Target.Project = targetProject;
+
+                return r;
+            },
+            new { TicketId = ticketId },
+            splitOn: "Id,Id,Id,Id"
+        );
+
+        return relationDict.Values.ToList();
+    }
+
     // ============================= COMMANDS =============================
     public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
