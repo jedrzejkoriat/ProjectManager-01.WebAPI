@@ -26,14 +26,7 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
-        try
-        {
-            return Ok(await _projectService.GetAllProjectsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectService.GetAllProjectsAsync());
     }
 
     // GET api/projects
@@ -45,14 +38,7 @@ public class ProjectsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectDto>> GetProject(Guid id)
     {
-        try
-        {
-            return Ok(await _projectService.GetProjectByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectService.GetProjectByIdAsync(id));
     }
 
     // POST api/projects
@@ -64,15 +50,8 @@ public class ProjectsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateProject([FromBody] ProjectCreateDto project)
     {
-        try
-        {
-            await _projectService.CreateProjectAsync(project);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectService.CreateProjectAsync(project);
+        return Ok();
     }
 
     // PUT api/projects
@@ -84,15 +63,8 @@ public class ProjectsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateProject([FromBody] ProjectUpdateDto updatedProject)
     {
-        try
-        {
-            await _projectService.UpdateProjectAsync(updatedProject);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectService.UpdateProjectAsync(updatedProject);
+        return Ok();
     }
 
     // DELETE api/projects
@@ -104,15 +76,8 @@ public class ProjectsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteProject(Guid id)
     {
-        try
-        {
-            await _projectService.DeleteProjectAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectService.DeleteProjectAsync(id);
+        return Ok();
     }
 
     // PATCH api/projects/{id}/soft-delete
@@ -124,14 +89,7 @@ public class ProjectsController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<ActionResult> SoftDeleteProject(Guid id)
     {
-        try
-        {
-            await _projectService.SoftDeleteProjectAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectService.SoftDeleteProjectAsync(id);
+        return Ok();
     }
 }

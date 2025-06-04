@@ -25,14 +25,7 @@ public class TicketRelationsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TicketRelationDto>>> GetTicketRelations()
     {
-        try
-        {
-            return Ok(await _ticketRelationService.GetAllTicketRelationsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketRelationService.GetAllTicketRelationsAsync());
     }
 
     // GET api/ticketrelations/{Id}
@@ -44,14 +37,7 @@ public class TicketRelationsController : ControllerBase
     [HttpGet("{Id}")]
     public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id)
     {
-        try
-        {
-            return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id));
     }
 
     // POST api/ticketrelations
@@ -63,15 +49,8 @@ public class TicketRelationsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTicketRelation([FromBody] TicketRelationCreateDto ticketRelation)
     {
-        try
-        {
-            await _ticketRelationService.CreateTicketRelationAsync(ticketRelation);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketRelationService.CreateTicketRelationAsync(ticketRelation);
+        return Ok();
     }
 
     // PUT api/ticketrelations
@@ -83,15 +62,8 @@ public class TicketRelationsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateTicketRelation([FromBody] TicketRelationUpdateDto updatedTicketRelation)
     {
-        try
-        {
-            await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
+        return Ok();
     }
 
     // DELETE api/ticketrelations/{Id}
@@ -103,14 +75,7 @@ public class TicketRelationsController : ControllerBase
     [HttpDelete("{Id}")]
     public async Task<ActionResult> DeleteTicketRelation(Guid Id)
     {
-        try
-        {
-            await _ticketRelationService.DeleteTicketRelationAsync(Id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketRelationService.DeleteTicketRelationAsync(Id);
+        return Ok();
     }
 }

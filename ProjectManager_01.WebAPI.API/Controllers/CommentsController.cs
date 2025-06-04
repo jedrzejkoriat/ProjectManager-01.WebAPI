@@ -25,14 +25,7 @@ public class CommentsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments()
     {
-        try
-        {
-            return Ok(await _commentService.GetAllCommentsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _commentService.GetAllCommentsAsync());
     }
 
     // GET api/comments/{id}
@@ -44,14 +37,7 @@ public class CommentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CommentDto>> GetComment(Guid id)
     {
-        try
-        {
-            return Ok(await _commentService.GetCommentAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _commentService.GetCommentAsync(id));
     }
 
     // POST api/comments
@@ -63,15 +49,8 @@ public class CommentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateComment([FromBody] CommentCreateDto commentCreateDto)
     {
-        try
-        {
-            await _commentService.CreateCommentAsync(commentCreateDto);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _commentService.CreateCommentAsync(commentCreateDto);
+        return Ok();
     }
 
     // PUT api/comments
@@ -83,15 +62,8 @@ public class CommentsController : ControllerBase
     [HttpPut]
     public ActionResult UpdateComment([FromBody] CommentUpdateDto updatedComment)
     {
-        try
-        {
-            _commentService.UpdateCommentAsync(updatedComment);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        _commentService.UpdateCommentAsync(updatedComment);
+        return Ok();
     }
 
     // DELETE api/comments/{id}
@@ -103,14 +75,7 @@ public class CommentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteComment(Guid id)
     {
-        try
-        {
-            await _commentService.DeleteCommentAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _commentService.DeleteCommentAsync(id);
+        return Ok();
     }
 }

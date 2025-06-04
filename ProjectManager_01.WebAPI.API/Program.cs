@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Configuration;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
+using ProjectManager_01.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

@@ -24,14 +24,7 @@ public class ProjectUserRolesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectUserRoleDto>>> GetProjectUserRoles()
     {
-        try
-        {
-            return Ok(await _projectUserRoleService.GetAllProjectUserRolesAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectUserRoleService.GetAllProjectUserRolesAsync());
     }
 
     // GET api/projectuserroles/{id}
@@ -43,14 +36,7 @@ public class ProjectUserRolesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectUserRoleDto>> GetProjectUserRole(Guid id)
     {
-        try
-        {
-            return Ok(await _projectUserRoleService.GetProjectUserRoleByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectUserRoleService.GetProjectUserRoleByIdAsync(id));
     }
 
     // POST api/projectuserroles
@@ -62,15 +48,8 @@ public class ProjectUserRolesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateProjectUserRole([FromBody] ProjectUserRoleCreateDto projectUserRole)
     {
-        try
-        {
-            await _projectUserRoleService.CreateProjectUserRoleAsync(projectUserRole);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectUserRoleService.CreateProjectUserRoleAsync(projectUserRole);
+        return Ok();
     }
 
     // PUT api/projectuserrole
@@ -82,15 +61,8 @@ public class ProjectUserRolesController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateProjectUserRole([FromBody] ProjectUserRoleUpdateDto updatedProjectUserRole)
     {
-        try
-        {
-            await _projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectUserRole);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectUserRole);
+        return Ok();
     }
 
     // DELETE api/projectuserrole/{id}
@@ -102,14 +74,7 @@ public class ProjectUserRolesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteProjectUserRole(Guid id)
     {
-        try
-        {
-            await _projectUserRoleService.DeleteProjectUserRoleAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectUserRoleService.DeleteProjectUserRoleAsync(id);
+        return Ok();
     }
 }

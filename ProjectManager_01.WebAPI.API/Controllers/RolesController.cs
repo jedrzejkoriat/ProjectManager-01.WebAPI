@@ -25,14 +25,7 @@ public class RolesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
     {
-        try
-        {
-            return Ok(await _roleService.GetAllRolesAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _roleService.GetAllRolesAsync());
     }
 
     // GET api/roles/{id}
@@ -44,14 +37,7 @@ public class RolesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<RoleDto>> GetRole(Guid id)
     {
-        try
-        {
-            return Ok(await _roleService.GetRoleByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _roleService.GetRoleByIdAsync(id));
     }
 
     // POST api/roles
@@ -63,15 +49,8 @@ public class RolesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateRole([FromBody] RoleCreateDto role)
     {
-        try
-        {
-            await _roleService.CreateRoleAsync(role);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _roleService.CreateRoleAsync(role);
+        return Ok();
     }
 
     // PUT api/roles
@@ -83,15 +62,8 @@ public class RolesController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateRole([FromBody] RoleUpdateDto updatedRole)
     {
-        try
-        {
-            await _roleService.UpdateRoleAsync(updatedRole);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _roleService.UpdateRoleAsync(updatedRole);
+        return Ok();
     }
 
     // DELETE api/roles/{id}
@@ -103,14 +75,7 @@ public class RolesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteRole(Guid id)
     {
-        try
-        {
-            await _roleService.DeleteRoleAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _roleService.DeleteRoleAsync(id);
+        return Ok();
     }
 }

@@ -25,14 +25,7 @@ public class ProjectRolePermissionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectRolePermissionDto>>> GetProjectRolePermissions()
     {
-        try
-        {
-            return Ok(await _projectRolePermissionService.GetProjectRolePermissionsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectRolePermissionService.GetProjectRolePermissionsAsync());
     }
 
     // GET: api/projectrolepermissions/{projectRoleId}/{permissionId}
@@ -45,14 +38,7 @@ public class ProjectRolePermissionsController : ControllerBase
     [HttpGet("{projectRoleId}/{permissionId}")]
     public async Task<ActionResult<ProjectRolePermissionDto>> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
-        try
-        {
-            return Ok(await _projectRolePermissionService.GetProjectRolePermissionByIdAsync(projectRoleId, permissionId));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _projectRolePermissionService.GetProjectRolePermissionByIdAsync(projectRoleId, permissionId));
     }
 
     // POST: api/projectrolepermissions
@@ -64,15 +50,8 @@ public class ProjectRolePermissionsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateProjectRolePermission([FromBody] ProjectRolePermissionCreateDto projectRolePermission)
     {
-        try
-        {
-            await _projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermission);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermission);
+        return Ok();
     }
 
     // DELETE: api/projectrolepermissions/{projectRoleId}/{permissionId}
@@ -85,14 +64,7 @@ public class ProjectRolePermissionsController : ControllerBase
     [HttpDelete("{projectRoleId}/{permissionId}")]
     public async Task<ActionResult> DeleteProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
-        try
-        {
-            await _projectRolePermissionService.DeleteProjectRolePermissionAsync(projectRoleId, permissionId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _projectRolePermissionService.DeleteProjectRolePermissionAsync(projectRoleId, permissionId);
+        return Ok();
     }
 }

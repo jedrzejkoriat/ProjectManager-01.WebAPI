@@ -25,14 +25,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
-        try
-        {
-            return Ok(await _userService.GetAllUsersAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _userService.GetAllUsersAsync());
     }
 
     // GET: api/users/{id}
@@ -44,14 +37,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(Guid id)
     {
-        try
-        {
-            return Ok(await _userService.GetUserByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _userService.GetUserByIdAsync(id));
     }
 
     // GET: api/users/project/{projectId}
@@ -63,15 +49,7 @@ public class UsersController : ControllerBase
     [HttpGet("project/{projectId}")]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByProjectId(Guid projectId)
     {
-        try
-        {
-            var users = await _userService.GetUsersByProjectIdAsync(projectId);
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _userService.GetUsersByProjectIdAsync(projectId));
     }
 
     // POST: api/users
@@ -83,15 +61,8 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateUser([FromBody] UserCreateDto user)
     {
-        try
-        {
-            await _userService.CreateUserAsync(user);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userService.CreateUserAsync(user);
+        return Ok();
     }
 
     // PUT: api/users/{id}
@@ -103,15 +74,8 @@ public class UsersController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto updatedUser)
     {
-        try
-        {
-            await _userService.UpdateUserAsync(updatedUser);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userService.UpdateUserAsync(updatedUser);
+        return Ok();
     }
 
     // DELETE: api/users/{id}
@@ -123,15 +87,8 @@ public class UsersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteUser(Guid id)
     {
-        try
-        {
-            await _userService.DeleteUserAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userService.DeleteUserAsync(id);
+        return Ok();
     }
 
     // PATCH api/users/{id}/soft-delete
@@ -143,14 +100,7 @@ public class UsersController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<ActionResult> SoftDeleteUser(Guid id)
     {
-        try
-        {
-            await _userService.SoftDeleteUserAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userService.SoftDeleteUserAsync(id);
+        return Ok();
     }
 }

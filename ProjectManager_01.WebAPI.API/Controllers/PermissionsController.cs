@@ -25,14 +25,7 @@ public class PermissionsController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<PermissionDto>> GetPermissions()
     {
-        try
-        {
-            return Ok(_permissionService.GetAllPermissionsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(_permissionService.GetAllPermissionsAsync());
     }
 
     // GET api/permissions/{id}
@@ -44,14 +37,7 @@ public class PermissionsController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<PermissionDto> GetPermission(Guid id)
     {
-        try
-        {
-            return Ok(_permissionService.GetPermissionByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(_permissionService.GetPermissionByIdAsync(id));
     }
 
     // POST api/permissions
@@ -63,15 +49,8 @@ public class PermissionsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreatePermission([FromBody] PermissionCreateDto permission)
     {
-        try
-        {
-            await _permissionService.CreatePermissionAsync(permission);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _permissionService.CreatePermissionAsync(permission);
+        return Ok();
     }
 
     // PUT api/permissions
@@ -83,15 +62,8 @@ public class PermissionsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdatePermission([FromBody] PermissionUpdateDto updatedPermission)
     {
-        try
-        {
-            await _permissionService.UpdatePermissionAsync(updatedPermission);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _permissionService.UpdatePermissionAsync(updatedPermission);
+        return Ok();
     }
 
     // DELETE api/permissions/{id}
@@ -103,14 +75,7 @@ public class PermissionsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeletePermission(Guid id)
     {
-        try
-        {
-            await _permissionService.DeletePermissionAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _permissionService.DeletePermissionAsync(id);
+        return Ok();
     }
 }

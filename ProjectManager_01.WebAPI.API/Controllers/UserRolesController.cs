@@ -25,14 +25,7 @@ public class UserRolesController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<UserRoleDto>> GetUserRoles()
     {
-        try
-        {
-            return Ok(_userRoleService.GetAllUserRolesAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(_userRoleService.GetAllUserRolesAsync());
     }
 
     // GET: api/userroles/{userId}
@@ -44,14 +37,7 @@ public class UserRolesController : ControllerBase
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserRoleDto>> GetUserRole(Guid userId)
     {
-        try
-        {
-            return Ok(await _userRoleService.GetUserRoleByUserIdAsync(userId));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _userRoleService.GetUserRoleByUserIdAsync(userId));
     }
 
     // POST: api/userroles
@@ -63,15 +49,8 @@ public class UserRolesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateUserRole([FromBody] UserRoleCreateDto userRole)
     {
-        try
-        {
-            await _userRoleService.CreateUserRoleAsync(userRole);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userRoleService.CreateUserRoleAsync(userRole);
+        return Ok();
     }
 
     // PUT: api/userroles/{userId}
@@ -83,15 +62,8 @@ public class UserRolesController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateUserRole([FromBody] UserRoleUpdateDto updatedUserRole)
     {
-        try
-        {
-            await _userRoleService.UpdateUserRoleAsync(updatedUserRole);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userRoleService.UpdateUserRoleAsync(updatedUserRole);
+        return Ok();
     }
 
     // DELETE: api/userroles/{userId}
@@ -103,14 +75,7 @@ public class UserRolesController : ControllerBase
     [HttpDelete("{userId}")]
     public async Task<ActionResult> DeleteUserRole(Guid userId)
     {
-        try
-        {
-            await _userRoleService.DeleteUserRoleAsync(userId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _userRoleService.DeleteUserRoleAsync(userId);
+        return Ok();
     }
 }

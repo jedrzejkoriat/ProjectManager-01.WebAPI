@@ -25,14 +25,7 @@ public class TicketsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTickets()
     {
-        try
-        {
-            return Ok(await _ticketService.GetAllTicketsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketService.GetAllTicketsAsync());
     }
 
     // GET: api/tickets/{id}
@@ -44,14 +37,7 @@ public class TicketsController : ControllerBase
     [HttpGet("id/{id}")]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
     {
-        try
-        {
-            return Ok(await _ticketService.GetTicketByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketService.GetTicketByIdAsync(id));
     }
 
     // GET: api/tickets/{projectKey}-{ticketNumber}
@@ -64,14 +50,7 @@ public class TicketsController : ControllerBase
     [HttpGet("{projectKey}-{ticketNumber}")]
     public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber(string projectKey, int ticketnumber)
     {
-        try
-        {
-            return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
     }
 
     // GET: api/tickets/project/{projectId}
@@ -83,15 +62,8 @@ public class TicketsController : ControllerBase
     [HttpGet("project/{projectId}")]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
     {
-        try
-        {
-            var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
-            return Ok(tickets);
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
+        return Ok(tickets);
     }
 
     // POST: api/tickets
@@ -103,15 +75,8 @@ public class TicketsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket)
     {
-        try
-        {
-            await _ticketService.CreateTicketAsync(ticket);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketService.CreateTicketAsync(ticket);
+        return Ok();
     }
 
     // PUT: api/tickets
@@ -123,15 +88,8 @@ public class TicketsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket)
     {
-        try
-        {
-            await _ticketService.UpdateTicketAsync(updatedTicket);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketService.UpdateTicketAsync(updatedTicket);
+        return Ok();
     }
 
     // DELETE: api/tickets/{id}
@@ -143,15 +101,8 @@ public class TicketsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTicket(Guid id)
     {
-        try
-        {
-            await _ticketService.DeleteTicketAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketService.DeleteTicketAsync(id);
+        return Ok();
     }
 
     // PATCH api/tickets/{id}/soft-delete
@@ -163,14 +114,7 @@ public class TicketsController : ControllerBase
     [HttpPatch("{id}")]
     public async Task<ActionResult> SoftDeleteTicket(Guid id)
     {
-        try
-        {
-            await _ticketService.SoftDeleteTicketAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketService.SoftDeleteTicketAsync(id);
+        return Ok();
     }
 }

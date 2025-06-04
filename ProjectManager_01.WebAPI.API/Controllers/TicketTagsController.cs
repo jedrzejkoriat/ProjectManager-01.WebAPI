@@ -25,14 +25,7 @@ public class TicketTagsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TicketTagDto>>> GetTicketTags()
     {
-        try
-        {
-            return Ok(await _ticketTagService.GetAllTicketTagsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketTagService.GetAllTicketTagsAsync());
     }
 
     // GET: api/tickettags/{ticketId}/{tagId}
@@ -45,14 +38,7 @@ public class TicketTagsController : ControllerBase
     [HttpGet("{ticketId}/{tagId}")]
     public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId)
     {
-        try
-        {
-            return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
     }
 
     // POST: api/tickettags
@@ -64,15 +50,8 @@ public class TicketTagsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag)
     {
-        try
-        {
-            await _ticketTagService.CreateTicketTagAsync(ticketTag);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketTagService.CreateTicketTagAsync(ticketTag);
+        return Ok();
     }
 
     // DELETE: api/tickettags/{ticketId}/{tagId}
@@ -85,14 +64,7 @@ public class TicketTagsController : ControllerBase
     [HttpDelete("{ticketId}/{tagId}")]
     public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId)
     {
-        try
-        {
-            await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
+        return Ok();
     }
 }

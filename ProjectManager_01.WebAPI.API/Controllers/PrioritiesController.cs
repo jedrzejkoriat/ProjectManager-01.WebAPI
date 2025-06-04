@@ -25,14 +25,7 @@ public class PrioritiesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PriorityDto>>> GetPriorities()
     {
-        try
-        {
-            return Ok(await _priorityService.GetAllPrioritiesAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _priorityService.GetAllPrioritiesAsync());
     }
 
     // GET api/priorities/{id}
@@ -44,14 +37,7 @@ public class PrioritiesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<PriorityDto>> GetPriority(Guid id)
     {
-        try
-        {
-            return Ok(await _priorityService.GetPriorityByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _priorityService.GetPriorityByIdAsync(id));
     }
 
     // POST api/priorities
@@ -63,15 +49,8 @@ public class PrioritiesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreatePriority([FromBody] PriorityCreateDto priority)
     {
-        try
-        {
-            await _priorityService.CreatePriorityAsync(priority);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _priorityService.CreatePriorityAsync(priority);
+        return Ok();
     }
 
     // PUT api/priorities
@@ -83,15 +62,8 @@ public class PrioritiesController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdatePriority([FromBody] PriorityUpdateDto updatedPriority)
     {
-        try
-        {
-            await _priorityService.UpdatePriorityAsync(updatedPriority);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _priorityService.UpdatePriorityAsync(updatedPriority);
+        return Ok();
     }
 
     // DELETE api/priorities/{id}
@@ -103,14 +75,7 @@ public class PrioritiesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeletePriority(Guid id)
     {
-        try
-        {
-            await _priorityService.DeletePriorityAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _priorityService.DeletePriorityAsync(id);
+        return Ok();
     }
 }

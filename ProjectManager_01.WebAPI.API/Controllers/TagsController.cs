@@ -25,14 +25,7 @@ public class TagsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
-        try
-        {
-            return Ok(await _tagService.GetAllTagsAsync());
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _tagService.GetAllTagsAsync());
     }
 
     // GET: api/tags/{id}
@@ -44,14 +37,7 @@ public class TagsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<TagDto>> GetTag(Guid id)
     {
-        try
-        {
-            return Ok(await _tagService.GetTagByIdAsync(id));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _tagService.GetTagByIdAsync(id));
     }
 
     // GET: api/tags/project/{projectId}
@@ -63,14 +49,7 @@ public class TagsController : ControllerBase
     [HttpGet("project/{projectId}")]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTagsByProjectId(Guid projectId)
     {
-        try
-        {
-            return Ok(await _tagService.GetTagsByProjectIdAsync(projectId));
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(await _tagService.GetTagsByProjectIdAsync(projectId));
     }
 
     // POST: api/tags
@@ -82,15 +61,8 @@ public class TagsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag)
     {
-        try
-        {
-            await _tagService.CreateTagAsync(tag);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _tagService.CreateTagAsync(tag);
+        return Ok();
     }
 
     // PUT: api/tags
@@ -102,15 +74,8 @@ public class TagsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag)
     {
-        try
-        {
-            await _tagService.UpdateTagAsync(updatedTag);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _tagService.UpdateTagAsync(updatedTag);
+        return Ok();
     }
 
     // DELETE: api/tags/{id}
@@ -122,14 +87,7 @@ public class TagsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTag(Guid id)
     {
-        try
-        {
-            await _tagService.DeleteTagAsync(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        await _tagService.DeleteTagAsync(id);
+        return Ok();
     }
 }
