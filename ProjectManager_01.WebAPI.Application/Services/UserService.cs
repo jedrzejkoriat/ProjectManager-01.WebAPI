@@ -108,7 +108,7 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<UserDto>> GetUsersByProjectIdAsync(Guid projectId)
     {
-        var users = await userRepository.GetUsersByProjectIdAsync(projectId);
+        var users = await userRepository.GetByProjectIdAsync(projectId);
 
         return mapper.Map<IEnumerable<UserDto>>(users);
     }

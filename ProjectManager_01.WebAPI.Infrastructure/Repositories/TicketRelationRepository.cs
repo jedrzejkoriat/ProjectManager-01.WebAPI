@@ -16,19 +16,72 @@ internal class TicketRelationRepository : ITicketRelationRepository
     // ============================= QUERIES =============================
     public async Task<List<TicketRelation>> GetAllAsync()
     {
-        var sql = @"SELECT * FROM TicketRelations";
-        var result = await dbConnection.QueryAsync<TicketRelation>(sql);
+        var sql = @"SELECT tr.*, 
+                       s.*, sp.*, 
+                       t.*, tp.*
+                    FROM TicketRelations tr
+                    JOIN Tickets s ON tr.SourceId = s.Id
+                    JOIN Projects sp ON s.ProjectId = sp.Id
+                    JOIN Tickets t ON tr.TargetId = t.Id
+                    JOIN Projects tp ON t.ProjectId = tp.Id";
 
-        return result.ToList();
+        var relationDict = new Dictionary<Guid, TicketRelation>();
+
+        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+            sql,
+            (relation, source, sourceProject, target, targetProject) =>
+            {
+                if (!relationDict.TryGetValue(relation.Id, out var r))
+                {
+                    r = relation;
+                    r.Source = source;
+                    r.Target = target;
+                    relationDict[r.Id] = r;
+                }
+
+                r.Source.Project = sourceProject;
+                r.Target.Project = targetProject;
+
+                return r;
+            },
+            splitOn: "Id,Id,Id,Id"
+        );
+
+        return relationDict.Values.ToList();
     }
 
     public async Task<TicketRelation> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM TicketRelations 
-                    WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<TicketRelation>(sql, new { Id = id });
+        var sql = @"SELECT tr.*, 
+                       s.*, sp.*, 
+                       t.*, tp.*
+                    FROM TicketRelations tr
+                    JOIN Tickets s ON tr.SourceId = s.Id
+                    JOIN Projects sp ON s.ProjectId = sp.Id
+                    JOIN Tickets t ON tr.TargetId = t.Id
+                    JOIN Projects tp ON t.ProjectId = tp.Id
+                    WHERE tr.Id = @Id";
 
-        return result;
+        TicketRelation relation = null;
+
+        await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+            sql,
+            (rel, source, sourceProject, target, targetProject) =>
+            {
+                source.Project = sourceProject;
+                target.Project = targetProject;
+
+                rel.Source = source;
+                rel.Target = target;
+
+                relation = rel;
+                return rel;
+            },
+            new { Id = id },
+            splitOn: "Id,Id,Id,Id"
+        );
+
+        return relation;
     }
 
     // ============================= COMMANDS =============================

@@ -14,27 +14,38 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         this.dbConnection = dbConnection;
     }
     // ============================= QUERIES =============================
-
     public async Task<List<ProjectRole>> GetAllAsync()
     {
-        var sql = @"SELECT * FROM ProjectRoles";
-        var result = await dbConnection.QueryAsync<ProjectRole>(sql);
+        var sql = @"SELECT pr.*, p.*
+                    FROM ProjectRoles pr
+                    JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
+                    JOIN Permissions p ON prp.PermissionId = p.Id";
 
-        return result.ToList();
+        var projectRoleDict = new Dictionary<Guid, ProjectRole>();
+
+        var result = await dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
+            sql,
+            (projectRole, permission) =>
+            {
+                if (!projectRoleDict.TryGetValue(projectRole.Id, out var pr))
+                {
+                    pr = projectRole;
+                    pr.Permissions = new List<Permission>();
+                    projectRoleDict[pr.Id] = pr;
+                }
+
+                pr.Permissions.Add(permission);
+                return pr;
+            },
+            splitOn: "Id"
+        );
+
+        return projectRoleDict.Values.ToList();
     }
 
     public async Task<ProjectRole> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM ProjectRoles 
-                    WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<ProjectRole>(sql, new { Id = id });
-
-        return result;
-    }
-
-    public async Task<ProjectRole> GetByIdWithPermissionsAsync(Guid id)
-    {
-        var sql = @"SELECT pr.*, prp.*, p.*
+        var sql = @"SELECT pr.*, p.*
                     FROM ProjectRoles pr
                     JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
                     JOIN Permissions p ON prp.PermissionId = p.Id
@@ -57,11 +68,12 @@ internal class ProjectRoleRepository : IProjectRoleRepository
                 return pr;
             },
             new { Id = id },
-            splitOn: "Id,Id"
+            splitOn: "Id"
         );
 
         return projectRoleDict.Values.FirstOrDefault();
     }
+
     // ============================= COMMANDS =============================
     public async Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction)
     {
@@ -88,7 +100,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         var sql = @"DELETE FROM ProjectRoles
                     WHERE ProjectId = @ProjectId";
-        var result = await dbConnection.ExecuteAsync(sql, new {ProjectId =  projectId}, transaction);
+        var result = await dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }

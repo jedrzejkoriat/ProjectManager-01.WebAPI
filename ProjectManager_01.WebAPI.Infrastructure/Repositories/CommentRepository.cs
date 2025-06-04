@@ -17,8 +17,8 @@ internal class CommentRepository : ICommentRepository
     // ============================== QUERIES =============================
     public async Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
     {
-        var sql = @"SELECT c.Id, c.TicketId, c.UserId, c.Content, c.CreatedAt,
-                    u.Id, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
+        var sql = @"SELECT c.*,
+                    u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
                     FROM Comments c
                     JOIN Users u ON c.UserId = u.Id
                     WHERE c.TicketId = @TicketId";
@@ -27,6 +27,7 @@ internal class CommentRepository : ICommentRepository
             comment.User = user;
             return comment;
         },
+        new {TicketId = ticketId},
         splitOn: "UserId");
 
         return comments.ToList();
@@ -34,18 +35,36 @@ internal class CommentRepository : ICommentRepository
 
     public async Task<Comment> GetByIdAsync(Guid id)
     {
-        var sql = @"SELECT * FROM Comments WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Comment>(sql, new { Id = id });
+        var sql = @"SELECT c.*, 
+                    u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
+                    FROM Comments c
+                    JOIN Users u ON c.UserId = u.Id
+                    WHERE c.Id = @Id";
+        var result = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        {
+            comment.User = user;
+            return comment;
+        },
+        new { Id = id },
+        splitOn: "UserId");
 
-        return result;
+        return result.FirstOrDefault();
     }
 
     public async Task<List<Comment>> GetAllAsync()
     {
-        var sql = @"SELECT * FROM Comments";
-        var result = await dbConnection.QueryAsync<Comment>(sql);
+        var sql = @"SELECT c.*, 
+                    u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
+                    FROM Comments c
+                    JOIN Users u ON c.UserId = u.Id";
+        var comments = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        {
+            comment.User = user;
+            return comment;
+        },
+        splitOn: "UserId");
 
-        return result.ToList();
+        return comments.ToList();
     }
 
     // ============================== COMMANDS ============================
