@@ -4,6 +4,7 @@ using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
 using ProjectManager_01.Application.DTOs.TicketTags;
+using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -38,10 +39,7 @@ public class TicketService : ITicketService
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {
@@ -71,10 +69,7 @@ public class TicketService : ITicketService
 
     public async Task DeleteTicketAsync(Guid ticketId)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {

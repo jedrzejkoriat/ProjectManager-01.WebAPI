@@ -39,10 +39,7 @@ public class UserService : IUserService
 
     public async Task CreateUserAsync(UserCreateDto userCreateDto)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {
@@ -70,10 +67,7 @@ public class UserService : IUserService
 
     public async Task DeleteUserAsync(Guid userId)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {

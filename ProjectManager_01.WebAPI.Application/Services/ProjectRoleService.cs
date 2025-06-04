@@ -4,6 +4,7 @@ using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.ProjectRolePermissions;
 using ProjectManager_01.Application.DTOs.ProjectRoles;
+using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -32,10 +33,7 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task CreateProjectRoleAsync(ProjectRoleCreateDto projectRoleCreateDto)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {
@@ -65,10 +63,7 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task DeleteProjectRoleAsync(Guid projectRoleId)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {

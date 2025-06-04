@@ -3,6 +3,7 @@ using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Roles;
+using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Services;
@@ -40,10 +41,7 @@ public class RoleService : IRoleService
 
     public async Task DeleteRoleAsync(Guid roleId)
     {
-        if (dbConnection.State != ConnectionState.Open)
-            dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
+        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
 
         try
         {
