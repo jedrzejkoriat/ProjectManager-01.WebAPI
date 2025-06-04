@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Net.Sockets;
 using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
@@ -39,11 +40,15 @@ public class TicketService : ITicketService
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
     {
+        var projectTickets = await _ticketRepository.GetByProjectIdAsync(ticketCreateDto.ProjectId);
+
         using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
             var ticket = _mapper.Map<Ticket>(ticketCreateDto);
+            ticket.TicketNumber = projectTickets.Any() ? projectTickets.Max(t => t.TicketNumber) + 1 : 1;
+
             var ticketId = await _ticketRepository.CreateAsync(ticket, transaction);
 
             foreach (var tagId in ticketCreateDto.TagIds)
