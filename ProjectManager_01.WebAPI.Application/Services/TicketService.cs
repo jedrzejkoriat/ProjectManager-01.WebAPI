@@ -73,9 +73,10 @@ public class TicketService : ITicketService
 
         try
         {
-            await ticketRepository.DeleteAsync(ticketId, transaction);
             await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticketId, transaction);
             await commentService.DeleteByTicketIdAsync(ticketId, transaction);
+
+            await ticketRepository.DeleteAsync(ticketId, transaction);
 
             transaction.Commit();
         }
@@ -89,41 +90,26 @@ public class TicketService : ITicketService
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
-        var tickets = await ticketRepository.GetByProjectIdAsync(projectId);
-
-        foreach (var ticket in tickets)
-        {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
-        }
-
-        await ticketRepository.DeleteByProjectIdAsync(projectId, transaction);
+        await DeleteTicketsAsync(
+            tr => ticketRepository.GetByProjectIdAsync(projectId),
+            tr => ticketRepository.DeleteByProjectIdAsync(projectId, tr),
+            transaction);
     }
 
     public async Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        var tickets = await ticketRepository.GetByReporterIdAsync(userId, transaction);
-
-        foreach (var ticket in tickets)
-        {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
-        }
-
-        await ticketRepository.DeleteByUserIdAsync(userId, transaction);
+        await DeleteTicketsAsync(
+            tr => ticketRepository.GetByReporterIdAsync(userId, tr),
+            tr => ticketRepository.DeleteByUserIdAsync(userId, tr),
+            transaction);
     }
 
     public async Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
     {
-        var tickets = await ticketRepository.GetByPriorityIdAsync(priorityId);
-
-        foreach (var ticket in tickets)
-        {
-            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
-            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
-        }
-
-        await ticketRepository.DeleteByPriorityIdAsync(priorityId, transaction);
+        await DeleteTicketsAsync(
+            tr => ticketRepository.GetByPriorityIdAsync(priorityId),
+            tr => ticketRepository.DeleteByPriorityIdAsync(priorityId, tr),
+            transaction);
     }
 
     public async Task<TicketDto> GetTicketByIdAsync(Guid ticketId)
@@ -168,5 +154,21 @@ public class TicketService : ITicketService
         var tickets = await ticketRepository.GetByProjectIdAsync(projectId);
 
         return mapper.Map<IEnumerable<TicketDto>>(tickets);
+    }
+
+    private async Task DeleteTicketsAsync(
+        Func<IDbTransaction, Task<IEnumerable<Ticket>>> getTickets,
+        Func<IDbTransaction, Task> deleteTickets,
+        IDbTransaction transaction)
+    {
+        var tickets = await getTickets(transaction);
+
+        foreach (var ticket in tickets)
+        {
+            await ticketRelationService.DeleteTicketRelationByTicketIdAsync(ticket.Id, transaction);
+            await commentService.DeleteByTicketIdAsync(ticket.Id, transaction);
+        }
+
+        await deleteTickets(transaction);
     }
 }
