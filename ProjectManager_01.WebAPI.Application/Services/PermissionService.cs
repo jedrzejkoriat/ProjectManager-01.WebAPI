@@ -34,6 +34,9 @@ public class PermissionService : IPermissionService
 
     public async Task DeletePermissionAsync(Guid permissionId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

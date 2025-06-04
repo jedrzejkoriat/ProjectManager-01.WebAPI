@@ -25,6 +25,12 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("fixedlimit", opt =>

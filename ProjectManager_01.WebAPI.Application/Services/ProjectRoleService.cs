@@ -32,6 +32,9 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task CreateProjectRoleAsync(ProjectRoleCreateDto projectRoleCreateDto)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try
@@ -62,6 +65,9 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task DeleteProjectRoleAsync(Guid projectRoleId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

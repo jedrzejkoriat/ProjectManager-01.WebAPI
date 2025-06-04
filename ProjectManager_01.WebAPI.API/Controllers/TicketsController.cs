@@ -41,7 +41,7 @@ public class TicketsController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Ticket by its id</returns>
-    [HttpGet("{id}")]
+    [HttpGet("id/{id}")]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
     {
         try

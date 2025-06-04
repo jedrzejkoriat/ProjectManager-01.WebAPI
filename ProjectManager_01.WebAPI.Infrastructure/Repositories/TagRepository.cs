@@ -44,7 +44,7 @@ internal class TagRepository : ITagRepository
     {
         var sql = @"SELECT t.*
                     FROM Tags t
-                    INNER JOIN TicketTag tt ON t.Id = tt.TagId
+                    INNER JOIN TicketTags tt ON t.Id = tt.TagId
                     WHERE tt.TicketId = @TicketId";
         var result = await dbConnection.QueryAsync<Tag>(sql, new { TicketId = ticketId });
 

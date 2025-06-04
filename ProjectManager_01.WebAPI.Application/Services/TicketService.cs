@@ -38,6 +38,9 @@ public class TicketService : ITicketService
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try
@@ -68,6 +71,9 @@ public class TicketService : ITicketService
 
     public async Task DeleteTicketAsync(Guid ticketId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

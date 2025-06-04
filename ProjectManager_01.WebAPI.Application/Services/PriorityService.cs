@@ -34,6 +34,9 @@ public class PriorityService : IPriorityService
 
     public async Task DeletePriorityAsync(Guid priorityId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

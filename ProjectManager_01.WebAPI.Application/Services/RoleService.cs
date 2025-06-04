@@ -40,6 +40,9 @@ public class RoleService : IRoleService
 
     public async Task DeleteRoleAsync(Guid roleId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

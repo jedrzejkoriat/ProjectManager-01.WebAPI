@@ -43,6 +43,9 @@ public class ProjectService : IProjectService
 
     public async Task DeleteProjectAsync(Guid projectId)
     {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
         using var transaction = dbConnection.BeginTransaction();
 
         try

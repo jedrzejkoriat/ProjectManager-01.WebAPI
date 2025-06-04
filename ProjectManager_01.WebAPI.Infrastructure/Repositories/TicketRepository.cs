@@ -59,17 +59,18 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"SELECT 
                         t.*, 
-                        proj.Id AS ProjectId, proj.Name AS ProjectName, proj.Key AS ProjectKey, proj.IsDeleted AS ProjectIsDeleted, proj.CreatedAt AS ProjectCreatedAt,
-                        prio.Id AS PriorityId, prio.Name AS PriorityName, prio.Level AS PriorityLevel, 
-                        a.Id AS AssigneeId, a.UserName AS AssigneeUserName, a.Email AS AssigneeEmail,
-                        r.Id AS ReporterId, r.UserName AS ReporterUserName, r.Email AS ReporterEmail
+                        proj.*, 
+                        prio.*, 
+                        a.*, 
+                        r.*
                     FROM Tickets t
                     JOIN Projects proj ON t.ProjectId = proj.Id
                     JOIN Priorities prio ON t.PriorityId = prio.Id
                     LEFT JOIN Users a ON t.AssigneeId = a.Id
                     JOIN Users r ON t.ReporterId = r.Id
                     WHERE t.Id = @Id
-                    AND t.IsDeleted = 0";
+                    AND t.IsDeleted = 0;
+";
 
         var ticket = (await dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
             sql,
@@ -82,7 +83,7 @@ internal class TicketRepository : ITicketRepository
                 return ticket;
             },
             new { Id = id },
-            splitOn: "ProjectId,PriorityId,AssigneeId,ReporterId"
+            splitOn: "Id,Id,Id,Id"
         )).FirstOrDefault();
 
         return ticket;
@@ -92,7 +93,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"SELECT 
                         t.*, 
-                        proj.Id AS ProjectId, proj.Name AS ProjectName, proj.Key AS ProjectKey, proj.IsDeleted AS ProjectIsDeleted, proj.CreatedAt AS ProjectCreatedAt,
+                        proj.Id AS ProjectId, proj.Name AS ProjectName, proj.[Key] AS ProjectKey, proj.IsDeleted AS ProjectIsDeleted, proj.CreatedAt AS ProjectCreatedAt,
                         prio.Id AS PriorityId, prio.Name AS PriorityName, prio.Level AS PriorityLevel, 
                         a.Id AS AssigneeId, a.UserName AS AssigneeUserName, a.Email AS AssigneeEmail,
                         r.Id AS ReporterId, r.UserName AS ReporterUserName, r.Email AS ReporterEmail
