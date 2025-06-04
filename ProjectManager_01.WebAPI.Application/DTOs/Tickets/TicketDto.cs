@@ -12,7 +12,7 @@ public sealed class TicketDto
     public Guid Id { get; init; }
     public ProjectDto Project { get; init; }
     public PriorityDto Priority { get; init; }
-    public UserDto Assignee { get; init; }
+    public UserDto? Assignee { get; init; }
     public UserDto Reporter { get; init; }
     public string Status { get; init; }
     public string Resolution { get; init; }

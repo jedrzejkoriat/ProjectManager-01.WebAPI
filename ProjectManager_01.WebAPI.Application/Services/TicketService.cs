@@ -116,13 +116,14 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepository.GetByIdAsync(ticketId);
 
-        var ticketDto = _mapper.Map<TicketDto>(ticket);
-        ticketDto.Comments = await _commentService.GetByTicketIdAsync(ticketId);
-        ticketDto.Tags = await _tagService.GetTagsByTicketIdAsync(ticketId);
-        ticketDto.RelationsAsSource = await _ticketRelationService.GetTicketRelationsBySourceIdAsync(ticketId);
-        ticketDto.RelationsAsTarget = await _ticketRelationService.GetTicketRelationsByTargetIdAsync(ticketId);
+        return await GetTicketDtoWithRelationsAsync(ticket);
+    }
 
-        return ticketDto;
+    public async Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber)
+    {
+        var ticket = await _ticketRepository.GetByKeyAndNumberAsync(projectKey, ticketNumber);
+
+        return await GetTicketDtoWithRelationsAsync(ticket);
     }
 
     public async Task<IEnumerable<TicketDto>> GetAllTicketsAsync()
@@ -142,13 +143,6 @@ public class TicketService : ITicketService
         await _ticketRepository.SoftDeleteAsync(ticketId);
     }
 
-    public async Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber)
-    {
-        var ticket = await _ticketRepository.GetByKeyAndNumberAsync(projectKey, ticketNumber);
-
-        return _mapper.Map<TicketDto>(ticket);
-    }
-
     public async Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId)
     {
         var tickets = await _ticketRepository.GetByProjectIdAsync(projectId);
@@ -156,6 +150,7 @@ public class TicketService : ITicketService
         return _mapper.Map<IEnumerable<TicketDto>>(tickets);
     }
 
+    // Method to handle deletion of tickets and their related entities
     private async Task DeleteTicketsAsync(
         Func<IDbTransaction, Task<IEnumerable<Ticket>>> getTickets,
         Func<IDbTransaction, Task> deleteTickets,
@@ -170,5 +165,17 @@ public class TicketService : ITicketService
         }
 
         await deleteTickets(transaction);
+    }
+
+    // Method to handle getting ticket relations
+    private async Task<TicketDto> GetTicketDtoWithRelationsAsync(Ticket ticket)
+    {
+        var ticketDto = _mapper.Map<TicketDto>(ticket);
+        ticketDto.Comments = await _commentService.GetByTicketIdAsync(ticket.Id);
+        ticketDto.Tags = await _tagService.GetTagsByTicketIdAsync(ticket.Id);
+        ticketDto.RelationsAsSource = await _ticketRelationService.GetTicketRelationsBySourceIdAsync(ticket.Id);
+        ticketDto.RelationsAsTarget = await _ticketRelationService.GetTicketRelationsByTargetIdAsync(ticket.Id);
+
+        return ticketDto;
     }
 }
