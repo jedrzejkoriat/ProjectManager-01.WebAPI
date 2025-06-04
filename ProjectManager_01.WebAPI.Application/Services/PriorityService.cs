@@ -10,10 +10,10 @@ namespace ProjectManager_01.Application.Services;
 
 public class PriorityService : IPriorityService
 {
-    private readonly IPriorityRepository priorityRepository;
-    private readonly IMapper mapper;
-    private readonly IDbConnection dbConnection;
-    private readonly ITicketService ticketService;
+    private readonly IPriorityRepository _priorityRepository;
+    private readonly IMapper _mapper;
+    private readonly IDbConnection _dbConnection;
+    private readonly ITicketService _ticketService;
 
     public PriorityService(
         IPriorityRepository priorityRepository,
@@ -21,26 +21,26 @@ public class PriorityService : IPriorityService
         IDbConnection dbConnection,
         ITicketService ticketService)
     {
-        this.priorityRepository = priorityRepository;
-        this.mapper = mapper;
-        this.dbConnection = dbConnection;
-        this.ticketService = ticketService;
+        _priorityRepository = priorityRepository;
+        _mapper = mapper;
+        _dbConnection = dbConnection;
+        _ticketService = ticketService;
     }
 
     public async Task CreatePriorityAsync(PriorityCreateDto priorityCreateDto)
     {
-        var priority = mapper.Map<Priority>(priorityCreateDto);
-        await priorityRepository.CreateAsync(priority);
+        var priority = _mapper.Map<Priority>(priorityCreateDto);
+        await _priorityRepository.CreateAsync(priority);
     }
 
     public async Task DeletePriorityAsync(Guid priorityId)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            await ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
-            await priorityRepository.DeleteAsync(priorityId, transaction);
+            await _ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
+            await _priorityRepository.DeleteAsync(priorityId, transaction);
 
             transaction.Commit();
         }
@@ -54,21 +54,21 @@ public class PriorityService : IPriorityService
 
     public async Task<IEnumerable<PriorityDto>> GetAllPrioritiesAsync()
     {
-        var priorities = await priorityRepository.GetAllAsync();
+        var priorities = await _priorityRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<PriorityDto>>(priorities);
+        return _mapper.Map<IEnumerable<PriorityDto>>(priorities);
     }
 
     public async Task<PriorityDto> GetPriorityByIdAsync(Guid priorityId)
     {
-        var priority = await priorityRepository.GetByIdAsync(priorityId);
+        var priority = await _priorityRepository.GetByIdAsync(priorityId);
 
-        return mapper.Map<PriorityDto>(priority);
+        return _mapper.Map<PriorityDto>(priority);
     }
 
     public async Task UpdatePriorityAsync(PriorityUpdateDto priorityUpdateDto)
     {
-        var priority = mapper.Map<Priority>(priorityUpdateDto);
-        await priorityRepository.UpdateAsync(priority);
+        var priority = _mapper.Map<Priority>(priorityUpdateDto);
+        await _priorityRepository.UpdateAsync(priority);
     }
 }

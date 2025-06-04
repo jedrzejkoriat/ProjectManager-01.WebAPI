@@ -9,45 +9,45 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketTagService : ITicketTagService
 {
-    private readonly ITicketTagRepository ticketTagRepository;
-    private readonly IMapper mapper;
+    private readonly ITicketTagRepository _ticketTagRepository;
+    private readonly IMapper _mapper;
 
     public TicketTagService(
         ITicketTagRepository ticketTagRepository,
         IMapper mapper)
     {
-        this.ticketTagRepository = ticketTagRepository;
-        this.mapper = mapper;
+        _ticketTagRepository = ticketTagRepository;
+        _mapper = mapper;
     }
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, IDbTransaction dbTransaction)
     {
-        var ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
-        await ticketTagRepository.CreateAsync(ticketTag, dbTransaction);
+        var ticketTag = _mapper.Map<TicketTag>(ticketTagCreateDto);
+        await _ticketTagRepository.CreateAsync(ticketTag, dbTransaction);
     }
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto)
     {
-        var ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
-        await ticketTagRepository.CreateAsync(ticketTag);
+        var ticketTag = _mapper.Map<TicketTag>(ticketTagCreateDto);
+        await _ticketTagRepository.CreateAsync(ticketTag);
     }
 
     public async Task DeleteTicketTagAsync(Guid ticketId, Guid tagId)
     {
-        await ticketTagRepository.DeleteAsync(ticketId, tagId);
+        await _ticketTagRepository.DeleteAsync(ticketId, tagId);
     }
 
     public async Task<TicketTagDto> GetTicketTagByIdAsync(Guid ticketId, Guid tagId)
     {
-        var ticketTag = await ticketTagRepository.GetByIdAsync(ticketId, tagId);
+        var ticketTag = await _ticketTagRepository.GetByIdAsync(ticketId, tagId);
 
-        return mapper.Map<TicketTagDto>(ticketTag);
+        return _mapper.Map<TicketTagDto>(ticketTag);
     }
 
     public async Task<IEnumerable<TicketTagDto>> GetAllTicketTagsAsync()
     {
-        var ticketTags = await ticketTagRepository.GetAllAsync();
+        var ticketTags = await _ticketTagRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<TicketTagDto>>(ticketTags);
+        return _mapper.Map<IEnumerable<TicketTagDto>>(ticketTags);
     }
 }

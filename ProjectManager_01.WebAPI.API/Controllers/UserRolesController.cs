@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class UserRolesController : ControllerBase
 {
-    private readonly IUserRoleService userRoleService;
+    private readonly IUserRoleService _userRoleService;
 
     public UserRolesController(IUserRoleService userRoleService)
     {
-        this.userRoleService = userRoleService;
+        _userRoleService = userRoleService;
     }
 
     // GET: api/userroles
@@ -27,7 +27,7 @@ public class UserRolesController : ControllerBase
     {
         try
         {
-            return Ok(userRoleService.GetAllUserRolesAsync());
+            return Ok(_userRoleService.GetAllUserRolesAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class UserRolesController : ControllerBase
     {
         try
         {
-            return Ok(await userRoleService.GetUserRoleByUserIdAsync(userId));
+            return Ok(await _userRoleService.GetUserRoleByUserIdAsync(userId));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class UserRolesController : ControllerBase
     {
         try
         {
-            await userRoleService.CreateUserRoleAsync(userRole);
+            await _userRoleService.CreateUserRoleAsync(userRole);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class UserRolesController : ControllerBase
     {
         try
         {
-            await userRoleService.UpdateUserRoleAsync(updatedUserRole);
+            await _userRoleService.UpdateUserRoleAsync(updatedUserRole);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class UserRolesController : ControllerBase
     {
         try
         {
-            await userRoleService.DeleteUserRoleAsync(userId);
+            await _userRoleService.DeleteUserRoleAsync(userId);
             return Ok();
         }
         catch (Exception ex)

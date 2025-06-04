@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRolePermissionRepository : IProjectRolePermissionRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public ProjectRolePermissionRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<ProjectRolePermission>> GetAllAsync()
     {
         var sql = @"SELECT * FROM ProjectRolePermissions";
-        var result = await dbConnection.QueryAsync<ProjectRolePermission>(sql);
+        var result = await _dbConnection.QueryAsync<ProjectRolePermission>(sql);
 
         return result.ToList();
     }
@@ -28,7 +28,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         var sql = @"SELECT * FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId 
                     AND PermissionId = @PermissionId";
-        var result = await dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
+        var result = await _dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
 
         return result;
     }
@@ -38,7 +38,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
                     VALUES (@ProjectRoleId, PermissionId)";
-        var result = await dbConnection.ExecuteAsync(sql, projectRolePermission, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, projectRolePermission, transaction);
 
         return result > 0;
     }
@@ -47,7 +47,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE ProjectRoleId = @ProjectRoleId";
-        var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId }, transaction);
 
         return result > 0;
     }
@@ -56,7 +56,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
                     VALUES (@ProjectRoleId, PermissionId)";
-        var result = await dbConnection.ExecuteAsync(sql, projectRolePermission);
+        var result = await _dbConnection.ExecuteAsync(sql, projectRolePermission);
 
         return result > 0;
     }
@@ -65,7 +65,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     {
         var sql = @"DELETE FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId AND PermissionId = @PermissionId";
-        var result = await dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
 
         return result > 0;
     }
@@ -74,7 +74,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE PermissionId = @PermissionId";
-        var result = await dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { PermissionId = permissionId }, transaction);
 
         return result > 0;
     }

@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PrioritiesController : ControllerBase
 {
-    private readonly IPriorityService priorityService;
+    private readonly IPriorityService _priorityService;
 
     public PrioritiesController(IPriorityService priorityService)
     {
-        this.priorityService = priorityService;
+        _priorityService = priorityService;
     }
 
     // GET api/priorities
@@ -27,7 +27,7 @@ public class PrioritiesController : ControllerBase
     {
         try
         {
-            return Ok(await priorityService.GetAllPrioritiesAsync());
+            return Ok(await _priorityService.GetAllPrioritiesAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class PrioritiesController : ControllerBase
     {
         try
         {
-            return Ok(await priorityService.GetPriorityByIdAsync(id));
+            return Ok(await _priorityService.GetPriorityByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class PrioritiesController : ControllerBase
     {
         try
         {
-            await priorityService.CreatePriorityAsync(priority);
+            await _priorityService.CreatePriorityAsync(priority);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class PrioritiesController : ControllerBase
     {
         try
         {
-            await priorityService.UpdatePriorityAsync(updatedPriority);
+            await _priorityService.UpdatePriorityAsync(updatedPriority);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class PrioritiesController : ControllerBase
     {
         try
         {
-            await priorityService.DeletePriorityAsync(id);
+            await _priorityService.DeletePriorityAsync(id);
             return Ok();
         }
         catch (Exception ex)

@@ -9,61 +9,61 @@ namespace ProjectManager_01.Application.Services;
 
 public class UserRoleService : IUserRoleService
 {
-    private readonly IUserRoleRepository userRoleRepository;
-    private readonly IMapper mapper;
+    private readonly IUserRoleRepository _userRoleRepository;
+    private readonly IMapper _mapper;
 
     public UserRoleService(
         IUserRoleRepository userRoleRepository,
         IMapper mapper)
     {
-        this.userRoleRepository = userRoleRepository;
-        this.mapper = mapper;
+        _userRoleRepository = userRoleRepository;
+        _mapper = mapper;
     }
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto)
     {
-        var userRole = mapper.Map<UserRole>(userRoleCreateDto);
-        await userRoleRepository.CreateAsync(userRole);
+        var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
+        await _userRoleRepository.CreateAsync(userRole);
     }
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto, IDbTransaction transaction)
     {
-        var userRole = mapper.Map<UserRole>(userRoleCreateDto);
-        await userRoleRepository.CreateAsync(userRole, transaction);
+        var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
+        await _userRoleRepository.CreateAsync(userRole, transaction);
     }
 
     public async Task UpdateUserRoleAsync(UserRoleUpdateDto userRoleUpdateDto)
     {
-        var userRole = mapper.Map<UserRole>(userRoleUpdateDto);
-        await userRoleRepository.UpdateAsync(userRole);
+        var userRole = _mapper.Map<UserRole>(userRoleUpdateDto);
+        await _userRoleRepository.UpdateAsync(userRole);
     }
 
     public async Task DeleteUserRoleAsync(Guid userId)
     {
-        await userRoleRepository.DeleteAsync(userId);
+        await _userRoleRepository.DeleteAsync(userId);
     }
 
     public async Task<UserRoleDto> GetUserRoleByUserIdAsync(Guid userId)
     {
-        var userRole = await userRoleRepository.GetByUserIdAsync(userId);
+        var userRole = await _userRoleRepository.GetByUserIdAsync(userId);
 
-        return mapper.Map<UserRoleDto>(userRole);
+        return _mapper.Map<UserRoleDto>(userRole);
     }
 
     public async Task<IEnumerable<UserRoleDto>> GetAllUserRolesAsync()
     {
-        var userRoles = await userRoleRepository.GetAllAsync();
+        var userRoles = await _userRoleRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<UserRoleDto>>(userRoles);
+        return _mapper.Map<IEnumerable<UserRoleDto>>(userRoles);
     }
 
     public async Task DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
     {
-        await userRoleRepository.DeleteByRoleIdAsync(roleId, transaction);
+        await _userRoleRepository.DeleteByRoleIdAsync(roleId, transaction);
     }
 
     public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await userRoleRepository.DeleteByUserIdAsync(userId, transaction);
+        await _userRoleRepository.DeleteByUserIdAsync(userId, transaction);
     }
 }

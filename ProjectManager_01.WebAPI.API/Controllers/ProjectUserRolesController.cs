@@ -9,11 +9,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectUserRolesController : ControllerBase
 {
-    private readonly IProjectUserRoleService projectUserRoleService;
+    private readonly IProjectUserRoleService _projectUserRoleService;
 
     public ProjectUserRolesController(IProjectUserRoleService projectUserRoleService)
     {
-        this.projectUserRoleService = projectUserRoleService;
+        _projectUserRoleService = projectUserRoleService;
     }
 
     // GET api/projectuserroles
@@ -26,7 +26,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         try
         {
-            return Ok(await projectUserRoleService.GetAllProjectUserRolesAsync());
+            return Ok(await _projectUserRoleService.GetAllProjectUserRolesAsync());
         }
         catch (Exception ex)
         {
@@ -45,7 +45,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         try
         {
-            return Ok(await projectUserRoleService.GetProjectUserRoleByIdAsync(id));
+            return Ok(await _projectUserRoleService.GetProjectUserRoleByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -64,7 +64,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         try
         {
-            await projectUserRoleService.CreateProjectUserRoleAsync(projectUserRole);
+            await _projectUserRoleService.CreateProjectUserRoleAsync(projectUserRole);
             return Ok();
         }
         catch (Exception ex)
@@ -84,7 +84,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         try
         {
-            await projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectUserRole);
+            await _projectUserRoleService.UpdateProjectUserRoleAsync(updatedProjectUserRole);
             return Ok();
         }
         catch (Exception ex)
@@ -104,7 +104,7 @@ public class ProjectUserRolesController : ControllerBase
     {
         try
         {
-            await projectUserRoleService.DeleteProjectUserRoleAsync(id);
+            await _projectUserRoleService.DeleteProjectUserRoleAsync(id);
             return Ok();
         }
         catch (Exception ex)

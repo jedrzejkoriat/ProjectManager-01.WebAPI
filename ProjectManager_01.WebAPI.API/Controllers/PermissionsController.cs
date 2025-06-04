@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class PermissionsController : ControllerBase
 {
-    private readonly IPermissionService permissionService;
+    private readonly IPermissionService _permissionService;
 
     public PermissionsController(IPermissionService permissionService)
     {
-        this.permissionService = permissionService;
+        _permissionService = permissionService;
     }
 
     // GET: api/permissions
@@ -27,7 +27,7 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            return Ok(permissionService.GetAllPermissionsAsync());
+            return Ok(_permissionService.GetAllPermissionsAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            return Ok(permissionService.GetPermissionByIdAsync(id));
+            return Ok(_permissionService.GetPermissionByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            await permissionService.CreatePermissionAsync(permission);
+            await _permissionService.CreatePermissionAsync(permission);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            await permissionService.UpdatePermissionAsync(updatedPermission);
+            await _permissionService.UpdatePermissionAsync(updatedPermission);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            await permissionService.DeletePermissionAsync(id);
+            await _permissionService.DeletePermissionAsync(id);
             return Ok();
         }
         catch (Exception ex)

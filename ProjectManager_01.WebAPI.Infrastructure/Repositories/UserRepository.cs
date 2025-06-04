@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class UserRepository : IUserRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public UserRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Users";
-        var result = await dbConnection.QueryAsync<User>(sql);
+        var result = await _dbConnection.QueryAsync<User>(sql);
 
         return result.ToList();
     }
@@ -27,7 +27,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT * FROM Users 
                     WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
 
         return result;
     }
@@ -38,7 +38,7 @@ internal class UserRepository : IUserRepository
                     FROM Users u
                     INNER JOIN ProjectUserRole pur ON pur.UserId = u.Id
                     WHERE pur.ProjectId = @ProjectId;";
-        var result = await dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
+        var result = await _dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
 
         return result.ToList();
     }
@@ -63,7 +63,7 @@ internal class UserRepository : IUserRepository
         var userDict = new Dictionary<Guid, User>();
         var projectRoleDict = new Dictionary<Guid, ProjectRole>();
 
-        var result = await dbConnection.QueryAsync<User, Role, ProjectRole, Permission, User>(
+        var result = await _dbConnection.QueryAsync<User, Role, ProjectRole, Permission, User>(
             sql,
             (user, role, projectRole, permission) =>
             {
@@ -107,7 +107,7 @@ internal class UserRepository : IUserRepository
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
                     VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
         if (result > 0)
             return entity.Id;
@@ -120,7 +120,7 @@ internal class UserRepository : IUserRepository
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
                     VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -135,7 +135,7 @@ internal class UserRepository : IUserRepository
                         Email = @Email,
                         PasswordHash = @PasswordHash
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -144,7 +144,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -153,7 +153,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }
@@ -163,7 +163,7 @@ internal class UserRepository : IUserRepository
         var sql = @"UPDATE Users
                     SET IsDeleted = 1
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

@@ -10,11 +10,11 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectService : IProjectService
 {
-    private readonly IProjectRepository projectRepository;
-    private readonly IMapper mapper;
-    private readonly ITicketService ticketService;
-    private readonly IDbConnection dbConnection;
-    private readonly IProjectRoleService projectRoleService;
+    private readonly IProjectRepository _projectRepository;
+    private readonly IMapper _mapper;
+    private readonly ITicketService _ticketService;
+    private readonly IDbConnection _dbConnection;
+    private readonly IProjectRoleService _projectRoleService;
 
     public ProjectService(
         IProjectRepository projectRepository,
@@ -23,34 +23,34 @@ public class ProjectService : IProjectService
         IDbConnection dbConnection,
         IProjectRoleService projectRoleService)
     {
-        this.projectRepository = projectRepository;
-        this.mapper = mapper;
-        this.ticketService = ticketService;
-        this.dbConnection = dbConnection;
-        this.projectRoleService = projectRoleService;
+        _projectRepository = projectRepository;
+        _mapper = mapper;
+        _ticketService = ticketService;
+        _dbConnection = dbConnection;
+        _projectRoleService = projectRoleService;
     }
 
     public async Task CreateProjectAsync(ProjectCreateDto projectCreateDto)
     {
-        var project = mapper.Map<Project>(projectCreateDto);
-        await projectRepository.CreateAsync(project);
+        var project = _mapper.Map<Project>(projectCreateDto);
+        await _projectRepository.CreateAsync(project);
     }
 
     public async Task UpdateProjectAsync(ProjectUpdateDto projectUpdateDto)
     {
-        var project = mapper.Map<Project>(projectUpdateDto);
-        await projectRepository.UpdateAsync(project);
+        var project = _mapper.Map<Project>(projectUpdateDto);
+        await _projectRepository.UpdateAsync(project);
     }
 
     public async Task DeleteProjectAsync(Guid projectId)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            await projectRepository.DeleteAsync(projectId, transaction);
-            await ticketService.DeleteByProjectIdAsync(projectId, transaction);
-            await projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
+            await _projectRepository.DeleteAsync(projectId, transaction);
+            await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
+            await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
 
             transaction.Commit();
         }
@@ -63,20 +63,20 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectDto> GetProjectByIdAsync(Guid projectId)
     {
-        var project = await projectRepository.GetByIdAsync(projectId);
+        var project = await _projectRepository.GetByIdAsync(projectId);
 
-        return mapper.Map<ProjectDto>(project);
+        return _mapper.Map<ProjectDto>(project);
     }
 
     public async Task<IEnumerable<ProjectDto>> GetAllProjectsAsync()
     {
-        var projects = await projectRepository.GetAllAsync();
+        var projects = await _projectRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<ProjectDto>>(projects);
+        return _mapper.Map<IEnumerable<ProjectDto>>(projects);
     }
 
     public async Task SoftDeleteProjectAsync(Guid projectId)
     {
-        await projectRepository.SoftDeleteAsync(projectId);
+        await _projectRepository.SoftDeleteAsync(projectId);
     }
 }

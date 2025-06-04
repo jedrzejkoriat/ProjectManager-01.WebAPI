@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class PriorityRepository : IPriorityRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public PriorityRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<Priority>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Priorities";
-        var result = await dbConnection.QueryAsync<Priority>(sql);
+        var result = await _dbConnection.QueryAsync<Priority>(sql);
 
         return result.ToList();
     }
@@ -27,7 +27,7 @@ internal class PriorityRepository : IPriorityRepository
     {
         var sql = @"SELECT * FROM Priorities 
                     WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstAsync(sql, new { Id = id });
 
         return result;
     }
@@ -38,7 +38,7 @@ internal class PriorityRepository : IPriorityRepository
         var sql = @"INSERT INTO Priorities (Id, Name) 
                     VALUES (@Id, @Name)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -51,7 +51,7 @@ internal class PriorityRepository : IPriorityRepository
         var sql = @"UPDATE Priorities 
                     SET Name = @Name 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -60,7 +60,7 @@ internal class PriorityRepository : IPriorityRepository
     {
         var sql = @"DELETE FROM Priorities 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -69,7 +69,7 @@ internal class PriorityRepository : IPriorityRepository
     {
         var sql = @"DELETE FROM Priorities 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }

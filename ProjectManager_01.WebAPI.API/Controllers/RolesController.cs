@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class RolesController : ControllerBase
 {
-    private readonly IRoleService roleService;
+    private readonly IRoleService _roleService;
 
     public RolesController(IRoleService roleService)
     {
-        this.roleService = roleService;
+        _roleService = roleService;
     }
 
     // GET: api/roles
@@ -27,7 +27,7 @@ public class RolesController : ControllerBase
     {
         try
         {
-            return Ok(await roleService.GetAllRolesAsync());
+            return Ok(await _roleService.GetAllRolesAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class RolesController : ControllerBase
     {
         try
         {
-            return Ok(await roleService.GetRoleByIdAsync(id));
+            return Ok(await _roleService.GetRoleByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class RolesController : ControllerBase
     {
         try
         {
-            await roleService.CreateRoleAsync(role);
+            await _roleService.CreateRoleAsync(role);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class RolesController : ControllerBase
     {
         try
         {
-            await roleService.UpdateRoleAsync(updatedRole);
+            await _roleService.UpdateRoleAsync(updatedRole);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class RolesController : ControllerBase
     {
         try
         {
-            await roleService.DeleteRoleAsync(id);
+            await _roleService.DeleteRoleAsync(id);
             return Ok();
         }
         catch (Exception ex)

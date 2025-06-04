@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketsController : ControllerBase
 {
-    private readonly ITicketService ticketService;
+    private readonly ITicketService _ticketService;
 
     public TicketsController(ITicketService ticketService)
     {
-        this.ticketService = ticketService;
+        _ticketService = ticketService;
     }
 
     // GET: api/tickets
@@ -27,7 +27,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketService.GetAllTicketsAsync());
+            return Ok(await _ticketService.GetAllTicketsAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketService.GetTicketByIdAsync(id));
+            return Ok(await _ticketService.GetTicketByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -66,7 +66,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
+            return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
         }
         catch (Exception ex)
         {
@@ -85,7 +85,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            var tickets = await ticketService.GetTicketsByProjectIdAsync(projectId);
+            var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
             return Ok(tickets);
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            await ticketService.CreateTicketAsync(ticket);
+            await _ticketService.CreateTicketAsync(ticket);
             return Ok();
         }
         catch (Exception ex)
@@ -125,7 +125,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            await ticketService.UpdateTicketAsync(updatedTicket);
+            await _ticketService.UpdateTicketAsync(updatedTicket);
             return Ok();
         }
         catch (Exception ex)
@@ -145,7 +145,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            await ticketService.DeleteTicketAsync(id);
+            await _ticketService.DeleteTicketAsync(id);
             return Ok();
         }
         catch (Exception ex)
@@ -165,7 +165,7 @@ public class TicketsController : ControllerBase
     {
         try
         {
-            await ticketService.SoftDeleteTicketAsync(id);
+            await _ticketService.SoftDeleteTicketAsync(id);
             return Ok();
         }
         catch (Exception ex)

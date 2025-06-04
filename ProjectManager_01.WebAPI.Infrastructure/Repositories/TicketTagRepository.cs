@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketTagRepository : ITicketTagRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public TicketTagRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<TicketTag>> GetAllAsync()
     {
         var sql = @"SELECT * FROM TicketTags";
-        var result = await dbConnection.QueryAsync<TicketTag>(sql);
+        var result = await _dbConnection.QueryAsync<TicketTag>(sql);
 
         return result.ToList();
     }
@@ -28,7 +28,7 @@ internal class TicketTagRepository : ITicketTagRepository
         var sql = @"SELECT * FROM TicketTags 
                     WHERE TicketId = @TicketId 
                     AND TagId = @TagId";
-        var result = await dbConnection.QueryFirstAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
+        var result = await _dbConnection.QueryFirstAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result;
     }
@@ -38,7 +38,7 @@ internal class TicketTagRepository : ITicketTagRepository
     {
         var sql = @"INSERT INTO TicketTags (TicketId, TagId)
                     VALUES (@TicketId, @TagId)";
-        var result = await dbConnection.ExecuteAsync(sql, ticketTag, dbTransaction);
+        var result = await _dbConnection.ExecuteAsync(sql, ticketTag, dbTransaction);
 
         return result > 0;
     }
@@ -47,7 +47,7 @@ internal class TicketTagRepository : ITicketTagRepository
     {
         var sql = @"INSERT INTO TicketTags (TicketId, TagId)
                     VALUES (@TicketId, @TagId)";
-        var result = await dbConnection.ExecuteAsync(sql, ticketTag);
+        var result = await _dbConnection.ExecuteAsync(sql, ticketTag);
 
         return result > 0;
     }
@@ -57,7 +57,7 @@ internal class TicketTagRepository : ITicketTagRepository
         var sql = @"DELETE FROM TicketTags 
                     WHERE TicketId = @TicketId 
                     AND TagId = @TagId";
-        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId, TagId = tagId });
+        var result = await _dbConnection.ExecuteAsync(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result > 0;
     }

@@ -7,11 +7,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketRepository : ITicketRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public TicketRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
@@ -21,7 +21,7 @@ internal class TicketRepository : ITicketRepository
                     FROM Tickets t
                     JOIN Projects p ON t.ProjectId = p.Id";
 
-        var tickets = await dbConnection.QueryAsync<Ticket, Project, Ticket>(
+        var tickets = await _dbConnection.QueryAsync<Ticket, Project, Ticket>(
             sql,
             (ticket, project) =>
             {
@@ -41,7 +41,7 @@ internal class TicketRepository : ITicketRepository
                     JOIN Projects p ON t.ProjectId = p.Id
                     WHERE t.ProjectId = @ProjectId";
 
-        var tickets = await dbConnection.QueryAsync<Ticket, Project, Ticket>(
+        var tickets = await _dbConnection.QueryAsync<Ticket, Project, Ticket>(
             sql,
             (ticket, project) =>
             {
@@ -72,7 +72,7 @@ internal class TicketRepository : ITicketRepository
                     AND t.IsDeleted = 0;
 ";
 
-        var ticket = (await dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
+        var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
             sql,
             (ticket, project, priority, assignee, reporter) =>
             {
@@ -106,7 +106,7 @@ internal class TicketRepository : ITicketRepository
                     AND proj.Key = @ProjectKey
                     AND t.IsDeleted = 0";
 
-        var ticket = (await dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
+        var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
             (sql, (ticket, project, priority, assignee, reporter) =>
             {
                 ticket.Project = project;
@@ -126,7 +126,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE ReporterId = @ReporterId";
-        var result = await dbConnection.QueryAsync<Ticket>(sql, new { ReporterId = reporterId }, transaction);
+        var result = await _dbConnection.QueryAsync<Ticket>(sql, new { ReporterId = reporterId }, transaction);
 
         return result.ToList();
     }
@@ -135,7 +135,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE PriorityId = @PriorityId";
-        var result = await dbConnection.QueryAsync<Ticket>(sql, new { PriorityId = priorityId });
+        var result = await _dbConnection.QueryAsync<Ticket>(sql, new { PriorityId = priorityId });
 
         return result.ToList();
     }
@@ -148,7 +148,7 @@ internal class TicketRepository : ITicketRepository
 					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
         entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateTimeOffset.UtcNow;
-        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
         if (result > 0)
             return entity.Id;
@@ -160,7 +160,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"DELETE FROM Tickets
                     WHERE PriorityId = @PriorityId";
-        var result = await dbConnection.ExecuteAsync(sql, new { PriorityId = priorityId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { PriorityId = priorityId }, transaction);
 
         return result > 0;
     }
@@ -169,7 +169,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"DELETE FROM Tickets
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }
@@ -179,7 +179,7 @@ internal class TicketRepository : ITicketRepository
         var sql = @"UPDATE Tickets
                     SET AssigneeId = NULL
                     WHERE AssigneeId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
@@ -188,7 +188,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"DELETE FROM Tickets
                     WHERE ReporterId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
         return result > 0;
     }
 
@@ -196,7 +196,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"DELETE FROM Tickets
                     WHERE ProjectId = @ProjectId";
-        var result = await dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }
@@ -206,7 +206,7 @@ internal class TicketRepository : ITicketRepository
         var sql = @"UPDATE Tickets
 					SET IsDeleted = 1
 					WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -217,7 +217,7 @@ internal class TicketRepository : ITicketRepository
 					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
         entity.Id = Guid.NewGuid();
         entity.CreatedAt = DateTimeOffset.UtcNow;
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -237,7 +237,7 @@ internal class TicketRepository : ITicketRepository
 						Description = @Description,
 						Version = @Version
 					WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -246,7 +246,7 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"DELETE FROM Tickets 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

@@ -11,11 +11,11 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectRoleService : IProjectRoleService
 {
-    private readonly IProjectRoleRepository projectRoleRepository;
-    private readonly IMapper mapper;
-    private readonly IProjectUserRoleService projectUserRoleService;
-    private readonly IDbConnection dbConnection;
-    private readonly IProjectRolePermissionService projectRolePermissionService;
+    private readonly IProjectRoleRepository _projectRoleRepository;
+    private readonly IMapper _mapper;
+    private readonly IProjectUserRoleService _projectUserRoleService;
+    private readonly IDbConnection _dbConnection;
+    private readonly IProjectRolePermissionService _projectRolePermissionService;
 
     public ProjectRoleService(
         IProjectRoleRepository projectRoleRepository,
@@ -24,26 +24,26 @@ public class ProjectRoleService : IProjectRoleService
         IDbConnection dbConnection,
         IProjectRolePermissionService projectRolePermissionService)
     {
-        this.projectRoleRepository = projectRoleRepository;
-        this.mapper = mapper;
-        this.projectUserRoleService = projectUserRoleService;
-        this.dbConnection = dbConnection;
-        this.projectRolePermissionService = projectRolePermissionService;
+        _projectRoleRepository = projectRoleRepository;
+        _mapper = mapper;
+        _projectUserRoleService = projectUserRoleService;
+        _dbConnection = dbConnection;
+        _projectRolePermissionService = projectRolePermissionService;
     }
 
     public async Task CreateProjectRoleAsync(ProjectRoleCreateDto projectRoleCreateDto)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            var projectRole = mapper.Map<ProjectRole>(projectRoleCreateDto);
-            var projectRoleId = await projectRoleRepository.CreateAsync(projectRole, transaction);
+            var projectRole = _mapper.Map<ProjectRole>(projectRoleCreateDto);
+            var projectRoleId = await _projectRoleRepository.CreateAsync(projectRole, transaction);
 
             foreach (var permissionId in projectRoleCreateDto.PermissionIds)
             {
                 var projectRolePermissionDto = new ProjectRolePermissionCreateDto(projectRoleId, permissionId);
-                await projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermissionDto, transaction);
+                await _projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermissionDto, transaction);
             }
 
             transaction.Commit();
@@ -57,19 +57,19 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task UpdateProjectRoleAsync(ProjectRoleUpdateDto projectRoleUpdateDto)
     {
-        var projectRole = mapper.Map<ProjectRole>(projectRoleUpdateDto);
-        await projectRoleRepository.UpdateAsync(projectRole);
+        var projectRole = _mapper.Map<ProjectRole>(projectRoleUpdateDto);
+        await _projectRoleRepository.UpdateAsync(projectRole);
     }
 
     public async Task DeleteProjectRoleAsync(Guid projectRoleId)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            await projectRoleRepository.DeleteAsync(projectRoleId, transaction);
-            await projectUserRoleService.DeleteByProjectRoleId(projectRoleId, transaction);
-            await projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
+            await _projectRoleRepository.DeleteAsync(projectRoleId, transaction);
+            await _projectUserRoleService.DeleteByProjectRoleId(projectRoleId, transaction);
+            await _projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
 
             transaction.Commit();
         }
@@ -82,22 +82,22 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task<ProjectRoleDto> GetProjectRoleByIdAsync(Guid projectRoleId)
     {
-        var projectRole = await projectRoleRepository.GetByIdAsync(projectRoleId);
+        var projectRole = await _projectRoleRepository.GetByIdAsync(projectRoleId);
 
-        return mapper.Map<ProjectRoleDto>(projectRole);
+        return _mapper.Map<ProjectRoleDto>(projectRole);
     }
 
     public async Task<IEnumerable<ProjectRoleDto>> GetAllProjectRolesAsync()
     {
-        var projectRoles = await projectRoleRepository.GetAllAsync();
+        var projectRoles = await _projectRoleRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<ProjectRoleDto>>(projectRoles);
+        return _mapper.Map<IEnumerable<ProjectRoleDto>>(projectRoles);
     }
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
-        await projectRoleRepository.DeleteByProjectIdAsync(projectId, transaction);
-        await projectUserRoleService.DeleteByProjectIdAsync(projectId, transaction);
+        await _projectRoleRepository.DeleteByProjectIdAsync(projectId, transaction);
+        await _projectUserRoleService.DeleteByProjectIdAsync(projectId, transaction);
     }
 }
 

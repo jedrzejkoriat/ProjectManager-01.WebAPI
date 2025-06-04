@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRepository : IProjectRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public ProjectRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<Project>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Projects";
-        var result = await dbConnection.QueryAsync<Project>(sql);
+        var result = await _dbConnection.QueryAsync<Project>(sql);
 
         return result.ToList();
     }
@@ -27,7 +27,7 @@ internal class ProjectRepository : IProjectRepository
     {
         var sql = @"SELECT * FROM Projects 
                         WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
 
         return result;
     }
@@ -38,7 +38,7 @@ internal class ProjectRepository : IProjectRepository
         var sql = @"UPDATE Projects
                         SET IsDeleted = 1
                         WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -47,7 +47,7 @@ internal class ProjectRepository : IProjectRepository
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
         return result > 0;
     }
@@ -58,7 +58,7 @@ internal class ProjectRepository : IProjectRepository
                     VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted)";
         project.Id = Guid.NewGuid();
         project.CreatedAt = DateTimeOffset.UtcNow;
-        var result = await dbConnection.ExecuteAsync(sql, project);
+        var result = await _dbConnection.ExecuteAsync(sql, project);
 
         if (result > 0)
             return project.Id;
@@ -72,7 +72,7 @@ internal class ProjectRepository : IProjectRepository
                     SET Name = @Name,
                         Key = @Key
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, project);
+        var result = await _dbConnection.ExecuteAsync(sql, project);
 
         return result > 0;
     }
@@ -80,7 +80,7 @@ internal class ProjectRepository : IProjectRepository
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolesController : ControllerBase
 {
-    private readonly IProjectRoleService projectRoleService;
+    private readonly IProjectRoleService _projectRoleService;
 
     public ProjectRolesController(IProjectRoleService projectRoleService)
     {
-        this.projectRoleService = projectRoleService;
+        _projectRoleService = projectRoleService;
     }
 
     // GET: api/roles
@@ -27,7 +27,7 @@ public class ProjectRolesController : ControllerBase
     {
         try
         {
-            return Ok(await projectRoleService.GetAllProjectRolesAsync());
+            return Ok(await _projectRoleService.GetAllProjectRolesAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class ProjectRolesController : ControllerBase
     {
         try
         {
-            return Ok(await projectRoleService.GetProjectRoleByIdAsync(id));
+            return Ok(await _projectRoleService.GetProjectRoleByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class ProjectRolesController : ControllerBase
     {
         try
         {
-            await projectRoleService.CreateProjectRoleAsync(projectRole);
+            await _projectRoleService.CreateProjectRoleAsync(projectRole);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class ProjectRolesController : ControllerBase
     {
         try
         {
-            await projectRoleService.UpdateProjectRoleAsync(updatedProjectRole);
+            await _projectRoleService.UpdateProjectRoleAsync(updatedProjectRole);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class ProjectRolesController : ControllerBase
     {
         try
         {
-            await projectRoleService.DeleteProjectRoleAsync(id);
+            await _projectRoleService.DeleteProjectRoleAsync(id);
             return Ok();
         }
         catch (Exception ex)

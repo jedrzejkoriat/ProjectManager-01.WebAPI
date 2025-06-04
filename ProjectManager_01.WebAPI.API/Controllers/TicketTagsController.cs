@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketTagsController : ControllerBase
 {
-    private readonly ITicketTagService ticketTagService;
+    private readonly ITicketTagService _ticketTagService;
 
     public TicketTagsController(ITicketTagService ticketTagService)
     {
-        this.ticketTagService = ticketTagService;
+        _ticketTagService = ticketTagService;
     }
 
     // GET: api/tickettags
@@ -27,7 +27,7 @@ public class TicketTagsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketTagService.GetAllTicketTagsAsync());
+            return Ok(await _ticketTagService.GetAllTicketTagsAsync());
         }
         catch (Exception ex)
         {
@@ -47,7 +47,7 @@ public class TicketTagsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
+            return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
         }
         catch (Exception ex)
         {
@@ -66,7 +66,7 @@ public class TicketTagsController : ControllerBase
     {
         try
         {
-            await ticketTagService.CreateTicketTagAsync(ticketTag);
+            await _ticketTagService.CreateTicketTagAsync(ticketTag);
             return Ok();
         }
         catch (Exception ex)
@@ -87,7 +87,7 @@ public class TicketTagsController : ControllerBase
     {
         try
         {
-            await ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
+            await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
             return Ok();
         }
         catch (Exception ex)

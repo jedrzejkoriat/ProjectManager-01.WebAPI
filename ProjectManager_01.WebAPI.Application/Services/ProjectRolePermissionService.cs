@@ -9,55 +9,55 @@ namespace ProjectManager_01.Application.Services;
 
 public class ProjectRolePermissionService : IProjectRolePermissionService
 {
-    private readonly IProjectRolePermissionRepository projectRolePermissionRepository;
-    private readonly IMapper mapper;
+    private readonly IProjectRolePermissionRepository _projectRolePermissionRepository;
+    private readonly IMapper _mapper;
 
     public ProjectRolePermissionService(
         IProjectRolePermissionRepository projectRolePermissionRepository,
         IMapper mapper)
     {
-        this.projectRolePermissionRepository = projectRolePermissionRepository;
-        this.mapper = mapper;
+        _projectRolePermissionRepository = projectRolePermissionRepository;
+        _mapper = mapper;
     }
 
     public async Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto)
     {
-        var projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
-        await projectRolePermissionRepository.CreateAsync(projectRolePermission);
+        var projectRolePermission = _mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
+        await _projectRolePermissionRepository.CreateAsync(projectRolePermission);
     }
 
     public async Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto, IDbTransaction transaction)
     {
-        var projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
-        await projectRolePermissionRepository.CreateAsync(projectRolePermission, transaction);
+        var projectRolePermission = _mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
+        await _projectRolePermissionRepository.CreateAsync(projectRolePermission, transaction);
     }
 
     public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
-        await projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, transaction);
+        await _projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, transaction);
     }
 
     public async Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
-        await projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
+        await _projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
     }
 
     public async Task DeleteProjectRolePermissionAsync(Guid projectRoleId, Guid permissionId)
     {
-        await projectRolePermissionRepository.DeleteAsync(projectRoleId, permissionId);
+        await _projectRolePermissionRepository.DeleteAsync(projectRoleId, permissionId);
     }
 
     public async Task<ProjectRolePermissionDto> GetProjectRolePermissionByIdAsync(Guid projectRoleId, Guid permissionId)
     {
-        var projectRolePermission = await projectRolePermissionRepository.GetByIdAsync(projectRoleId, permissionId);
+        var projectRolePermission = await _projectRolePermissionRepository.GetByIdAsync(projectRoleId, permissionId);
 
-        return mapper.Map<ProjectRolePermissionDto>(projectRolePermission);
+        return _mapper.Map<ProjectRolePermissionDto>(projectRolePermission);
     }
 
     public async Task<IEnumerable<ProjectRolePermissionDto>> GetProjectRolePermissionsAsync()
     {
-        var projectRolePermissions = await projectRolePermissionRepository.GetAllAsync();
+        var projectRolePermissions = await _projectRolePermissionRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<ProjectRolePermissionDto>>(projectRolePermissions);
+        return _mapper.Map<IEnumerable<ProjectRolePermissionDto>>(projectRolePermissions);
     }
 }

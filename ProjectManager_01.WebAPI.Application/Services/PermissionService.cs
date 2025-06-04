@@ -10,10 +10,10 @@ namespace ProjectManager_01.Application.Services;
 
 public class PermissionService : IPermissionService
 {
-    private readonly IPermissionRepository permissionRepository;
-    private readonly IMapper mapper;
-    private readonly IDbConnection dbConnection;
-    private readonly IProjectRolePermissionService projectRolePermissionService;
+    private readonly IPermissionRepository _permissionRepository;
+    private readonly IMapper _mapper;
+    private readonly IDbConnection _dbConnection;
+    private readonly IProjectRolePermissionService _projectRolePermissionService;
 
     public PermissionService(
         IPermissionRepository permissionRepository,
@@ -21,26 +21,26 @@ public class PermissionService : IPermissionService
         IDbConnection dbConnection,
         IProjectRolePermissionService projectRolePermissionService)
     {
-        this.permissionRepository = permissionRepository;
-        this.mapper = mapper;
-        this.dbConnection = dbConnection;
-        this.projectRolePermissionService = projectRolePermissionService;
+        _permissionRepository = permissionRepository;
+        _mapper = mapper;
+        _dbConnection = dbConnection;
+        _projectRolePermissionService = projectRolePermissionService;
     }
 
     public async Task CreatePermissionAsync(PermissionCreateDto permissionCreateDto)
     {
-        var permission = mapper.Map<Permission>(permissionCreateDto);
-        await permissionRepository.CreateAsync(permission);
+        var permission = _mapper.Map<Permission>(permissionCreateDto);
+        await _permissionRepository.CreateAsync(permission);
     }
 
     public async Task DeletePermissionAsync(Guid permissionId)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            await permissionRepository.DeleteAsync(permissionId, transaction);
-            await projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
+            await _permissionRepository.DeleteAsync(permissionId, transaction);
+            await _projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
 
             transaction.Commit();
         }
@@ -53,21 +53,21 @@ public class PermissionService : IPermissionService
 
     public async Task<IEnumerable<PermissionDto>> GetAllPermissionsAsync()
     {
-        var permissions = await permissionRepository.GetAllAsync();
+        var permissions = await _permissionRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<PermissionDto>>(permissions);
+        return _mapper.Map<IEnumerable<PermissionDto>>(permissions);
     }
 
     public async Task<PermissionDto> GetPermissionByIdAsync(Guid permissionId)
     {
-        var permission = await permissionRepository.GetByIdAsync(permissionId);
+        var permission = await _permissionRepository.GetByIdAsync(permissionId);
 
-        return mapper.Map<PermissionDto>(permission);
+        return _mapper.Map<PermissionDto>(permission);
     }
 
     public async Task UpdatePermissionAsync(PermissionUpdateDto permissionUpdateDto)
     {
-        var permission = mapper.Map<Permission>(permissionUpdateDto);
-        await permissionRepository.UpdateAsync(permission);
+        var permission = _mapper.Map<Permission>(permissionUpdateDto);
+        await _permissionRepository.UpdateAsync(permission);
     }
 }

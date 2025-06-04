@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectRolePermissionsController : ControllerBase
 {
-    private readonly IProjectRolePermissionService projectRolePermissionService;
+    private readonly IProjectRolePermissionService _projectRolePermissionService;
 
     public ProjectRolePermissionsController(IProjectRolePermissionService projectRolePermissionService)
     {
-        this.projectRolePermissionService = projectRolePermissionService;
+        _projectRolePermissionService = projectRolePermissionService;
     }
 
     // GET: api/projectrolepermissions
@@ -27,7 +27,7 @@ public class ProjectRolePermissionsController : ControllerBase
     {
         try
         {
-            return Ok(await projectRolePermissionService.GetProjectRolePermissionsAsync());
+            return Ok(await _projectRolePermissionService.GetProjectRolePermissionsAsync());
         }
         catch (Exception ex)
         {
@@ -47,7 +47,7 @@ public class ProjectRolePermissionsController : ControllerBase
     {
         try
         {
-            return Ok(await projectRolePermissionService.GetProjectRolePermissionByIdAsync(projectRoleId, permissionId));
+            return Ok(await _projectRolePermissionService.GetProjectRolePermissionByIdAsync(projectRoleId, permissionId));
         }
         catch (Exception ex)
         {
@@ -66,7 +66,7 @@ public class ProjectRolePermissionsController : ControllerBase
     {
         try
         {
-            await projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermission);
+            await _projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermission);
             return Ok();
         }
         catch (Exception ex)
@@ -87,7 +87,7 @@ public class ProjectRolePermissionsController : ControllerBase
     {
         try
         {
-            await projectRolePermissionService.DeleteProjectRolePermissionAsync(projectRoleId, permissionId);
+            await _projectRolePermissionService.DeleteProjectRolePermissionAsync(projectRoleId, permissionId);
             return Ok();
         }
         catch (Exception ex)

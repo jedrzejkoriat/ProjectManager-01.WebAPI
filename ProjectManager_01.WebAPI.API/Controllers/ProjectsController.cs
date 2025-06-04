@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class ProjectsController : ControllerBase
 {
-    private readonly IProjectService projectService;
+    private readonly IProjectService _projectService;
 
     public ProjectsController(IProjectService projectService)
     {
-        this.projectService = projectService;
+        _projectService = projectService;
     }
 
 
@@ -28,7 +28,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await projectService.GetAllProjectsAsync());
+            return Ok(await _projectService.GetAllProjectsAsync());
         }
         catch (Exception ex)
         {
@@ -47,7 +47,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await projectService.GetProjectByIdAsync(id));
+            return Ok(await _projectService.GetProjectByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -66,7 +66,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await projectService.CreateProjectAsync(project);
+            await _projectService.CreateProjectAsync(project);
             return Ok();
         }
         catch (Exception ex)
@@ -86,7 +86,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await projectService.UpdateProjectAsync(updatedProject);
+            await _projectService.UpdateProjectAsync(updatedProject);
             return Ok();
         }
         catch (Exception ex)
@@ -106,7 +106,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await projectService.DeleteProjectAsync(id);
+            await _projectService.DeleteProjectAsync(id);
             return Ok();
         }
         catch (Exception ex)
@@ -126,7 +126,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await projectService.SoftDeleteProjectAsync(id);
+            await _projectService.SoftDeleteProjectAsync(id);
             return Ok();
         }
         catch (Exception ex)

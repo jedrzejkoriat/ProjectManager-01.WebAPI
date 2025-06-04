@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class CommentsController : ControllerBase
 {
-    private readonly ICommentService commentService;
+    private readonly ICommentService _commentService;
 
     public CommentsController(ICommentService commentService)
     {
-        this.commentService = commentService;
+        _commentService = commentService;
     }
 
     // GET: api/comments
@@ -27,7 +27,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            return Ok(await commentService.GetAllCommentsAsync());
+            return Ok(await _commentService.GetAllCommentsAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            return Ok(await commentService.GetCommentAsync(id));
+            return Ok(await _commentService.GetCommentAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            await commentService.CreateCommentAsync(commentCreateDto);
+            await _commentService.CreateCommentAsync(commentCreateDto);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            commentService.UpdateCommentAsync(updatedComment);
+            _commentService.UpdateCommentAsync(updatedComment);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class CommentsController : ControllerBase
     {
         try
         {
-            await commentService.DeleteCommentAsync(id);
+            await _commentService.DeleteCommentAsync(id);
             return Ok();
         }
         catch (Exception ex)

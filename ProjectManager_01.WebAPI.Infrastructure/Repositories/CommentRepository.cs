@@ -7,11 +7,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class CommentRepository : ICommentRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public CommentRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================== QUERIES =============================
@@ -22,7 +22,7 @@ internal class CommentRepository : ICommentRepository
                     FROM Comments c
                     JOIN Users u ON c.UserId = u.Id
                     WHERE c.TicketId = @TicketId";
-        var comments = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        var comments = await _dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
         {
             comment.User = user;
             return comment;
@@ -40,7 +40,7 @@ internal class CommentRepository : ICommentRepository
                     FROM Comments c
                     JOIN Users u ON c.UserId = u.Id
                     WHERE c.Id = @Id";
-        var result = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        var result = await _dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
         {
             comment.User = user;
             return comment;
@@ -57,7 +57,7 @@ internal class CommentRepository : ICommentRepository
                     u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
                     FROM Comments c
                     JOIN Users u ON c.UserId = u.Id";
-        var comments = await dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
+        var comments = await _dbConnection.QueryAsync<Comment, User, Comment>(sql, (comment, user) =>
         {
             comment.User = user;
             return comment;
@@ -72,7 +72,7 @@ internal class CommentRepository : ICommentRepository
     {
         var sql = @"DELETE FROM Comments
                     WHERE TicketId = @TicketId";
-        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
 
         return result > 0;
     }
@@ -81,7 +81,7 @@ internal class CommentRepository : ICommentRepository
     {
         var sql = @"DELETE FROM Comments
                     WHERE UserId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
@@ -92,7 +92,7 @@ internal class CommentRepository : ICommentRepository
                     VALUES (@Id, @TicketId, @UserId, @Content, @CreatedAt)";
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
-        var result = await dbConnection.ExecuteAsync(sql, comment);
+        var result = await _dbConnection.ExecuteAsync(sql, comment);
 
         if (result > 0)
             return comment.Id;
@@ -105,7 +105,7 @@ internal class CommentRepository : ICommentRepository
         var sql = @"UPDATE Comments
                     SET Content = @Content
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, comment);
+        var result = await _dbConnection.ExecuteAsync(sql, comment);
 
         return result > 0;
     }
@@ -113,7 +113,7 @@ internal class CommentRepository : ICommentRepository
     public async Task<bool> DeleteAsync(Guid id)
     {
         var sql = "DELETE FROM Comments WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

@@ -7,11 +7,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class ProjectRoleRepository : IProjectRoleRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public ProjectRoleRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
@@ -24,7 +24,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 
         var projectRoleDict = new Dictionary<Guid, ProjectRole>();
 
-        var result = await dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
+        var result = await _dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
             sql,
             (projectRole, permission) =>
             {
@@ -54,7 +54,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
 
         var projectRoleDict = new Dictionary<Guid, ProjectRole>();
 
-        var result = await dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
+        var result = await _dbConnection.QueryAsync<ProjectRole, Permission, ProjectRole>(
             sql,
             (projectRole, permission) =>
             {
@@ -81,7 +81,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
                     VALUES (@Id, @ProjectId, @Name)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
         if (result > 0)
             return entity.Id;
@@ -93,7 +93,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         var sql = @"DELETE FROM ProjectRoles 
                     WHERE Id = @Id";
-        var result = dbConnection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
+        var result = _dbConnection.ExecuteAsync(sql, new { Id = projectRoleId }, transaction);
         return result.ContinueWith(t => t.Result > 0);
     }
 
@@ -101,7 +101,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         var sql = @"DELETE FROM ProjectRoles
                     WHERE ProjectId = @ProjectId";
-        var result = await dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }
@@ -111,7 +111,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
                     VALUES (@Id, @ProjectId, @Name)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -125,7 +125,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
                     SET ProjectId = @ProjectId,
                         Name = @Name
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -134,7 +134,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         var sql = @"DELETE FROM ProjectRoles 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

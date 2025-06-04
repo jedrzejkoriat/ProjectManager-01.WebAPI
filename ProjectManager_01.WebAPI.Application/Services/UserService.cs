@@ -11,13 +11,13 @@ namespace ProjectManager_01.Application.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository userRepository;
-    private readonly IMapper mapper;
-    private readonly IUserRoleService userRoleService;
-    private readonly IProjectUserRoleService projectUserRoleService;
-    private readonly IDbConnection dbConnection;
-    private readonly ICommentService commentService;
-    private readonly ITicketService ticketService;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+    private readonly IUserRoleService _userRoleService;
+    private readonly IProjectUserRoleService _projectUserRoleService;
+    private readonly IDbConnection _dbConnection;
+    private readonly ICommentService _commentService;
+    private readonly ITicketService _ticketService;
 
     public UserService(
         IUserRepository userRepository,
@@ -28,27 +28,27 @@ public class UserService : IUserService
         ICommentService commentService,
         ITicketService ticketService)
     {
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-        this.userRoleService = userRoleService;
-        this.projectUserRoleService = projectUserRoleService;
-        this.dbConnection = dbConnection;
-        this.commentService = commentService;
-        this.ticketService = ticketService;
+        _userRepository = userRepository;
+        _mapper = mapper;
+        _userRoleService = userRoleService;
+        _projectUserRoleService = projectUserRoleService;
+        _dbConnection = dbConnection;
+        _commentService = commentService;
+        _ticketService = ticketService;
     }
 
     public async Task CreateUserAsync(UserCreateDto userCreateDto)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            var user = mapper.Map<User>(userCreateDto);
+            var user = _mapper.Map<User>(userCreateDto);
             user.PasswordHash = BcryptPasswordHasher.HashPassword(userCreateDto.Password);
-            var userId = await userRepository.CreateAsync(user, transaction);
+            var userId = await _userRepository.CreateAsync(user, transaction);
 
             var userRoleCreateDto = new UserRoleCreateDto(userId);
-            await userRoleService.CreateUserRoleAsync(userRoleCreateDto, transaction);
+            await _userRoleService.CreateUserRoleAsync(userRoleCreateDto, transaction);
 
             transaction.Commit();
         }
@@ -61,22 +61,22 @@ public class UserService : IUserService
 
     public async Task UpdateUserAsync(UserUpdateDto userUpdateDto)
     {
-        var user = mapper.Map<User>(userUpdateDto);
-        await userRepository.UpdateAsync(user);
+        var user = _mapper.Map<User>(userUpdateDto);
+        await _userRepository.UpdateAsync(user);
     }
 
     public async Task DeleteUserAsync(Guid userId)
     {
-        using var transaction = DbTransactionHelper.BeginTransaction(dbConnection);
+        using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
         try
         {
-            await userRepository.DeleteAsync(userId, transaction);
-            await userRoleService.DeleteByUserIdAsync(userId, transaction);
-            await projectUserRoleService.DeleteByUserIdAsync(userId, transaction);
-            await commentService.DeleteByUserIdAsync(userId, transaction);
-            await ticketService.ClearUserAssignmentAsync(userId, transaction);
-            await ticketService.DeleteTicketByUserIdAsync(userId, transaction);
+            await _userRepository.DeleteAsync(userId, transaction);
+            await _userRoleService.DeleteByUserIdAsync(userId, transaction);
+            await _projectUserRoleService.DeleteByUserIdAsync(userId, transaction);
+            await _commentService.DeleteByUserIdAsync(userId, transaction);
+            await _ticketService.ClearUserAssignmentAsync(userId, transaction);
+            await _ticketService.DeleteTicketByUserIdAsync(userId, transaction);
 
             transaction.Commit();
         }
@@ -89,27 +89,27 @@ public class UserService : IUserService
 
     public async Task<UserDto> GetUserByIdAsync(Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
 
-        return mapper.Map<UserDto>(user);
+        return _mapper.Map<UserDto>(user);
     }
 
     public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
     {
-        var users = await userRepository.GetAllAsync();
+        var users = await _userRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<UserDto>>(users);
+        return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
     public async Task SoftDeleteUserAsync(Guid userId)
     {
-        await userRepository.SoftDeleteAsync(userId);
+        await _userRepository.SoftDeleteAsync(userId);
     }
 
     public async Task<IEnumerable<UserDto>> GetUsersByProjectIdAsync(Guid projectId)
     {
-        var users = await userRepository.GetByProjectIdAsync(projectId);
+        var users = await _userRepository.GetByProjectIdAsync(projectId);
 
-        return mapper.Map<IEnumerable<UserDto>>(users);
+        return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 }

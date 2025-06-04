@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TicketRelationsController : ControllerBase
 {
-    private readonly ITicketRelationService ticketRelationService;
+    private readonly ITicketRelationService _ticketRelationService;
 
     public TicketRelationsController(ITicketRelationService ticketRelationService)
     {
-        this.ticketRelationService = ticketRelationService;
+        _ticketRelationService = ticketRelationService;
     }
 
     // GET: api/ticketrelations
@@ -27,7 +27,7 @@ public class TicketRelationsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketRelationService.GetAllTicketRelationsAsync());
+            return Ok(await _ticketRelationService.GetAllTicketRelationsAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class TicketRelationsController : ControllerBase
     {
         try
         {
-            return Ok(await ticketRelationService.GetTicketRelationByIdAsync(Id));
+            return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class TicketRelationsController : ControllerBase
     {
         try
         {
-            await ticketRelationService.CreateTicketRelationAsync(ticketRelation);
+            await _ticketRelationService.CreateTicketRelationAsync(ticketRelation);
             return Ok();
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class TicketRelationsController : ControllerBase
     {
         try
         {
-            await ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
+            await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class TicketRelationsController : ControllerBase
     {
         try
         {
-            await ticketRelationService.DeleteTicketRelationAsync(Id);
+            await _ticketRelationService.DeleteTicketRelationAsync(Id);
             return Ok();
         }
         catch (Exception ex)

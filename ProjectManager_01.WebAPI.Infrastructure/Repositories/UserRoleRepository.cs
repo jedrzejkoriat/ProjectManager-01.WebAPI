@@ -8,11 +8,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class UserRoleRepository : IUserRoleRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public UserRoleRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
@@ -20,7 +20,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"SELECT * FROM UserRoles 
                     WHERE UserId = @UserId";
-        var result = await dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
+        var result = await _dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
 
         return result;
     }
@@ -28,7 +28,7 @@ internal class UserRoleRepository : IUserRoleRepository
     public async Task<IEnumerable<UserRole>> GetAllAsync()
     {
         var sql = @"SELECT * FROM UserRoles";
-        var result = await dbConnection.QueryAsync<UserRole>(sql);
+        var result = await _dbConnection.QueryAsync<UserRole>(sql);
 
         return result.ToList();
     }
@@ -39,7 +39,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"INSERT INTO UserRoles (UserId)
                     VALUES (@UserId)";
-        var result = await dbConnection.ExecuteAsync(sql, userRole, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, userRole, transaction);
 
         return result > 0;
     }
@@ -48,7 +48,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE RoleId = @RoleId";
-        var result = await dbConnection.ExecuteAsync(sql, new { RoleId = roleId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { RoleId = roleId }, transaction);
 
         return result > 0;
     }
@@ -57,7 +57,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE UserId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
 
         return result > 0;
     }
@@ -66,7 +66,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"INSERT INTO UserRoles (UserId)
                     VALUES (@UserId)";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -76,7 +76,7 @@ internal class UserRoleRepository : IUserRoleRepository
         var sql = @"UPDATE UserRoles
                     SET RoleId = @RoleId
                     WHERE UserId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, userRole);
+        var result = await _dbConnection.ExecuteAsync(sql, userRole);
 
         return result > 0;
     }
@@ -85,7 +85,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE UserId = @UserId";
-        var result = await dbConnection.ExecuteAsync(sql, new { UserId = userId });
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId });
 
         return result > 0;
     }

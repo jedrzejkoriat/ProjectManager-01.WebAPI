@@ -7,18 +7,18 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class RoleRepository : IRoleRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public RoleRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
     public async Task<IEnumerable<Role>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Roles";
-        var result = await dbConnection.QueryAsync<Role>(sql);
+        var result = await _dbConnection.QueryAsync<Role>(sql);
 
         return result.ToList();
     }
@@ -27,7 +27,7 @@ internal class RoleRepository : IRoleRepository
     {
         var sql = @"SELECT * FROM Roles 
                     WHERE Id = @Id";
-        var result = await dbConnection.QueryFirstAsync<Role>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstAsync<Role>(sql, new { Id = id });
 
         return result;
     }
@@ -37,7 +37,7 @@ internal class RoleRepository : IRoleRepository
     {
         var sql = @"DELETE FROM Roles 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = Id }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = Id }, transaction);
 
         return result > 0;
     }
@@ -46,7 +46,7 @@ internal class RoleRepository : IRoleRepository
     {
         var sql = @"DELETE FROM Roles 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }
@@ -56,7 +56,7 @@ internal class RoleRepository : IRoleRepository
         var sql = @"INSERT INTO Roles (Id, Name)
 					VALUES (@Id, @Name)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -69,7 +69,7 @@ internal class RoleRepository : IRoleRepository
         var sql = @"UPDATE Roles
 					SET Name = @Name
 					WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }

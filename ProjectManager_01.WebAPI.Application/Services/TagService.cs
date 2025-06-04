@@ -8,59 +8,59 @@ namespace ProjectManager_01.Application.Services;
 
 public class TagService : ITagService
 {
-    private readonly ITagRepository tagRepository;
-    private readonly IMapper mapper;
+    private readonly ITagRepository _tagRepository;
+    private readonly IMapper _mapper;
 
     public TagService(
         ITagRepository tagRepository,
         IMapper mapper)
     {
-        this.tagRepository = tagRepository;
-        this.mapper = mapper;
+        _tagRepository = tagRepository;
+        _mapper = mapper;
     }
 
     public async Task CreateTagAsync(TagCreateDto tagCreateDto)
     {
-        var tag = mapper.Map<Tag>(tagCreateDto);
-        await tagRepository.CreateAsync(tag);
+        var tag = _mapper.Map<Tag>(tagCreateDto);
+        await _tagRepository.CreateAsync(tag);
     }
 
     public async Task UpdateTagAsync(TagUpdateDto tagUpdateDto)
     {
-        var tag = mapper.Map<Tag>(tagUpdateDto);
-        await tagRepository.UpdateAsync(tag);
+        var tag = _mapper.Map<Tag>(tagUpdateDto);
+        await _tagRepository.UpdateAsync(tag);
     }
 
     public async Task DeleteTagAsync(Guid tagId)
     {
-        await tagRepository.DeleteAsync(tagId);
+        await _tagRepository.DeleteAsync(tagId);
     }
 
     public async Task<TagDto> GetTagByIdAsync(Guid tagId)
     {
-        var tag = await tagRepository.GetByIdAsync(tagId);
+        var tag = await _tagRepository.GetByIdAsync(tagId);
 
-        return mapper.Map<TagDto>(tag);
+        return _mapper.Map<TagDto>(tag);
     }
 
     public async Task<IEnumerable<TagDto>> GetAllTagsAsync()
     {
-        var tags = await tagRepository.GetAllAsync();
+        var tags = await _tagRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<TagDto>>(tags);
+        return _mapper.Map<IEnumerable<TagDto>>(tags);
     }
 
     public async Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId)
     {
-        var tags = await tagRepository.GetByProjectIdAsync(projectId);
+        var tags = await _tagRepository.GetByProjectIdAsync(projectId);
 
-        return mapper.Map<IEnumerable<TagDto>>(tags);
+        return _mapper.Map<IEnumerable<TagDto>>(tags);
     }
 
     public async Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId)
     {
-        var tags = await tagRepository.GetByTicketIdAsync(ticketId);
+        var tags = await _tagRepository.GetByTicketIdAsync(ticketId);
 
-        return mapper.Map<IEnumerable<TagDto>>(tags);
+        return _mapper.Map<IEnumerable<TagDto>>(tags);
     }
 }

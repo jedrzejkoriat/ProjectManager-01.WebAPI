@@ -9,64 +9,64 @@ namespace ProjectManager_01.Application.Services;
 
 public class TicketRelationService : ITicketRelationService
 {
-    private readonly ITicketRelationRepository ticketRelationRepository;
-    private readonly IMapper mapper;
+    private readonly ITicketRelationRepository _ticketRelationRepository;
+    private readonly IMapper _mapper;
 
     public TicketRelationService(
         ITicketRelationRepository ticketRelationRepository,
         IMapper mapper)
     {
-        this.ticketRelationRepository = ticketRelationRepository;
-        this.mapper = mapper;
+        _ticketRelationRepository = ticketRelationRepository;
+        _mapper = mapper;
     }
 
     public async Task CreateTicketRelationAsync(TicketRelationCreateDto ticketRelationCreateDto)
     {
-        var ticketRelation = mapper.Map<TicketRelation>(ticketRelationCreateDto);
-        await ticketRelationRepository.CreateAsync(ticketRelation);
+        var ticketRelation = _mapper.Map<TicketRelation>(ticketRelationCreateDto);
+        await _ticketRelationRepository.CreateAsync(ticketRelation);
     }
 
     public async Task UpdateTicketRelationAsync(TicketRelationUpdateDto ticketRelationUpdateDto)
     {
-        var ticketRelation = mapper.Map<TicketRelation>(ticketRelationUpdateDto);
-        await ticketRelationRepository.UpdateAsync(ticketRelation);
+        var ticketRelation = _mapper.Map<TicketRelation>(ticketRelationUpdateDto);
+        await _ticketRelationRepository.UpdateAsync(ticketRelation);
     }
 
     public async Task DeleteTicketRelationAsync(Guid ticketRelationId)
     {
-        await ticketRelationRepository.DeleteAsync(ticketRelationId);
+        await _ticketRelationRepository.DeleteAsync(ticketRelationId);
     }
 
     public async Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId)
     {
-        var ticketRelation = await ticketRelationRepository.GetByIdAsync(ticketRelationId);
+        var ticketRelation = await _ticketRelationRepository.GetByIdAsync(ticketRelationId);
 
-        return mapper.Map<TicketRelationDto>(ticketRelation);
+        return _mapper.Map<TicketRelationDto>(ticketRelation);
     }
 
     public async Task<IEnumerable<TicketRelationDto>> GetAllTicketRelationsAsync()
     {
-        var ticketRelations = await ticketRelationRepository.GetAllAsync();
+        var ticketRelations = await _ticketRelationRepository.GetAllAsync();
 
-        return mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
+        return _mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
     }
 
     public async Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
-        await ticketRelationRepository.DeleteByTicketIdAsync(ticketId, transaction);
+        await _ticketRelationRepository.DeleteByTicketIdAsync(ticketId, transaction);
     }
 
     public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsBySourceIdAsync(Guid ticketId)
     {
-        var ticketRelations = await ticketRelationRepository.GetBySourceIdAsync(ticketId);
+        var ticketRelations = await _ticketRelationRepository.GetBySourceIdAsync(ticketId);
 
-        return mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
+        return _mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
     }
 
     public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsByTargetIdAsync(Guid ticketId)
     {
-        var ticketRelations = await ticketRelationRepository.GetByTargetIdAsync(ticketId);
+        var ticketRelations = await _ticketRelationRepository.GetByTargetIdAsync(ticketId);
 
-        return mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
+        return _mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
     }
 }

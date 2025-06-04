@@ -5,11 +5,11 @@ namespace ProjectManager_01.Hubs;
 
 public class TicketsHub : Hub
 {
-    private readonly ITicketService ticketService;
+    private readonly ITicketService _ticketService;
 
     public TicketsHub(ITicketService ticketService)
     {
-        this.ticketService = ticketService;
+        _ticketService = ticketService;
     }
 
     public async Task SubscribeToTicket(string ticketId)
@@ -18,7 +18,7 @@ public class TicketsHub : Hub
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, GetTicketGroupName(guid));
 
-            var ticket = await ticketService.GetTicketByIdAsync(guid);
+            var ticket = await _ticketService.GetTicketByIdAsync(guid);
             await Clients.Caller.SendAsync("ReceiveTicket", ticket);
         }
         else

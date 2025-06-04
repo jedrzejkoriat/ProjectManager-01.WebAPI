@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService userService;
+    private readonly IUserService _userService;
 
     public UsersController(IUserService userService)
     {
-        this.userService = userService;
+        _userService = userService;
     }
 
     // GET: api/users
@@ -27,7 +27,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            return Ok(await userService.GetAllUsersAsync());
+            return Ok(await _userService.GetAllUsersAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            return Ok(await userService.GetUserByIdAsync(id));
+            return Ok(await _userService.GetUserByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var users = await userService.GetUsersByProjectIdAsync(projectId);
+            var users = await _userService.GetUsersByProjectIdAsync(projectId);
             return Ok(users);
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await userService.CreateUserAsync(user);
+            await _userService.CreateUserAsync(user);
             return Ok();
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await userService.UpdateUserAsync(updatedUser);
+            await _userService.UpdateUserAsync(updatedUser);
             return Ok();
         }
         catch (Exception ex)
@@ -125,7 +125,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(id);
             return Ok();
         }
         catch (Exception ex)
@@ -145,7 +145,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await userService.SoftDeleteUserAsync(id);
+            await _userService.SoftDeleteUserAsync(id);
             return Ok();
         }
         catch (Exception ex)

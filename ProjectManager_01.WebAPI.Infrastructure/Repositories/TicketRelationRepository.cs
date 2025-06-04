@@ -7,11 +7,11 @@ namespace ProjectManager_01.Infrastructure.Repositories;
 
 internal class TicketRelationRepository : ITicketRelationRepository
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnection _dbConnection;
 
     public TicketRelationRepository(IDbConnection dbConnection)
     {
-        this.dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
     // ============================= QUERIES =============================
@@ -28,7 +28,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
         var relationDict = new Dictionary<Guid, TicketRelation>();
 
-        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+        var result = await _dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
             sql,
             (relation, source, sourceProject, target, targetProject) =>
             {
@@ -65,7 +65,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
         TicketRelation relation = null;
 
-        await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+        await _dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
             sql,
             (rel, source, sourceProject, target, targetProject) =>
             {
@@ -99,7 +99,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
         var relationDict = new Dictionary<Guid, TicketRelation>();
 
-        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+        var result = await _dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
             sql,
             (relation, source, sourceProject, target, targetProject) =>
             {
@@ -137,7 +137,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
 
         var relationDict = new Dictionary<Guid, TicketRelation>();
 
-        var result = await dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
+        var result = await _dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
             sql,
             (relation, source, sourceProject, target, targetProject) =>
             {
@@ -166,7 +166,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
     {
         var sql = @"DELETE FROM TicketRelations 
                     WHERE SourceId = @TicketId OR TargetId = @TicketId";
-        var result = await dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
+        var result = await _dbConnection.ExecuteAsync(sql, new { TicketId = ticketId }, transaction);
 
         return result > 0;
     }
@@ -176,7 +176,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
         var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
 					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
         entity.Id = Guid.NewGuid();
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         if (result > 0)
             return entity.Id;
@@ -191,7 +191,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
 						TargetId = @TargetId,
 						RelationType = @RelationType
 					WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, entity);
+        var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
     }
@@ -200,7 +200,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
     {
         var sql = @"DELETE FROM TicketRelations 
                     WHERE Id = @Id";
-        var result = await dbConnection.ExecuteAsync(sql, new { Id = id });
+        var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
 
         return result > 0;
     }

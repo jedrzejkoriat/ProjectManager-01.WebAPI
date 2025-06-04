@@ -10,11 +10,11 @@ namespace ProjectManager_01.Controllers;
 [ApiController]
 public class TagsController : ControllerBase
 {
-    private readonly ITagService tagService;
+    private readonly ITagService _tagService;
 
     public TagsController(ITagService tagService)
     {
-        this.tagService = tagService;
+        _tagService = tagService;
     }
 
     // GET: api/tags
@@ -27,7 +27,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            return Ok(await tagService.GetAllTagsAsync());
+            return Ok(await _tagService.GetAllTagsAsync());
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            return Ok(await tagService.GetTagByIdAsync(id));
+            return Ok(await _tagService.GetTagByIdAsync(id));
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            return Ok(await tagService.GetTagsByProjectIdAsync(projectId));
+            return Ok(await _tagService.GetTagsByProjectIdAsync(projectId));
         }
         catch (Exception ex)
         {
@@ -84,7 +84,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            await tagService.CreateTagAsync(tag);
+            await _tagService.CreateTagAsync(tag);
             return Ok();
         }
         catch (Exception ex)
@@ -104,7 +104,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            await tagService.UpdateTagAsync(updatedTag);
+            await _tagService.UpdateTagAsync(updatedTag);
             return Ok();
         }
         catch (Exception ex)
@@ -124,7 +124,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            await tagService.DeleteTagAsync(id);
+            await _tagService.DeleteTagAsync(id);
             return Ok();
         }
         catch (Exception ex)
