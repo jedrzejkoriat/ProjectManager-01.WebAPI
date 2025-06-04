@@ -13,8 +13,9 @@ internal class RoleRepository : IRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
-    public async Task<List<Role>> GetAllAsync()
+    public async Task<IEnumerable<Role>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Roles";
         var result = await dbConnection.QueryAsync<Role>(sql);

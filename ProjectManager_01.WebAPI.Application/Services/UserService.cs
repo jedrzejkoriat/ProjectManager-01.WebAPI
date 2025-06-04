@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.UserRoles;
@@ -20,8 +19,9 @@ public class UserService : IUserService
     private readonly ICommentService commentService;
     private readonly ITicketService ticketService;
 
-    public UserService(IUserRepository userRepository, 
-        IMapper mapper, 
+    public UserService(
+        IUserRepository userRepository,
+        IMapper mapper,
         IUserRoleService userRoleService,
         IProjectUserRoleService projectUserRoleService,
         IDbConnection dbConnection,
@@ -43,7 +43,7 @@ public class UserService : IUserService
 
         try
         {
-            User user = mapper.Map<User>(userCreateDto);
+            var user = mapper.Map<User>(userCreateDto);
             user.PasswordHash = BcryptPasswordHasher.HashPassword(userCreateDto.Password);
             var userId = await userRepository.CreateAsync(user, transaction);
 
@@ -61,7 +61,7 @@ public class UserService : IUserService
 
     public async Task UpdateUserAsync(UserUpdateDto userUpdateDto)
     {
-        User user = mapper.Map<User>(userUpdateDto);
+        var user = mapper.Map<User>(userUpdateDto);
         await userRepository.UpdateAsync(user);
     }
 
@@ -89,16 +89,16 @@ public class UserService : IUserService
 
     public async Task<UserDto> GetUserByIdAsync(Guid userId)
     {
-        User user = await userRepository.GetByIdAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
 
         return mapper.Map<UserDto>(user);
     }
 
-    public async Task<List<UserDto>> GetAllUsersAsync()
+    public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
     {
-        List<User> users = await userRepository.GetAllAsync();
+        var users = await userRepository.GetAllAsync();
 
-        return mapper.Map<List<UserDto>>(users);
+        return mapper.Map<IEnumerable<UserDto>>(users);
     }
 
     public async Task SoftDeleteUserAsync(Guid userId)

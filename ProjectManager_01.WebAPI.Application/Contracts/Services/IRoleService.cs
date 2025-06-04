@@ -8,5 +8,5 @@ public interface IRoleService
     Task UpdateRoleAsync(RoleUpdateDto roleUpdateDto);
     Task DeleteRoleAsync(Guid roleId);
     Task<RoleDto> GetRoleByIdAsync(Guid roleId);
-    Task<List<RoleDto>> GetAllRolesAsync();
+    Task<IEnumerable<RoleDto>> GetAllRolesAsync();
 }

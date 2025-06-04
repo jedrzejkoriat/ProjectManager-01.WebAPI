@@ -9,7 +9,7 @@ public interface ITicketRelationService
     Task UpdateTicketRelationAsync(TicketRelationUpdateDto ticketRelationUpdateDto);
     Task DeleteTicketRelationAsync(Guid ticketRelationId);
     Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId);
-    Task<List<TicketRelationDto>> GetAllTicketRelationsAsync();
+    Task<IEnumerable<TicketRelationDto>> GetAllTicketRelationsAsync();
     Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbTransaction transaction);
     Task<IEnumerable<TicketRelationDto>> GetTicketRelationsBySourceIdAsync(Guid ticketId);
     Task<IEnumerable<TicketRelationDto>> GetTicketRelationsByTargetIdAsync(Guid ticketId);

@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ProjectManager_01.Application.DTOs.Projects;
 
-namespace ProjectManager_01.Application.DTOs.Projects;
-
-public sealed record ProjectDto (Guid Id, string Name, string Key, bool IsDeleted, DateTimeOffset CreatedAt);
+public sealed record ProjectDto(Guid Id, string Name, string Key, bool IsDeleted, DateTimeOffset CreatedAt);

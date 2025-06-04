@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
-using ProjectManager_01.Domain.Enums;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
@@ -16,7 +15,7 @@ internal class TicketRepository : ITicketRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<Ticket>> GetAllAsync()
+    public async Task<IEnumerable<Ticket>> GetAllAsync()
     {
         var sql = @"SELECT t.*, p.*
                     FROM Tickets t
@@ -35,7 +34,7 @@ internal class TicketRepository : ITicketRepository
         return tickets.ToList();
     }
 
-    public async Task<List<Ticket>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<Ticket>> GetByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT t.*, p.*
                     FROM Tickets t
@@ -122,7 +121,7 @@ internal class TicketRepository : ITicketRepository
         return ticket;
     }
 
-    public async Task<List<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction)
+    public async Task<IEnumerable<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction)
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE ReporterId = @ReporterId";
@@ -131,7 +130,7 @@ internal class TicketRepository : ITicketRepository
         return result.ToList();
     }
 
-    public async Task<List<Ticket>> GetByPriorityIdAsync(Guid priorityId)
+    public async Task<IEnumerable<Ticket>> GetByPriorityIdAsync(Guid priorityId)
     {
         var sql = @"SELECT * FROM Tickets 
                     WHERE PriorityId = @PriorityId";

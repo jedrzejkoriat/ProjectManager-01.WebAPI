@@ -12,7 +12,9 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
     private readonly IProjectRolePermissionRepository projectRolePermissionRepository;
     private readonly IMapper mapper;
 
-    public ProjectRolePermissionService(IProjectRolePermissionRepository projectRolePermissionRepository, IMapper mapper)
+    public ProjectRolePermissionService(
+        IProjectRolePermissionRepository projectRolePermissionRepository,
+        IMapper mapper)
     {
         this.projectRolePermissionRepository = projectRolePermissionRepository;
         this.mapper = mapper;
@@ -20,13 +22,13 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
 
     public async Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto)
     {
-        ProjectRolePermission projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
+        var projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
         await projectRolePermissionRepository.CreateAsync(projectRolePermission);
     }
 
     public async Task CreateProjectRolePermissionAsync(ProjectRolePermissionCreateDto projectRolePermissionCreateDto, IDbTransaction transaction)
     {
-        ProjectRolePermission projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
+        var projectRolePermission = mapper.Map<ProjectRolePermission>(projectRolePermissionCreateDto);
         await projectRolePermissionRepository.CreateAsync(projectRolePermission, transaction);
     }
 
@@ -47,15 +49,15 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
 
     public async Task<ProjectRolePermissionDto> GetProjectRolePermissionByIdAsync(Guid projectRoleId, Guid permissionId)
     {
-        ProjectRolePermission projectRolePermission = await projectRolePermissionRepository.GetByIdAsync(projectRoleId, permissionId);
+        var projectRolePermission = await projectRolePermissionRepository.GetByIdAsync(projectRoleId, permissionId);
 
         return mapper.Map<ProjectRolePermissionDto>(projectRolePermission);
     }
 
-    public async Task<List<ProjectRolePermissionDto>> GetProjectRolePermissionsAsync()
+    public async Task<IEnumerable<ProjectRolePermissionDto>> GetProjectRolePermissionsAsync()
     {
-        List<ProjectRolePermission> projectRolePermissions = await projectRolePermissionRepository.GetAllAsync();
+        var projectRolePermissions = await projectRolePermissionRepository.GetAllAsync();
 
-        return mapper.Map<List<ProjectRolePermissionDto>>(projectRolePermissions);
+        return mapper.Map<IEnumerable<ProjectRolePermissionDto>>(projectRolePermissions);
     }
 }

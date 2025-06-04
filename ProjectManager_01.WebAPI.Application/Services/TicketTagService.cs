@@ -12,7 +12,9 @@ public class TicketTagService : ITicketTagService
     private readonly ITicketTagRepository ticketTagRepository;
     private readonly IMapper mapper;
 
-    public TicketTagService(ITicketTagRepository ticketTagRepository, IMapper mapper)
+    public TicketTagService(
+        ITicketTagRepository ticketTagRepository,
+        IMapper mapper)
     {
         this.ticketTagRepository = ticketTagRepository;
         this.mapper = mapper;
@@ -20,13 +22,13 @@ public class TicketTagService : ITicketTagService
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, IDbTransaction dbTransaction)
     {
-        TicketTag ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
+        var ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
         await ticketTagRepository.CreateAsync(ticketTag, dbTransaction);
     }
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto)
     {
-        TicketTag ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
+        var ticketTag = mapper.Map<TicketTag>(ticketTagCreateDto);
         await ticketTagRepository.CreateAsync(ticketTag);
     }
 
@@ -37,15 +39,15 @@ public class TicketTagService : ITicketTagService
 
     public async Task<TicketTagDto> GetTicketTagByIdAsync(Guid ticketId, Guid tagId)
     {
-        TicketTag ticketTag = await ticketTagRepository.GetByIdAsync(ticketId, tagId);
+        var ticketTag = await ticketTagRepository.GetByIdAsync(ticketId, tagId);
 
         return mapper.Map<TicketTagDto>(ticketTag);
     }
 
-    public async Task<List<TicketTagDto>> GetAllTicketTagsAsync()
+    public async Task<IEnumerable<TicketTagDto>> GetAllTicketTagsAsync()
     {
-        List<TicketTag> ticketTags = await ticketTagRepository.GetAllAsync();
+        var ticketTags = await ticketTagRepository.GetAllAsync();
 
-        return mapper.Map<List<TicketTagDto>>(ticketTags);
+        return mapper.Map<IEnumerable<TicketTagDto>>(ticketTags);
     }
 }

@@ -17,9 +17,9 @@ public class ProjectRoleService : IProjectRoleService
     private readonly IProjectRolePermissionService projectRolePermissionService;
 
     public ProjectRoleService(
-        IProjectRoleRepository projectRoleRepository, 
-        IMapper mapper, 
-        IProjectUserRoleService projectUserRoleService, 
+        IProjectRoleRepository projectRoleRepository,
+        IMapper mapper,
+        IProjectUserRoleService projectUserRoleService,
         IDbConnection dbConnection,
         IProjectRolePermissionService projectRolePermissionService)
     {
@@ -36,7 +36,7 @@ public class ProjectRoleService : IProjectRoleService
 
         try
         {
-            ProjectRole projectRole = mapper.Map<ProjectRole>(projectRoleCreateDto);
+            var projectRole = mapper.Map<ProjectRole>(projectRoleCreateDto);
             var projectRoleId = await projectRoleRepository.CreateAsync(projectRole, transaction);
 
             foreach (var permissionId in projectRoleCreateDto.PermissionIds)
@@ -56,7 +56,7 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task UpdateProjectRoleAsync(ProjectRoleUpdateDto projectRoleUpdateDto)
     {
-        ProjectRole projectRole = mapper.Map<ProjectRole>(projectRoleUpdateDto);
+        var projectRole = mapper.Map<ProjectRole>(projectRoleUpdateDto);
         await projectRoleRepository.UpdateAsync(projectRole);
     }
 
@@ -81,16 +81,16 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task<ProjectRoleDto> GetProjectRoleByIdAsync(Guid projectRoleId)
     {
-        ProjectRole projectRole = await projectRoleRepository.GetByIdAsync(projectRoleId);
+        var projectRole = await projectRoleRepository.GetByIdAsync(projectRoleId);
 
         return mapper.Map<ProjectRoleDto>(projectRole);
     }
 
-    public async Task<List<ProjectRoleDto>> GetAllProjectRolesAsync()
+    public async Task<IEnumerable<ProjectRoleDto>> GetAllProjectRolesAsync()
     {
-        List<ProjectRole> projectRoles = await projectRoleRepository.GetAllAsync();
+        var projectRoles = await projectRoleRepository.GetAllAsync();
 
-        return mapper.Map<List<ProjectRoleDto>>(projectRoles);
+        return mapper.Map<IEnumerable<ProjectRoleDto>>(projectRoles);
     }
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)

@@ -8,5 +8,5 @@ public interface IPriorityService
     Task UpdatePriorityAsync(PriorityUpdateDto priorityUpdateDto);
     Task DeletePriorityAsync(Guid priorityId);
     Task<PriorityDto> GetPriorityByIdAsync(Guid priorityId);
-    Task<List<PriorityDto>> GetAllPrioritiesAsync();
+    Task<IEnumerable<PriorityDto>> GetAllPrioritiesAsync();
 }

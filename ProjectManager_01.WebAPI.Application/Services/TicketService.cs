@@ -42,7 +42,7 @@ public class TicketService : ITicketService
 
         try
         {
-            Ticket ticket = mapper.Map<Ticket>(ticketCreateDto);
+            var ticket = mapper.Map<Ticket>(ticketCreateDto);
             var ticketId = await ticketRepository.CreateAsync(ticket, transaction);
 
             foreach (var tagId in ticketCreateDto.TagIds)
@@ -62,7 +62,7 @@ public class TicketService : ITicketService
 
     public async Task UpdateTicketAsync(TicketUpdateDto ticketUpdateDto)
     {
-        Ticket ticket = mapper.Map<Ticket>(ticketUpdateDto);
+        var ticket = mapper.Map<Ticket>(ticketUpdateDto);
         await ticketRepository.UpdateAsync(ticket);
     }
 
@@ -138,11 +138,11 @@ public class TicketService : ITicketService
         return ticketDto;
     }
 
-    public async Task<List<TicketDto>> GetAllTicketsAsync()
+    public async Task<IEnumerable<TicketDto>> GetAllTicketsAsync()
     {
-        List<Ticket> tickets = await ticketRepository.GetAllAsync();
+        var tickets = await ticketRepository.GetAllAsync();
 
-        return mapper.Map<List<TicketDto>>(tickets);
+        return mapper.Map<IEnumerable<TicketDto>>(tickets);
     }
 
     public async Task ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction)

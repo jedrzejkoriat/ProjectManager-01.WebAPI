@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Permissions;
@@ -15,8 +14,9 @@ public class PermissionService : IPermissionService
     private readonly IDbConnection dbConnection;
     private readonly IProjectRolePermissionService projectRolePermissionService;
 
-    public PermissionService(IPermissionRepository permissionRepository, 
-        IMapper mapper, 
+    public PermissionService(
+        IPermissionRepository permissionRepository,
+        IMapper mapper,
         IDbConnection dbConnection,
         IProjectRolePermissionService projectRolePermissionService)
     {
@@ -28,7 +28,7 @@ public class PermissionService : IPermissionService
 
     public async Task CreatePermissionAsync(PermissionCreateDto permissionCreateDto)
     {
-        Permission permission = mapper.Map<Permission>(permissionCreateDto);
+        var permission = mapper.Map<Permission>(permissionCreateDto);
         await permissionRepository.CreateAsync(permission);
     }
 
@@ -50,23 +50,23 @@ public class PermissionService : IPermissionService
         }
     }
 
-    public async Task<List<PermissionDto>> GetAllPermissionsAsync()
+    public async Task<IEnumerable<PermissionDto>> GetAllPermissionsAsync()
     {
-        List<Permission> permissions = await permissionRepository.GetAllAsync();
+        var permissions = await permissionRepository.GetAllAsync();
 
-        return mapper.Map<List<PermissionDto>>(permissions);
+        return mapper.Map<IEnumerable<PermissionDto>>(permissions);
     }
 
     public async Task<PermissionDto> GetPermissionByIdAsync(Guid permissionId)
     {
-        Permission permission = await permissionRepository.GetByIdAsync(permissionId);
+        var permission = await permissionRepository.GetByIdAsync(permissionId);
 
         return mapper.Map<PermissionDto>(permission);
     }
 
     public async Task UpdatePermissionAsync(PermissionUpdateDto permissionUpdateDto)
     {
-        Permission permission = mapper.Map<Permission>(permissionUpdateDto);
+        var permission = mapper.Map<Permission>(permissionUpdateDto);
         await permissionRepository.UpdateAsync(permission);
     }
 }

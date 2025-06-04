@@ -8,5 +8,5 @@ public interface IPermissionService
     Task UpdatePermissionAsync(PermissionUpdateDto permissionUpdateDto);
     Task DeletePermissionAsync(Guid permissionId);
     Task<PermissionDto> GetPermissionByIdAsync(Guid permissionId);
-    Task<List<PermissionDto>> GetAllPermissionsAsync();
+    Task<IEnumerable<PermissionDto>> GetAllPermissionsAsync();
 }

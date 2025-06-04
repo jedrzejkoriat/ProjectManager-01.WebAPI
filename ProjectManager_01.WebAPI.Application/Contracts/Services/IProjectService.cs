@@ -8,6 +8,6 @@ public interface IProjectService
     Task UpdateProjectAsync(ProjectUpdateDto projectUpdateDto);
     Task DeleteProjectAsync(Guid projectId);
     Task<ProjectDto> GetProjectByIdAsync(Guid projectId);
-    Task<List<ProjectDto>> GetAllProjectsAsync();
+    Task<IEnumerable<ProjectDto>> GetAllProjectsAsync();
     Task SoftDeleteProjectAsync(Guid projectId);
 }

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Comments;
@@ -17,7 +16,7 @@ public class CommentsController : ControllerBase
     {
         this.commentService = commentService;
     }
-    
+
     // GET: api/comments
     /// <summary>
     /// Get all comments

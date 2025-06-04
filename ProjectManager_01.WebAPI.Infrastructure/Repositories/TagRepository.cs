@@ -13,8 +13,9 @@ internal class TagRepository : ITagRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
-    public async Task<List<Tag>> GetAllAsync()
+    public async Task<IEnumerable<Tag>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Tags";
         var result = await dbConnection.QueryAsync<Tag>(sql);
@@ -30,7 +31,7 @@ internal class TagRepository : ITagRepository
 
         return result;
     }
-    public async Task<List<Tag>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<Tag>> GetByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT * FROM Tags 
                     WHERE ProjectId = @ProjectId";

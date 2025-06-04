@@ -13,8 +13,9 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
-    public async Task<List<ProjectRole>> GetAllAsync()
+    public async Task<IEnumerable<ProjectRole>> GetAllAsync()
     {
         var sql = @"SELECT pr.*, p.*
                     FROM ProjectRoles pr

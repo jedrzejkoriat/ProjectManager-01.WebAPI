@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ProjectManager_01.Application.DTOs.Tickets;
 
 namespace ProjectManager_01.Hubs;
 

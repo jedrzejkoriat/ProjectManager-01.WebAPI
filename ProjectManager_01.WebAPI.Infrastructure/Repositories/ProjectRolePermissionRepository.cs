@@ -15,7 +15,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<ProjectRolePermission>> GetAllAsync()
+    public async Task<IEnumerable<ProjectRolePermission>> GetAllAsync()
     {
         var sql = @"SELECT * FROM ProjectRolePermissions";
         var result = await dbConnection.QueryAsync<ProjectRolePermission>(sql);

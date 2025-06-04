@@ -13,8 +13,9 @@ internal class TicketRelationRepository : ITicketRelationRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
-    public async Task<List<TicketRelation>> GetAllAsync()
+    public async Task<IEnumerable<TicketRelation>> GetAllAsync()
     {
         var sql = @"SELECT tr.*, 
                        s.*, sp.*, 

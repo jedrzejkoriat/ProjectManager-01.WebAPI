@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ProjectManager_01.Application.DTOs.Comments;
 using ProjectManager_01.Application.DTOs.Permissions;
 using ProjectManager_01.Application.DTOs.Priorities;

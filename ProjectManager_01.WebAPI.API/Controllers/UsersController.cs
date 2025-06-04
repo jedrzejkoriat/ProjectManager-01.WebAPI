@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.Application.Contracts.Services;
-using ProjectManager_01.Application.DTOs;
 using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.Controllers;

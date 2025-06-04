@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Azure.Core;
 using Dapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Domain.Models;
@@ -14,8 +13,9 @@ internal class UserRepository : IUserRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
-    public async Task<List<User>> GetAllAsync()
+    public async Task<IEnumerable<User>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Users";
         var result = await dbConnection.QueryAsync<User>(sql);

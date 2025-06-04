@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProjectManager_01.Application.Contracts.Repositories;
-using ProjectManager_01.Application.Contracts.Services;
-using ProjectManager_01.Application.Services;
 using ProjectManager_01.Infrastructure.Repositories;
 
 namespace ProjectManager_01.Infrastructure.Configuration;

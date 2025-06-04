@@ -9,5 +9,5 @@ public interface ITicketTagService
     Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, IDbTransaction dbTransaction);
     Task DeleteTicketTagAsync(Guid ticketId, Guid tagId);
     Task<TicketTagDto> GetTicketTagByIdAsync(Guid ticketId, Guid tagId);
-    Task<List<TicketTagDto>> GetAllTicketTagsAsync();
+    Task<IEnumerable<TicketTagDto>> GetAllTicketTagsAsync();
 }

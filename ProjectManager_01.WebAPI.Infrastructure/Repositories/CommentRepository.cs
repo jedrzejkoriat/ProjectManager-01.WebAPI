@@ -15,7 +15,7 @@ internal class CommentRepository : ICommentRepository
     }
 
     // ============================== QUERIES =============================
-    public async Task<List<Comment>> GetByTicketIdAsync(Guid ticketId)
+    public async Task<IEnumerable<Comment>> GetByTicketIdAsync(Guid ticketId)
     {
         var sql = @"SELECT c.*,
                     u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
@@ -27,7 +27,7 @@ internal class CommentRepository : ICommentRepository
             comment.User = user;
             return comment;
         },
-        new {TicketId = ticketId},
+        new { TicketId = ticketId },
         splitOn: "UserId");
 
         return comments.ToList();
@@ -51,7 +51,7 @@ internal class CommentRepository : ICommentRepository
         return result.FirstOrDefault();
     }
 
-    public async Task<List<Comment>> GetAllAsync()
+    public async Task<IEnumerable<Comment>> GetAllAsync()
     {
         var sql = @"SELECT c.*, 
                     u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt

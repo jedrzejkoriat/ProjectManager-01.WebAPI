@@ -12,7 +12,9 @@ public class ProjectUserRoleService : IProjectUserRoleService
     private readonly IProjectUserRoleRepository projectUserRoleRepository;
     private readonly IMapper mapper;
 
-    public ProjectUserRoleService(IProjectUserRoleRepository projectUserRoleRepository, IMapper mapper)
+    public ProjectUserRoleService(
+        IProjectUserRoleRepository projectUserRoleRepository,
+        IMapper mapper)
     {
         this.projectUserRoleRepository = projectUserRoleRepository;
         this.mapper = mapper;
@@ -20,13 +22,13 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
     public async Task CreateProjectUserRoleAsync(ProjectUserRoleCreateDto projectUserRoleCreateDto)
     {
-        ProjectUserRole projectUserRole = mapper.Map<ProjectUserRole>(projectUserRoleCreateDto);
+        var projectUserRole = mapper.Map<ProjectUserRole>(projectUserRoleCreateDto);
         await projectUserRoleRepository.CreateAsync(projectUserRole);
     }
 
     public async Task UpdateProjectUserRoleAsync(ProjectUserRoleUpdateDto projectUserRoleUpdateDto)
     {
-        ProjectUserRole projectUserRole = mapper.Map<ProjectUserRole>(projectUserRoleUpdateDto);
+        var projectUserRole = mapper.Map<ProjectUserRole>(projectUserRoleUpdateDto);
         await projectUserRoleRepository.UpdateAsync(projectUserRole);
     }
 
@@ -37,16 +39,16 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
     public async Task<ProjectUserRoleDto> GetProjectUserRoleByIdAsync(Guid projectUserRoleId)
     {
-        ProjectUserRole projectUserRole = await projectUserRoleRepository.GetByIdAsync(projectUserRoleId);
+        var projectUserRole = await projectUserRoleRepository.GetByIdAsync(projectUserRoleId);
 
         return mapper.Map<ProjectUserRoleDto>(projectUserRole);
     }
 
-    public async Task<List<ProjectUserRoleDto>> GetAllProjectUserRolesAsync()
+    public async Task<IEnumerable<ProjectUserRoleDto>> GetAllProjectUserRolesAsync()
     {
-        List<ProjectUserRole> projectUserRoles = await projectUserRoleRepository.GetAllAsync();
+        var projectUserRoles = await projectUserRoleRepository.GetAllAsync();
 
-        return mapper.Map<List<ProjectUserRoleDto>>(projectUserRoles);
+        return mapper.Map<IEnumerable<ProjectUserRoleDto>>(projectUserRoles);
     }
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)

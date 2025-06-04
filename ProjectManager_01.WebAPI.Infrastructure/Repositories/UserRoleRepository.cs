@@ -14,6 +14,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         this.dbConnection = dbConnection;
     }
+
     // ============================= QUERIES =============================
     public async Task<UserRole> GetByUserIdAsync(Guid userId)
     {
@@ -24,7 +25,7 @@ internal class UserRoleRepository : IUserRoleRepository
         return result;
     }
 
-    public async Task<List<UserRole>> GetAllAsync()
+    public async Task<IEnumerable<UserRole>> GetAllAsync()
     {
         var sql = @"SELECT * FROM UserRoles";
         var result = await dbConnection.QueryAsync<UserRole>(sql);

@@ -15,7 +15,7 @@ internal class TicketTagRepository : ITicketTagRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<TicketTag>> GetAllAsync()
+    public async Task<IEnumerable<TicketTag>> GetAllAsync()
     {
         var sql = @"SELECT * FROM TicketTags";
         var result = await dbConnection.QueryAsync<TicketTag>(sql);

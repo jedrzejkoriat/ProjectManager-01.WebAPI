@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Projects;
@@ -16,7 +15,8 @@ public class ProjectService : IProjectService
     private readonly IDbConnection dbConnection;
     private readonly IProjectRoleService projectRoleService;
 
-    public ProjectService(IProjectRepository projectRepository,
+    public ProjectService(
+        IProjectRepository projectRepository,
         IMapper mapper,
         ITicketService ticketService,
         IDbConnection dbConnection,
@@ -31,13 +31,13 @@ public class ProjectService : IProjectService
 
     public async Task CreateProjectAsync(ProjectCreateDto projectCreateDto)
     {
-        Project project = mapper.Map<Project>(projectCreateDto);
+        var project = mapper.Map<Project>(projectCreateDto);
         await projectRepository.CreateAsync(project);
     }
 
     public async Task UpdateProjectAsync(ProjectUpdateDto projectUpdateDto)
     {
-        Project project = mapper.Map<Project>(projectUpdateDto);
+        var project = mapper.Map<Project>(projectUpdateDto);
         await projectRepository.UpdateAsync(project);
     }
 
@@ -62,16 +62,16 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectDto> GetProjectByIdAsync(Guid projectId)
     {
-        Project project = await projectRepository.GetByIdAsync(projectId);
+        var project = await projectRepository.GetByIdAsync(projectId);
 
         return mapper.Map<ProjectDto>(project);
     }
 
-    public async Task<List<ProjectDto>> GetAllProjectsAsync()
+    public async Task<IEnumerable<ProjectDto>> GetAllProjectsAsync()
     {
-        List<Project> projects = await projectRepository.GetAllAsync();
+        var projects = await projectRepository.GetAllAsync();
 
-        return mapper.Map<List<ProjectDto>>(projects);
+        return mapper.Map<IEnumerable<ProjectDto>>(projects);
     }
 
     public async Task SoftDeleteProjectAsync(Guid projectId)

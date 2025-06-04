@@ -8,7 +8,7 @@ public interface ITagService
     Task UpdateTagAsync(TagUpdateDto tagUpdateDto);
     Task DeleteTagAsync(Guid tagId);
     Task<TagDto> GetTagByIdAsync(Guid tagId);
-    Task<List<TagDto>> GetAllTagsAsync();
+    Task<IEnumerable<TagDto>> GetAllTagsAsync();
     Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId);
     Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId);
 }

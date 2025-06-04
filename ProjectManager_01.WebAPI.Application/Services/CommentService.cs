@@ -12,7 +12,9 @@ public class CommentService : ICommentService
     private readonly ICommentRepository commentRepository;
     private readonly IMapper mapper;
 
-    public CommentService(ICommentRepository commentRepository, IMapper mapper)
+    public CommentService(
+        ICommentRepository commentRepository,
+        IMapper mapper)
     {
         this.commentRepository = commentRepository;
         this.mapper = mapper;
@@ -31,11 +33,11 @@ public class CommentService : ICommentService
         return mapper.Map<CommentDto>(comment);
     }
 
-    public async Task<List<CommentDto>> GetAllCommentsAsync()
+    public async Task<IEnumerable<CommentDto>> GetAllCommentsAsync()
     {
         var comments = await commentRepository.GetAllAsync();
 
-        return mapper.Map<List<CommentDto>>(comments);
+        return mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto)
@@ -62,6 +64,6 @@ public class CommentService : ICommentService
     public async Task<IEnumerable<CommentDto>> GetByTicketIdAsync(Guid ticketId)
     {
         var comments = await commentRepository.GetByTicketIdAsync(ticketId);
-        return mapper.Map<List<CommentDto>>(comments);
+        return mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 }

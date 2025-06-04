@@ -15,7 +15,7 @@ internal class ProjectRepository : IProjectRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<Project>> GetAllAsync()
+    public async Task<IEnumerable<Project>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Projects";
         var result = await dbConnection.QueryAsync<Project>(sql);

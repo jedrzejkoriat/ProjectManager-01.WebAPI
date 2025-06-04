@@ -1,10 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManager_01.Domain.Models;
+﻿namespace ProjectManager_01.Application.DTOs.TicketTags;
 
-namespace ProjectManager_01.Application.DTOs.TicketTags;
-
-public sealed record TicketTagDto (Guid TagId, Guid TicketId);
+public sealed record TicketTagDto(Guid TagId, Guid TicketId);

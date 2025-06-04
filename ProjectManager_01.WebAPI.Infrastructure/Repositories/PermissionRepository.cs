@@ -15,7 +15,7 @@ internal class PermissionRepository : IPermissionRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<Permission>> GetAllAsync()
+    public async Task<IEnumerable<Permission>> GetAllAsync()
     {
         var sql = "SELECT * FROM Permissions";
         var result = await dbConnection.QueryAsync<Permission>(sql);

@@ -5,7 +5,7 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface ITicketTagRepository
 {
-    Task<List<TicketTag>> GetAllAsync();
+    Task<IEnumerable<TicketTag>> GetAllAsync();
     Task<TicketTag> GetByIdAsync(Guid ticketId, Guid tagId);
     Task<bool> DeleteAsync(Guid ticketId, Guid tagId);
     Task<bool> CreateAsync(TicketTag ticketTag);

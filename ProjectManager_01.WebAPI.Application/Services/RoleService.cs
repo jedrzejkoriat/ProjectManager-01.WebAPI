@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Roles;
@@ -15,7 +14,11 @@ public class RoleService : IRoleService
     private readonly IDbConnection dbConnection;
     private readonly IUserRoleService userRoleService;
 
-    public RoleService(IRoleRepository roleRepository, IMapper mapper, IDbConnection dbConnection, IUserRoleService userRoleService)
+    public RoleService(
+        IRoleRepository roleRepository,
+        IMapper mapper,
+        IDbConnection dbConnection,
+        IUserRoleService userRoleService)
     {
         this.roleRepository = roleRepository;
         this.mapper = mapper;
@@ -25,13 +28,13 @@ public class RoleService : IRoleService
 
     public async Task CreateRoleAsync(RoleCreateDto roleCreateDto)
     {
-        Role role = mapper.Map<Role>(roleCreateDto);
+        var role = mapper.Map<Role>(roleCreateDto);
         await roleRepository.CreateAsync(role);
     }
 
     public async Task UpdateRoleAsync(RoleUpdateDto roleUpdateDto)
     {
-        Role role = mapper.Map<Role>(roleUpdateDto);
+        var role = mapper.Map<Role>(roleUpdateDto);
         await roleRepository.UpdateAsync(role);
     }
 
@@ -40,7 +43,7 @@ public class RoleService : IRoleService
         using var transaction = dbConnection.BeginTransaction();
 
         try
-        { 
+        {
             await roleRepository.DeleteAsync(roleId, transaction);
             await userRoleService.DeleteByRoleIdAsync(roleId, transaction);
 
@@ -49,21 +52,21 @@ public class RoleService : IRoleService
         catch
         {
             transaction.Rollback();
-            throw new Exception ("Error while performing role deletion transaction.");
+            throw new Exception("Error while performing role deletion transaction.");
         }
     }
 
     public async Task<RoleDto> GetRoleByIdAsync(Guid roleId)
     {
-        Role role = await roleRepository.GetByIdAsync(roleId);
+        var role = await roleRepository.GetByIdAsync(roleId);
 
         return mapper.Map<RoleDto>(role);
     }
 
-    public async Task<List<RoleDto>> GetAllRolesAsync()
+    public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
     {
-        List<Role> roles = await roleRepository.GetAllAsync();
+        var roles = await roleRepository.GetAllAsync();
 
-        return mapper.Map<List<RoleDto>>(roles);
+        return mapper.Map<IEnumerable<RoleDto>>(roles);
     }
 }

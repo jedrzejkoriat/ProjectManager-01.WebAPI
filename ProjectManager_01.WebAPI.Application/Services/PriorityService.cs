@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using AutoMapper;
-using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Priorities;
@@ -16,7 +15,7 @@ public class PriorityService : IPriorityService
     private readonly ITicketService ticketService;
 
     public PriorityService(
-        IPriorityRepository priorityRepository, 
+        IPriorityRepository priorityRepository,
         IMapper mapper,
         IDbConnection dbConnection,
         ITicketService ticketService)
@@ -29,7 +28,7 @@ public class PriorityService : IPriorityService
 
     public async Task CreatePriorityAsync(PriorityCreateDto priorityCreateDto)
     {
-        Priority priority = mapper.Map<Priority>(priorityCreateDto);
+        var priority = mapper.Map<Priority>(priorityCreateDto);
         await priorityRepository.CreateAsync(priority);
     }
 
@@ -52,23 +51,23 @@ public class PriorityService : IPriorityService
 
     }
 
-    public async Task<List<PriorityDto>> GetAllPrioritiesAsync()
+    public async Task<IEnumerable<PriorityDto>> GetAllPrioritiesAsync()
     {
-        List<Priority> priorities = await priorityRepository.GetAllAsync();
+        var priorities = await priorityRepository.GetAllAsync();
 
-        return mapper.Map<List<PriorityDto>>(priorities);
+        return mapper.Map<IEnumerable<PriorityDto>>(priorities);
     }
 
     public async Task<PriorityDto> GetPriorityByIdAsync(Guid priorityId)
     {
-        Priority priority = await priorityRepository.GetByIdAsync(priorityId);
+        var priority = await priorityRepository.GetByIdAsync(priorityId);
 
         return mapper.Map<PriorityDto>(priority);
     }
 
     public async Task UpdatePriorityAsync(PriorityUpdateDto priorityUpdateDto)
     {
-        Priority priority = mapper.Map<Priority>(priorityUpdateDto);
+        var priority = mapper.Map<Priority>(priorityUpdateDto);
         await priorityRepository.UpdateAsync(priority);
     }
 }

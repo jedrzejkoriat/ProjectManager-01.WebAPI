@@ -15,7 +15,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<ProjectUserRole>> GetAllAsync()
+    public async Task<IEnumerable<ProjectUserRole>> GetAllAsync()
     {
         var sql = @"SELECT * FROM ProjectUserRoles";
         var result = await dbConnection.QueryAsync<ProjectUserRole>(sql);

@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ProjectManager_01.Application.Contracts.Services;
-using ProjectManager_01.Application.DTOs;
 using ProjectManager_01.Application.DTOs.UserRoles;
 
 namespace ProjectManager_01.Controllers;
@@ -28,7 +26,7 @@ public class UserRolesController : ControllerBase
     public ActionResult<IEnumerable<UserRoleDto>> GetUserRoles()
     {
         try
-        { 
+        {
             return Ok(userRoleService.GetAllUserRolesAsync());
         }
         catch (Exception ex)

@@ -11,7 +11,9 @@ public class TagService : ITagService
     private readonly ITagRepository tagRepository;
     private readonly IMapper mapper;
 
-    public TagService(ITagRepository tagRepository, IMapper mapper)
+    public TagService(
+        ITagRepository tagRepository,
+        IMapper mapper)
     {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
@@ -19,13 +21,13 @@ public class TagService : ITagService
 
     public async Task CreateTagAsync(TagCreateDto tagCreateDto)
     {
-        Tag tag = mapper.Map<Tag>(tagCreateDto);
+        var tag = mapper.Map<Tag>(tagCreateDto);
         await tagRepository.CreateAsync(tag);
     }
 
     public async Task UpdateTagAsync(TagUpdateDto tagUpdateDto)
     {
-        Tag tag = mapper.Map<Tag>(tagUpdateDto);
+        var tag = mapper.Map<Tag>(tagUpdateDto);
         await tagRepository.UpdateAsync(tag);
     }
 
@@ -36,16 +38,16 @@ public class TagService : ITagService
 
     public async Task<TagDto> GetTagByIdAsync(Guid tagId)
     {
-        Tag tag = await tagRepository.GetByIdAsync(tagId);
+        var tag = await tagRepository.GetByIdAsync(tagId);
 
         return mapper.Map<TagDto>(tag);
     }
 
-    public async Task<List<TagDto>> GetAllTagsAsync()
+    public async Task<IEnumerable<TagDto>> GetAllTagsAsync()
     {
-        List<Tag> tags = await tagRepository.GetAllAsync();
+        var tags = await tagRepository.GetAllAsync();
 
-        return mapper.Map<List<TagDto>>(tags);
+        return mapper.Map<IEnumerable<TagDto>>(tags);
     }
 
     public async Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId)

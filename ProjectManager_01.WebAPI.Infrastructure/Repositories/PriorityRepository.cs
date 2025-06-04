@@ -15,7 +15,7 @@ internal class PriorityRepository : IPriorityRepository
     }
 
     // ============================= QUERIES =============================
-    public async Task<List<Priority>> GetAllAsync()
+    public async Task<IEnumerable<Priority>> GetAllAsync()
     {
         var sql = @"SELECT * FROM Priorities";
         var result = await dbConnection.QueryAsync<Priority>(sql);

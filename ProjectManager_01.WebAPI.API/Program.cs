@@ -1,10 +1,10 @@
 using System.Data;
+using FluentValidation;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
+using ProjectManager_01.Application.Configuration;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
-using ProjectManager_01.Application.Configuration;
-using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
