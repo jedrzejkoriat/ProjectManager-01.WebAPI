@@ -111,7 +111,7 @@ public class TicketsController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}/soft-delete")]
     public async Task<ActionResult> SoftDeleteTicket(Guid id)
     {
         await _ticketService.SoftDeleteTicketAsync(id);

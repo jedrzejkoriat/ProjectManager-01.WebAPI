@@ -97,7 +97,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}/soft-delete")]
     public async Task<ActionResult> SoftDeleteUser(Guid id)
     {
         await _userService.SoftDeleteUserAsync(id);

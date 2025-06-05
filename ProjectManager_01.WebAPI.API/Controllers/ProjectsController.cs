@@ -86,7 +86,7 @@ public class ProjectsController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}/soft-delete")]
     public async Task<ActionResult> SoftDeleteProject(Guid id)
     {
         await _projectService.SoftDeleteProjectAsync(id);
