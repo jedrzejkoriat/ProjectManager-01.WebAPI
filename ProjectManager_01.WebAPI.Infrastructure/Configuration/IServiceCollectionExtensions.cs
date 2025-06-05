@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ProjectManager_01.Application.Contracts.Authorization;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Infrastructure.Auth;
 using ProjectManager_01.Infrastructure.Repositories;
 
 namespace ProjectManager_01.Infrastructure.Configuration;
@@ -23,6 +25,12 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddJwtGenerator(this IServiceCollection services)
+    {
+        services.AddSingleton<IJwtGenerator, JwtGenerator>();
         return services;
     }
 }

@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using ProjectManager_01.Application.Authorization;
+
+namespace ProjectManager_01.Application.Authorization;
+
+public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermissionRequirement>
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public ProjectPermissionHandler(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ProjectPermissionRequirement requirement)
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+        var routeData = httpContext?.GetRouteData();
+        var projectId = routeData?.Values["projectId"]?.ToString();
+
+        if (string.IsNullOrWhiteSpace(projectId))
+        {
+            context.Fail();
+            return Task.CompletedTask;
+        }
+
+        var permissionName = requirement.PermissionName;
+
+        var claims = context.User.FindAll("project_permission");
+
+        bool hasPermission = claims.Any(c =>
+        {
+            var parts = c.Value.Split(':');
+            return parts.Length == 2 && parts[0] == projectId && parts[1] == requirement.PermissionName;
+        });
+
+        if (hasPermission)
+        {
+            context.Succeed(requirement);
+        }
+        else
+        {
+            context.Fail();
+        }
+
+        return Task.CompletedTask;
+    }
+}
