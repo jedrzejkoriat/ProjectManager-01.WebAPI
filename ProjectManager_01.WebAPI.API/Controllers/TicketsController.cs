@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.SignalR;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
+using ProjectManager_01.Hubs;
 
 namespace ProjectManager_01.Controllers;
 
@@ -11,10 +13,14 @@ namespace ProjectManager_01.Controllers;
 public class TicketsController : ControllerBase
 {
     private readonly ITicketService _ticketService;
+    private readonly IHubContext<TicketsHub> _hubContext;
 
-    public TicketsController(ITicketService ticketService)
+    public TicketsController(
+        ITicketService ticketService,
+        IHubContext<TicketsHub> hubContext)
     {
         _ticketService = ticketService;
+        _hubContext = hubContext;
     }
 
     // GET: api/tickets
@@ -88,7 +94,12 @@ public class TicketsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket)
     {
-        await _ticketService.UpdateTicketAsync(updatedTicket);
+        var ticket = await _ticketService.UpdateTicketAsync(updatedTicket);
+
+        await _hubContext.Clients
+            .Group($"ticket-{ticket.Id}")
+            .SendAsync("ReceiveTicket", ticket);
+
         return Ok();
     }
 

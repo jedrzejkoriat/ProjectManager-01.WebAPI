@@ -66,10 +66,12 @@ public class TicketService : ITicketService
         }
     }
 
-    public async Task UpdateTicketAsync(TicketUpdateDto ticketUpdateDto)
+    public async Task<TicketDto> UpdateTicketAsync(TicketUpdateDto ticketUpdateDto)
     {
         var ticket = _mapper.Map<Ticket>(ticketUpdateDto);
         await _ticketRepository.UpdateAsync(ticket);
+
+        return await GetTicketByIdAsync(ticket.Id);
     }
 
     public async Task DeleteTicketAsync(Guid ticketId)

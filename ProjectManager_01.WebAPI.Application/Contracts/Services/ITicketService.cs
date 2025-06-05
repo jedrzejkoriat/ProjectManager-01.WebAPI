@@ -7,7 +7,7 @@ public interface ITicketService
 {
     Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
     Task CreateTicketAsync(TicketCreateDto ticketCreateDto);
-    Task UpdateTicketAsync(TicketUpdateDto ticketUpdateDto);
+    Task<TicketDto> UpdateTicketAsync(TicketUpdateDto ticketUpdateDto);
     Task DeleteTicketAsync(Guid ticketId);
     Task<TicketDto> GetTicketByIdAsync(Guid ticketId);
     Task<IEnumerable<TicketDto>> GetAllTicketsAsync();
