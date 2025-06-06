@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Projects;
 
@@ -8,6 +10,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProjectsController : ControllerBase
 {
     private readonly IProjectService _projectService;
@@ -23,6 +26,7 @@ public class ProjectsController : ControllerBase
     /// </summary>
     /// <returns>All projects</returns>
     [HttpGet]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
         return Ok(await _projectService.GetAllProjectsAsync());
@@ -35,6 +39,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Project by its id</returns>
     [HttpGet("{id}")]
+    [Authorize(Policy = Permissions.ReadProject)]
     public async Task<ActionResult<ProjectDto>> GetProject(Guid id)
     {
         return Ok(await _projectService.GetProjectByIdAsync(id));
@@ -47,6 +52,7 @@ public class ProjectsController : ControllerBase
     /// <param name="project"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> CreateProject([FromBody] ProjectCreateDto project)
     {
         await _projectService.CreateProjectAsync(project);
@@ -60,6 +66,7 @@ public class ProjectsController : ControllerBase
     /// <param name="updatedProject"></param>
     /// <returns></returns>
     [HttpPut]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> UpdateProject([FromBody] ProjectUpdateDto updatedProject)
     {
         await _projectService.UpdateProjectAsync(updatedProject);
@@ -73,6 +80,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> DeleteProject(Guid id)
     {
         await _projectService.DeleteProjectAsync(id);
@@ -86,6 +94,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpPatch("{id}/soft-delete")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> SoftDeleteProject(Guid id)
     {
         await _projectService.SoftDeleteProjectAsync(id);

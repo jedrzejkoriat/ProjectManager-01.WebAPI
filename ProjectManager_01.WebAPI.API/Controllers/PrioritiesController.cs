@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Priorities;
 
@@ -8,6 +10,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PrioritiesController : ControllerBase
 {
     private readonly IPriorityService _priorityService;
@@ -47,6 +50,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="priority"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> CreatePriority([FromBody] PriorityCreateDto priority)
     {
         await _priorityService.CreatePriorityAsync(priority);
@@ -60,6 +64,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="updatedPriority"></param>
     /// <returns></returns>
     [HttpPut]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> UpdatePriority([FromBody] PriorityUpdateDto updatedPriority)
     {
         await _priorityService.UpdatePriorityAsync(updatedPriority);
@@ -73,6 +78,7 @@ public class PrioritiesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> DeletePriority(Guid id)
     {
         await _priorityService.DeletePriorityAsync(id);

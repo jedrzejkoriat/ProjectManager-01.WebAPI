@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Comments;
 
@@ -8,6 +10,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CommentsController : ControllerBase
 {
     private readonly ICommentService _commentService;
@@ -23,6 +26,7 @@ public class CommentsController : ControllerBase
     /// </summary>
     /// <returns>All comments</returns>
     [HttpGet]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments()
     {
         return Ok(await _commentService.GetAllCommentsAsync());
@@ -35,6 +39,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Comment by its id</returns>
     [HttpGet("{id}")]
+    [Authorize(Policy = Permissions.ReadComment)]
     public async Task<ActionResult<CommentDto>> GetComment(Guid id)
     {
         return Ok(await _commentService.GetCommentAsync(id));
@@ -44,9 +49,10 @@ public class CommentsController : ControllerBase
     /// <summary>
     /// Create a new comment
     /// </summary>
-    /// <param name="comment"></param>
+    /// <param name="commentCreateDto"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Policy = Permissions.WriteComment)]
     public async Task<ActionResult> CreateComment([FromBody] CommentCreateDto commentCreateDto)
     {
         await _commentService.CreateCommentAsync(commentCreateDto);
@@ -60,6 +66,7 @@ public class CommentsController : ControllerBase
     /// <param name="updatedComment"></param>
     /// <returns></returns>
     [HttpPut]
+    [Authorize(Policy = Permissions.WriteComment)]
     public ActionResult UpdateComment([FromBody] CommentUpdateDto updatedComment)
     {
         _commentService.UpdateCommentAsync(updatedComment);
@@ -73,6 +80,7 @@ public class CommentsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [Authorize(Policy = Permissions.WriteComment)]
     public async Task<ActionResult> DeleteComment(Guid id)
     {
         await _commentService.DeleteCommentAsync(id);

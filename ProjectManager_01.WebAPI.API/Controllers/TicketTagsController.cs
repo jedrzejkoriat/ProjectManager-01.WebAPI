@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.TicketTags;
 
@@ -8,6 +10,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TicketTagsController : ControllerBase
 {
     private readonly ITicketTagService _ticketTagService;
@@ -23,6 +26,7 @@ public class TicketTagsController : ControllerBase
     /// </summary>
     /// <returns>All ticket tags</returns>
     [HttpGet]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketTagDto>>> GetTicketTags()
     {
         return Ok(await _ticketTagService.GetAllTicketTagsAsync());
@@ -36,6 +40,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns>Ticket tag by its ticket id and tag id</returns>
     [HttpGet("{ticketId}/{tagId}")]
+    [Authorize(Policy = Permissions.ReadTicketTag)]
     public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId)
     {
         return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
@@ -48,6 +53,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="ticketTag"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Policy = Permissions.WriteTicketTag)]
     public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag)
     {
         await _ticketTagService.CreateTicketTagAsync(ticketTag);
@@ -62,6 +68,7 @@ public class TicketTagsController : ControllerBase
     /// <param name="tagId"></param>
     /// <returns></returns>
     [HttpDelete("{ticketId}/{tagId}")]
+    [Authorize(Policy = Permissions.WriteTicketTag)]
     public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId)
     {
         await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);

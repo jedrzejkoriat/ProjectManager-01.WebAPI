@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.UserRoles;
 
@@ -8,6 +10,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class UserRolesController : ControllerBase
 {
     private readonly IUserRoleService _userRoleService;

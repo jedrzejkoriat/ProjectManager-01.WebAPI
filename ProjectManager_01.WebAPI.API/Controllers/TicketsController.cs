@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.SignalR;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tickets;
 using ProjectManager_01.Hubs;
@@ -10,6 +12,7 @@ namespace ProjectManager_01.Controllers;
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TicketsController : ControllerBase
 {
     private readonly ITicketService _ticketService;
@@ -29,6 +32,7 @@ public class TicketsController : ControllerBase
     /// </summary>
     /// <returns>All tickets</returns>
     [HttpGet]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTickets()
     {
         return Ok(await _ticketService.GetAllTicketsAsync());
@@ -41,6 +45,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Ticket by its id</returns>
     [HttpGet("{id}")]
+    [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
     {
         return Ok(await _ticketService.GetTicketByIdAsync(id));
@@ -54,6 +59,7 @@ public class TicketsController : ControllerBase
     /// <param name="ticketNumber"></param>
     /// <returns>ticket with all details by its key and number</returns>
     [HttpGet("getByKeyAndNumber")]
+    [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber)
     {
         return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber));
@@ -66,6 +72,7 @@ public class TicketsController : ControllerBase
     /// <param name="projectId"></param>
     /// <returns></returns>
     [HttpGet("project/{projectId}")]
+    [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
     {
         var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
@@ -79,6 +86,7 @@ public class TicketsController : ControllerBase
     /// <param name="ticket"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Policy = Permissions.WriteTicket)]
     public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket)
     {
         await _ticketService.CreateTicketAsync(ticket);
@@ -92,6 +100,7 @@ public class TicketsController : ControllerBase
     /// <param name="updatedTicket"></param>
     /// <returns></returns>
     [HttpPut]
+    [Authorize(Policy = Permissions.WriteTicket)]
     public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket)
     {
         var ticket = await _ticketService.UpdateTicketAsync(updatedTicket);
@@ -110,6 +119,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> DeleteTicket(Guid id)
     {
         await _ticketService.DeleteTicketAsync(id);
@@ -123,6 +133,7 @@ public class TicketsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpPatch("{id}/soft-delete")]
+    [Authorize(Policy = Permissions.DeleteTicket)]
     public async Task<ActionResult> SoftDeleteTicket(Guid id)
     {
         await _ticketService.SoftDeleteTicketAsync(id);
