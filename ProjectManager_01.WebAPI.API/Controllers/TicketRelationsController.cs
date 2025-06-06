@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managing Ticket Relations - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TicketRelationsController : ControllerBase
@@ -35,57 +34,65 @@ public class TicketRelationsController : ControllerBase
         return Ok(await _ticketRelationService.GetAllTicketRelationsAsync());
     }
 
-    // GET api/ticketrelations/{Id}
+    // GET api/projects/{projectId}/ticketrelations/{Id}
     /// <summary>
     /// Get TicketRelation by Id - User with ReadTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="Id"></param>
+    /// <param name="projectId"></param>
     /// <returns>TicketRelation by Id</returns>
-    [HttpGet("{Id}")]
+    [HttpGet("api/projects/{projectId}/[controller]/{Id}")]
     [Authorize(Policy = Permissions.ReadTicketRelation)]
-    public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id)
+    public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id, Guid projectId)
     {
+        // TODO: validate projectId
         return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id));
     }
 
-    // POST api/ticketrelations
+    // POST api/projects/{projectId}/ticketrelations
     /// <summary>
     /// Create TicketRelation - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="ticketRelation"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteTicketRelation)]
-    public async Task<ActionResult> CreateTicketRelation([FromBody] TicketRelationCreateDto ticketRelation)
+    public async Task<ActionResult> CreateTicketRelation([FromBody] TicketRelationCreateDto ticketRelation, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketRelationService.CreateTicketRelationAsync(ticketRelation);
         return Ok();
     }
 
-    // PUT api/ticketrelations
+    // PUT api/projects/{projectId}/ticketrelations
     /// <summary>
     /// Update TicketRelation - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="updatedTicketRelation"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPut]
+    [HttpPut("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteTicketRelation)]
-    public async Task<ActionResult> UpdateTicketRelation([FromBody] TicketRelationUpdateDto updatedTicketRelation)
+    public async Task<ActionResult> UpdateTicketRelation([FromBody] TicketRelationUpdateDto updatedTicketRelation, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
         return Ok();
     }
 
-    // DELETE api/ticketrelations/{Id}
+    // DELETE api/projects/{projectId}/ticketrelations/{Id}
     /// <summary>
     /// Delete TicketRelation by Id - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="Id"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpDelete("{Id}")]
+    [HttpDelete("api/projects/{projectId}/[controller]/{Id}")]
     [Authorize(Policy = Permissions.WriteTicketRelation)]
-    public async Task<ActionResult> DeleteTicketRelation(Guid Id)
+    public async Task<ActionResult> DeleteTicketRelation(Guid Id, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketRelationService.DeleteTicketRelationAsync(Id);
         return Ok();
     }

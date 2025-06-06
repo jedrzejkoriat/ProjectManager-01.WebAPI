@@ -13,7 +13,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managing Tickets - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TicketsController : ControllerBase
@@ -34,78 +33,87 @@ public class TicketsController : ControllerBase
     /// Get all Tickets - Admin only
     /// </summary>
     /// <returns>All Tickets</returns>
-    [HttpGet]
+    [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTickets()
     {
         return Ok(await _ticketService.GetAllTicketsAsync());
     }
 
-    // GET: api/tickets/{id}
+    // GET: api/projects/{projectId}/tickets/{id}
     /// <summary>
     /// Get Ticket by Id - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="projectId"></param>
     /// <returns>Ticket by Id</returns>
-    [HttpGet("{id}")]
+    [HttpGet("api/projects/{projectId}/[controller]/{id}")]
     [Authorize(Policy = Permissions.ReadTicket)]
-    public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
+    public async Task<ActionResult<TicketDto>> GetTicket(Guid id, Guid projectId)
     {
+        // TODO: validate projectId
         return Ok(await _ticketService.GetTicketByIdAsync(id));
     }
 
-    // GET: api/tickets/getByKeyAndNumber?projectKey=ABC&ticketNumber=123
+    // GET: api/projects/{projectId}/tickets/getByKeyAndNumber?projectKey=ABC&ticketNumber=123
     /// <summary>
     /// Get Ticket by ProjectKey and TicketNumber - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="projectKey"></param>
     /// <param name="ticketNumber"></param>
+    /// <param name="projectId"></param>
     /// <returns>Ticket by ProjectKey and TicketNumber</returns>
-    [HttpGet("getByKeyAndNumber")]
+    [HttpGet("api/projects/{projectId}/[controller]/getByKeyAndNumber")]
     [Authorize(Policy = Permissions.ReadTicket)]
-    public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber)
+    public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber, Guid projectId)
     {
+        // TODO: validate projectId
         return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber));
     }
 
-    // GET: api/tickets/project/{projectId}
+    // GET: api/projects/{projectId}/tickets/project/{projectId}
     /// <summary>
     /// Get Tickets by ProjectId - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="projectId"></param>
     /// <returns>Tickets by ProjectId</returns>
-    [HttpGet("project/{projectId}")]
+    [HttpGet("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
     {
+        // TODO: validate projectId
         var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
         return Ok(tickets);
     }
 
-    // POST: api/tickets
+    // POST: api/projects/{projectId}/tickets
     /// <summary>
     /// Create Ticket - User with WriteTicket permission and matching Project access
     /// </summary>
     /// <param name="ticket"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteTicket)]
-    public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket)
+    public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketService.CreateTicketAsync(ticket);
         return Ok();
     }
 
-    // PUT: api/tickets
+    // PUT: api/projects/{projectId}/tickets
     /// <summary>
     /// Update Ticket - User with WriteTicket permission and matching Project access
     /// </summary>
     /// <param name="updatedTicket"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPut]
+    [HttpPut("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteTicket)]
-    public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket)
+    public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket, Guid projectId)
     {
+        // TODO: validate projectId
         var ticket = await _ticketService.UpdateTicketAsync(updatedTicket);
 
         await _hubContext.Clients
@@ -129,16 +137,18 @@ public class TicketsController : ControllerBase
         return Ok();
     }
 
-    // PATCH api/tickets/{id}/soft-delete
+    // PATCH api/projects/{projectId}/tickets/{id}/soft-delete
     /// <summary>
     /// Soft-delete Ticket by Id - User with DeleteTicket permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPatch("{id}/soft-delete")]
+    [HttpPatch("api/projects/{projectId}/[controller]/{id}/soft-delete")]
     [Authorize(Policy = Permissions.DeleteTicket)]
-    public async Task<ActionResult> SoftDeleteTicket(Guid id)
+    public async Task<ActionResult> SoftDeleteTicket(Guid id, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketService.SoftDeleteTicketAsync(id);
         return Ok();
     }

@@ -34,7 +34,7 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
         var hasPermission = claims.Any(c =>
         {
             var parts = c.Value.Split(':');
-            return parts.Length == 2 && parts[0] == projectId && parts[1] == requirement.PermissionName;
+            return parts.Length == 2 && parts[0] == projectId && parts[1].ToLower() == requirement.PermissionName;
         });
 
         if (hasPermission)

@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managin Tags - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TagsController : ControllerBase
@@ -28,77 +27,85 @@ public class TagsController : ControllerBase
     /// Get all Tags - Admin only
     /// </summary>
     /// <returns>All Tags</returns>
-    [HttpGet]
+    [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
         return Ok(await _tagService.GetAllTagsAsync());
     }
 
-    // GET: api/tags/{id}
+    // GET: api/projects/{projectId}/tags/{id}
     /// <summary>
     /// Get Tag by Id - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="projectId"></param>
     /// <returns>Tag by Id</returns>
-    [HttpGet("{id}")]
+    [HttpGet("api/projects/{projectId}/[controller]/{id}")]
     [Authorize(Policy = Permissions.ReadTag)]
-    public async Task<ActionResult<TagDto>> GetTag(Guid id)
+    public async Task<ActionResult<TagDto>> GetTag(Guid id, Guid projectId)
     {
+        // TODO: validate projectId
         return Ok(await _tagService.GetTagByIdAsync(id));
     }
 
-    // GET: api/tags/project/{projectId}
+    // GET: api/projects/{projectId}/tags
     /// <summary>
     /// Get Tags by ProjectId - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="projectId"></param>
     /// <returns>All project Tags</returns>
-    [HttpGet("project/{projectId}")]
+    [HttpGet("api/projects/{projectId}/[controller]/")]
     [Authorize(Policy = Permissions.ReadTag)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTagsByProjectId(Guid projectId)
     {
         return Ok(await _tagService.GetTagsByProjectIdAsync(projectId));
     }
 
-    // POST: api/tags
+    // POST: api/projects/{projectId}/tags
     /// <summary>
     /// Create Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="tag"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("api/projects/{projectId}/[controller]/")]
     [Authorize(Policy = Permissions.WriteTag)]
-    public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag)
+    public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag, Guid projectId)
     {
+        // TODO: validate projectId
         await _tagService.CreateTagAsync(tag);
         return Ok();
     }
 
-    // PUT: api/tags
+    // PUT: api/projects/{projectId}/tags
     /// <summary>
     /// Update Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="updatedTag"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpPut]
+    [HttpPut("api/projects/{projectId}/[controller]/")]
     [Authorize(Policy = Permissions.WriteTag)]
-    public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag)
+    public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag, Guid projectId)
     {
+        // TODO: validate projectId
         await _tagService.UpdateTagAsync(updatedTag);
         return Ok();
     }
 
-    // DELETE: api/tags/{id}
+    // DELETE: api/projects/{projectId}/tags/{id}
     /// <summary>
     /// Delete Tag by Id - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpDelete("{id}")]
+    [HttpDelete("api/projects/{projectId}/[controller]/{id}")]
     [Authorize(Policy = Permissions.WriteTag)]
-    public async Task<ActionResult> DeleteTag(Guid id)
+    public async Task<ActionResult> DeleteTag(Guid id, Guid projectId)
     {
+        // TODO: validate projectId
         await _tagService.DeleteTagAsync(id);
         return Ok();
     }

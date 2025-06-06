@@ -35,30 +35,29 @@ public class ProjectsController : ControllerBase
         return Ok(await _projectService.GetAllProjectsAsync());
     }
 
-    // GET api/projects
+    // GET api/projects/{projectId}
     /// <summary>
-    /// Get Project by Id - User with ReadProject permission and matching Project access
+    /// Get Project by Id - User with matching Project access
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="projectId"></param>
     /// <returns>Project by Id</returns>
-    [HttpGet("{id}")]
-    [Authorize(Policy = Permissions.ReadProject)]
-    public async Task<ActionResult<ProjectDto>> GetProject(Guid id)
+    [HttpGet("{projectId}")]
+    public async Task<ActionResult<ProjectDto>> GetProject(Guid projectId)
     {
-        return Ok(await _projectService.GetProjectByIdAsync(id));
+        // TODO Validate if user has projectrole with projectId
+        return Ok(await _projectService.GetProjectByIdAsync(projectId));
     }
 
-    // GET api/projects/users/{userId}
+    // GET api/projects/my
     /// <summary>
-    /// Get Projects by UserId - User with ReadProject permission and matching Project access
+    /// Get Projects by UserId (from token)
     /// </summary>
-    /// <param name="userId"></param>
     /// <returns>List of user ProjectDto</returns>
-    [HttpGet("users/{userId}")]
-    [Authorize(Policy = Permissions.ReadProject)]
-    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectsByUserId(Guid userId)
+    [HttpGet("my")]
+    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectsByUserId()
     {
-        var projects = await _projectService.GetProjectsByUserIdAsync(userId);
+        // TODO Delete UserId from here, use UserId from token
+        var projects = await _projectService.GetProjectsByUserIdAsync(Guid.NewGuid());
         return Ok(projects);
     }
 
@@ -90,7 +89,7 @@ public class ProjectsController : ControllerBase
         return Ok();
     }
 
-    // DELETE api/projects
+    // DELETE api/projects/{id}
     /// <summary>
     /// Delete Project by Id - Admin only (DELETE is denied on db side)
     /// </summary>
@@ -106,7 +105,7 @@ public class ProjectsController : ControllerBase
 
     // PATCH api/projects/{id}/soft-delete
     /// <summary>
-    /// Soft delete a project
+    /// Soft-delete Project by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

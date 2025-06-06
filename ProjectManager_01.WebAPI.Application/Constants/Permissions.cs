@@ -4,7 +4,6 @@ public static class Permissions
 {
     public const string ReadComment = "ReadComment";
     public const string WriteComment = "WriteComment";
-    public const string ReadProject = "ReadProject";
     public const string ReadTag = "ReadTag";
     public const string WriteTag = "WriteTag";
     public const string ReadTicketRelation = "ReadTicketRelation";

@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managing TicketTags - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TicketTagsController : ControllerBase
@@ -35,45 +34,51 @@ public class TicketTagsController : ControllerBase
         return Ok(await _ticketTagService.GetAllTicketTagsAsync());
     }
 
-    // GET: api/tickettags/{ticketId}/{tagId}
+    // GET: api/projects/{projectId}/tickettags/{ticketId}/{tagId}
     /// <summary>
     /// Get TicketTag by TicketId and TagId - User with ReadTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketId"></param>
     /// <param name="tagId"></param>
+    /// <param name="projectId"></param>
     /// <returns>TicketTag by TicketId and TagId</returns>
-    [HttpGet("{ticketId}/{tagId}")]
+    [HttpGet("api/projects/{projectId}/[controller]/{ticketId}/{tagId}")]
     [Authorize(Policy = Permissions.ReadTicketTag)]
-    public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId)
+    public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId, Guid projectId)
     {
+        // TODO: validate projectId
         return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
     }
 
-    // POST: api/tickettags
+    // POST: api/projects/{projectId}/tickettags
     /// <summary>
     /// Create TicketTag - User with WriteTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketTag"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteTicketTag)]
-    public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag)
+    public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketTagService.CreateTicketTagAsync(ticketTag);
         return Ok();
     }
 
-    // DELETE: api/tickettags/{ticketId}/{tagId}
+    // DELETE: api/projects/{projectId}/tickettags/{ticketId}/{tagId}
     /// <summary>
     /// Delete TicketTag by TicketId and TagId - User with WriteTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketId"></param>
     /// <param name="tagId"></param>
+    /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpDelete("{ticketId}/{tagId}")]
+    [HttpDelete("api/projects/{projectId}/[controller]/{ticketId}/{tagId}")]
     [Authorize(Policy = Permissions.WriteTicketTag)]
-    public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId)
+    public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId, Guid projectId)
     {
+        // TODO: validate projectId
         await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
         return Ok();
     }
