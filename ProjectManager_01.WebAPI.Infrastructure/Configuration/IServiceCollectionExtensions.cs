@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ProjectManager_01.Application.Contracts.Authorization;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Infrastructure.Auth;
@@ -31,6 +34,17 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddJwtGenerator(this IServiceCollection services)
     {
         services.AddSingleton<IJwtGenerator, JwtGenerator>();
+        return services;
+    }
+
+    public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration config)
+    {
+        var connectionString = config.GetConnectionString("DefaultConnection");
+        services.AddScoped<IDbConnection>(sp =>
+        {
+            return new SqlConnection(connectionString);
+        });
+
         return services;
     }
 }

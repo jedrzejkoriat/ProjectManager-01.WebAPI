@@ -1,4 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using ProjectManager_01.Application.Authorization;
 using ProjectManager_01.Application.Contracts.Authorization;
 using ProjectManager_01.Application.Contracts.Services;
@@ -28,15 +36,45 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = config["Jwt:Issuer"],
+                    ValidAudience = config["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
+                };
+            });
+
+        services.AddAuthorization(options =>
+        {
+            AuthorizationPolicies.RegisterPolicies(options);
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddApplicationMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(cfg => cfg.AddProfile<MapperConfig>());
         return services;
     }
 
-    public static IServiceCollection AddAuthService(this IServiceCollection services)
+    public static IServiceCollection AddDtoValidation(this IServiceCollection services)
     {
-        services.AddScoped<IAuthService, AuthService>();
+        services.AddFluentValidationAutoValidation();
+        services.AddFluentValidationClientsideAdapters();
+        services.AddValidatorsFromAssembly(Assembly.Load("ProjectManager_01.Application"));
 
         return services;
     }
