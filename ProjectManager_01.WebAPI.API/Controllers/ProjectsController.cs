@@ -17,7 +17,6 @@ public class ProjectsController : ControllerBase
         _projectService = projectService;
     }
 
-
     // GET: api/projects
     /// <summary>
     /// Get all projects
