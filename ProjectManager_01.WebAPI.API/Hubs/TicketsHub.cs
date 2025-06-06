@@ -3,6 +3,9 @@ using ProjectManager_01.Application.Contracts.Services;
 
 namespace ProjectManager_01.Hubs;
 
+/// <summary>
+/// SignalR hub for live updates on tickets.
+/// </summary>
 public class TicketsHub : Hub
 {
     private readonly ITicketService _ticketService;
@@ -12,6 +15,7 @@ public class TicketsHub : Hub
         _ticketService = ticketService;
     }
 
+    // Add subscriber to a group based on ticketId
     public async Task SubscribeToTicket(string ticketId)
     {
         if (Guid.TryParse(ticketId, out var guid))
@@ -27,6 +31,7 @@ public class TicketsHub : Hub
         }
     }
 
+    // Unsubscribe from the group by ticketId
     public async Task UnsubscribeFromTicket(string ticketId)
     {
         if (Guid.TryParse(ticketId, out var guid))
@@ -35,6 +40,7 @@ public class TicketsHub : Hub
         }
     }
 
+    // Get group name helper
     private string GetTicketGroupName(Guid ticketId)
     {
         return $"ticket-{ticketId}";

@@ -45,7 +45,7 @@ public class CommentsController : ControllerBase
     public async Task<ActionResult<CommentDto>> GetComment(Guid id, Guid projectId)
     {
         // TODO: validate if projectId matches the comment's project
-        return Ok(await _commentService.GetCommentAsync(id));
+        return Ok(await _commentService.GetCommentAsync(id, projectId));
     }
 
     // POST api/projects/{projectId}/comments
@@ -60,7 +60,7 @@ public class CommentsController : ControllerBase
     public async Task<ActionResult> CreateComment([FromBody] CommentCreateDto commentCreateDto, Guid projectId)
     {
         // TODO: validate if projectId matches the comment's project
-        await _commentService.CreateCommentAsync(commentCreateDto);
+        await _commentService.CreateCommentAsync(commentCreateDto, projectId);
         return Ok();
     }
 
@@ -76,7 +76,7 @@ public class CommentsController : ControllerBase
     public ActionResult UpdateComment([FromBody] CommentUpdateDto updatedComment, Guid projectId)
     {
         // TODO: validate if projectId matches the comment's project
-        _commentService.UpdateCommentAsync(updatedComment);
+        _commentService.UpdateCommentAsync(updatedComment, projectId);
         return Ok();
     }
 
@@ -92,7 +92,7 @@ public class CommentsController : ControllerBase
     public async Task<ActionResult> DeleteComment(Guid id, Guid projectId)
     {
         // TODO: validate if projectId matches the comment's project
-        await _commentService.DeleteCommentAsync(id);
+        await _commentService.DeleteCommentAsync(id, projectId);
         return Ok();
     }
 }

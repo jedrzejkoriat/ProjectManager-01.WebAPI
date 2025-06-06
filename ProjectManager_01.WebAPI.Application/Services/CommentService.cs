@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel.Design;
+using System.Data;
 using AutoMapper;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
@@ -10,25 +11,34 @@ namespace ProjectManager_01.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly ITicketService _ticketService;
     private readonly IMapper _mapper;
 
     public CommentService(
         ICommentRepository commentRepository,
+        ITicketService ticketService,
         IMapper mapper)
     {
         _commentRepository = commentRepository;
+        _ticketService = ticketService;
         _mapper = mapper;
     }
 
-    public async Task CreateCommentAsync(CommentCreateDto commentCreateDto)
+    public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
+        if (!await ValidateProjectIdAsync(commentCreateDto.TicketId, projectId))
+            throw new Exception("Comment does not belong to the specified project.");
+
         var comment = _mapper.Map<Comment>(commentCreateDto);
         await _commentRepository.CreateAsync(comment);
     }
 
-    public async Task<CommentDto> GetCommentAsync(Guid commentId)
+    public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        if (!await ValidateProjectIdAsync(comment.TicketId, projectId))
+            throw new Exception("Comment does not belong to the specified project.");
 
         return _mapper.Map<CommentDto>(comment);
     }
@@ -40,14 +50,22 @@ public class CommentService : ICommentService
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 
-    public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto)
+    public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto, Guid projectId)
     {
+        if (!await ValidateProjectIdAsync(commentUpdateDto.TicketId, projectId))
+            throw new Exception("Comment does not belong to the specified project.");
+
         var comment = _mapper.Map<Comment>(commentUpdateDto);
         await _commentRepository.UpdateAsync(comment);
     }
 
-    public async Task DeleteCommentAsync(Guid commentId)
+    public async Task DeleteCommentAsync(Guid commentId, Guid projectId)
     {
+        var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        if (!await ValidateProjectIdAsync(comment.TicketId, projectId))
+            throw new Exception("Comment does not belong to the specified project.");
+
         await _commentRepository.DeleteAsync(commentId);
     }
 
@@ -65,5 +83,15 @@ public class CommentService : ICommentService
     {
         var comments = await _commentRepository.GetByTicketIdAsync(ticketId);
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
+    }
+
+    private async Task<bool> ValidateProjectIdAsync(Guid ticketId, Guid projectId)
+    {
+        var ticket = await _ticketService.GetTicketByIdAsync(ticketId);
+
+        if (ticket == null)
+            return false;
+
+        return ticket.Project.Id == projectId;
     }
 }
