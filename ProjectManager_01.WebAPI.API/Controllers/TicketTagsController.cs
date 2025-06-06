@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.TicketTags;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing TicketTags - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class TicketTagsController : ControllerBase
 
     // GET: api/tickettags
     /// <summary>
-    /// Get all ticket tags
+    /// Get all TicketTags - Admin only
     /// </summary>
-    /// <returns>All ticket tags</returns>
+    /// <returns>All TicketTags</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketTagDto>>> GetTicketTags()
@@ -34,11 +37,11 @@ public class TicketTagsController : ControllerBase
 
     // GET: api/tickettags/{ticketId}/{tagId}
     /// <summary>
-    /// Get a ticket tag by ticket id and tag id
+    /// Get TicketTag by TicketId and TagId - User with ReadTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketId"></param>
     /// <param name="tagId"></param>
-    /// <returns>Ticket tag by its ticket id and tag id</returns>
+    /// <returns>TicketTag by TicketId and TagId</returns>
     [HttpGet("{ticketId}/{tagId}")]
     [Authorize(Policy = Permissions.ReadTicketTag)]
     public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId)
@@ -48,7 +51,7 @@ public class TicketTagsController : ControllerBase
 
     // POST: api/tickettags
     /// <summary>
-    /// Create a new ticket tag
+    /// Create TicketTag - User with WriteTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketTag"></param>
     /// <returns></returns>
@@ -62,7 +65,7 @@ public class TicketTagsController : ControllerBase
 
     // DELETE: api/tickettags/{ticketId}/{tagId}
     /// <summary>
-    /// Delete a ticket tag by ticket id and tag id
+    /// Delete TicketTag by TicketId and TagId - User with WriteTicketTag permission and matching Project access
     /// </summary>
     /// <param name="ticketId"></param>
     /// <param name="tagId"></param>

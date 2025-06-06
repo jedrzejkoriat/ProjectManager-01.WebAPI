@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.Roles;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Roles - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class RolesController : ControllerBase
 
     // GET: api/roles
     /// <summary>
-    /// Get all roles
+    /// Get all Roles - Admin only
     /// </summary>
-    /// <returns>All roles</returns>
+    /// <returns>All Roles</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
     {
@@ -33,10 +36,10 @@ public class RolesController : ControllerBase
 
     // GET api/roles/{id}
     /// <summary>
-    /// Get a role by ID
+    /// Get Role by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Role by its id</returns>
+    /// <returns>Role by Id</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<RoleDto>> GetRole(Guid id)
     {
@@ -45,7 +48,7 @@ public class RolesController : ControllerBase
 
     // POST api/roles
     /// <summary>
-    /// Create a new role
+    /// Create Role - Admin only (INSERT is denied on db side)
     /// </summary>
     /// <param name="role"></param>
     /// <returns></returns>
@@ -58,7 +61,7 @@ public class RolesController : ControllerBase
 
     // PUT api/roles
     /// <summary>
-    /// Update an existing role
+    /// Update Role - Admin only (UPDATE is denied on db side)
     /// </summary>
     /// <param name="updatedRole"></param>
     /// <returns></returns>
@@ -71,7 +74,7 @@ public class RolesController : ControllerBase
 
     // DELETE api/roles/{id}
     /// <summary>
-    /// Delete a role
+    /// Delete Role by Id - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

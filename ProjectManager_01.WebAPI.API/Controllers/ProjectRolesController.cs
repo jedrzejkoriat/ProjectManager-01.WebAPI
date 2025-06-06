@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.ProjectRoles;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing ProjectRoles - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class ProjectRolesController : ControllerBase
 
     // GET: api/roles
     /// <summary>
-    /// Get all project roles
+    /// Get all ProjectRoles - Admin only
     /// </summary>
-    /// <returns>All project roles</returns>
+    /// <returns>All ProjectRoles</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectRoleDto>>> GetProjectRoles()
     {
@@ -33,10 +36,10 @@ public class ProjectRolesController : ControllerBase
 
     // GET: api/roles/{id}
     /// <summary>
-    /// Get a project role by ID
+    /// Get ProjectRole by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Project role by its id</returns>
+    /// <returns>ProjectRole by Id</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectRoleDto>> GetProjectRole(Guid id)
     {
@@ -45,7 +48,7 @@ public class ProjectRolesController : ControllerBase
 
     // POST: api/roles
     /// <summary>
-    /// Create a new role
+    /// Create ProjectRole - Admin only
     /// </summary>
     /// <param name="projectRole"></param>
     /// <returns></returns>
@@ -58,7 +61,7 @@ public class ProjectRolesController : ControllerBase
 
     // PUT: api/roles
     /// <summary>
-    /// Update an existing role
+    /// Update ProjectRole - Admin only
     /// </summary>
     /// <param name="updatedProjectRole"></param>
     /// <returns></returns>
@@ -71,7 +74,7 @@ public class ProjectRolesController : ControllerBase
 
     // DELETE: api/roles/{id}
     /// <summary>
-    /// Delete a role
+    /// Delete ProjectRole by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

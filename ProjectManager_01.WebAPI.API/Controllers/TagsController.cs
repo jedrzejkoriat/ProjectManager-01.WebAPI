@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.Tags;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managin Tags - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class TagsController : ControllerBase
 
     // GET: api/tags
     /// <summary>
-    /// Get all tags
+    /// Get all Tags - Admin only
     /// </summary>
-    /// <returns>All tags</returns>
+    /// <returns>All Tags</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
@@ -34,10 +37,10 @@ public class TagsController : ControllerBase
 
     // GET: api/tags/{id}
     /// <summary>
-    /// Get a tag by ID
+    /// Get Tag by Id - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
+    /// <returns>Tag by Id</returns>
     [HttpGet("{id}")]
     [Authorize(Policy = Permissions.ReadTag)]
     public async Task<ActionResult<TagDto>> GetTag(Guid id)
@@ -47,10 +50,10 @@ public class TagsController : ControllerBase
 
     // GET: api/tags/project/{projectId}
     /// <summary>
-    /// Get all tags by project ID
+    /// Get Tags by ProjectId - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="projectId"></param>
-    /// <returns></returns>
+    /// <returns>All project Tags</returns>
     [HttpGet("project/{projectId}")]
     [Authorize(Policy = Permissions.ReadTag)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTagsByProjectId(Guid projectId)
@@ -60,7 +63,7 @@ public class TagsController : ControllerBase
 
     // POST: api/tags
     /// <summary>
-    /// Create a new tag
+    /// Create Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="tag"></param>
     /// <returns></returns>
@@ -74,7 +77,7 @@ public class TagsController : ControllerBase
 
     // PUT: api/tags
     /// <summary>
-    /// Update an existing tag
+    /// Update Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="updatedTag"></param>
     /// <returns></returns>
@@ -88,7 +91,7 @@ public class TagsController : ControllerBase
 
     // DELETE: api/tags/{id}
     /// <summary>
-    /// Delete a tag
+    /// Delete Tag by Id - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

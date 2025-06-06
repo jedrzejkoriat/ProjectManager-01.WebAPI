@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.Comments;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Comments - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class CommentsController : ControllerBase
 
     // GET: api/comments
     /// <summary>
-    /// Get all comments
+    /// Get all Comments - Admin only
     /// </summary>
-    /// <returns>All comments</returns>
+    /// <returns>All Comments</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<CommentDto>>> GetComments()
@@ -34,10 +37,10 @@ public class CommentsController : ControllerBase
 
     // GET api/comments/{id}
     /// <summary>
-    /// Get a comment by ID
+    /// Get Comment by Id - User with ReadComment permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Comment by its id</returns>
+    /// <returns>Comment by Id</returns>
     [HttpGet("{id}")]
     [Authorize(Policy = Permissions.ReadComment)]
     public async Task<ActionResult<CommentDto>> GetComment(Guid id)
@@ -47,7 +50,7 @@ public class CommentsController : ControllerBase
 
     // POST api/comments
     /// <summary>
-    /// Create a new comment
+    /// Create Comment - User with WriteComment permission and matching Project access
     /// </summary>
     /// <param name="commentCreateDto"></param>
     /// <returns></returns>
@@ -61,7 +64,7 @@ public class CommentsController : ControllerBase
 
     // PUT api/comments
     /// <summary>
-    /// Update an existing comment
+    /// Update Comment - User with matching UserId, WriteComment permission and matching Project access
     /// </summary>
     /// <param name="updatedComment"></param>
     /// <returns></returns>
@@ -75,7 +78,7 @@ public class CommentsController : ControllerBase
 
     // DELETE api/comments/{id}
     /// <summary>
-    /// Delete a comment
+    /// Delete Comment by Id - User with matching UserId, WriteComment permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

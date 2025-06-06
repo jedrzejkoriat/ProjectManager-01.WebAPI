@@ -9,6 +9,9 @@ using ProjectManager_01.Hubs;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Tickets - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -28,9 +31,9 @@ public class TicketsController : ControllerBase
 
     // GET: api/tickets
     /// <summary>
-    /// Get all tickets
+    /// Get all Tickets - Admin only
     /// </summary>
-    /// <returns>All tickets</returns>
+    /// <returns>All Tickets</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTickets()
@@ -40,10 +43,10 @@ public class TicketsController : ControllerBase
 
     // GET: api/tickets/{id}
     /// <summary>
-    /// Get a ticket by ID
+    /// Get Ticket by Id - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Ticket by its id</returns>
+    /// <returns>Ticket by Id</returns>
     [HttpGet("{id}")]
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
@@ -53,11 +56,11 @@ public class TicketsController : ControllerBase
 
     // GET: api/tickets/getByKeyAndNumber?projectKey=ABC&ticketNumber=123
     /// <summary>
-    /// Get a ticket by project key and ticket number
+    /// Get Ticket by ProjectKey and TicketNumber - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="projectKey"></param>
     /// <param name="ticketNumber"></param>
-    /// <returns>ticket with all details by its key and number</returns>
+    /// <returns>Ticket by ProjectKey and TicketNumber</returns>
     [HttpGet("getByKeyAndNumber")]
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber)
@@ -67,10 +70,10 @@ public class TicketsController : ControllerBase
 
     // GET: api/tickets/project/{projectId}
     /// <summary>
-    /// Get all tickets by project ID
+    /// Get Tickets by ProjectId - User with ReadTicket permission and matching Project access
     /// </summary>
     /// <param name="projectId"></param>
-    /// <returns></returns>
+    /// <returns>Tickets by ProjectId</returns>
     [HttpGet("project/{projectId}")]
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
@@ -81,7 +84,7 @@ public class TicketsController : ControllerBase
 
     // POST: api/tickets
     /// <summary>
-    /// Create a new ticket
+    /// Create Ticket - User with WriteTicket permission and matching Project access
     /// </summary>
     /// <param name="ticket"></param>
     /// <returns></returns>
@@ -95,7 +98,7 @@ public class TicketsController : ControllerBase
 
     // PUT: api/tickets
     /// <summary>
-    /// Update an existing ticket
+    /// Update Ticket - User with WriteTicket permission and matching Project access
     /// </summary>
     /// <param name="updatedTicket"></param>
     /// <returns></returns>
@@ -114,7 +117,7 @@ public class TicketsController : ControllerBase
 
     // DELETE: api/tickets/{id}
     /// <summary>
-    /// Delete a ticket
+    /// Delete Ticket by Id - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -128,7 +131,7 @@ public class TicketsController : ControllerBase
 
     // PATCH api/tickets/{id}/soft-delete
     /// <summary>
-    /// Soft delete a ticket
+    /// Soft-delete Ticket by Id - User with DeleteTicket permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

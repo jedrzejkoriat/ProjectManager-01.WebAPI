@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.Priorities;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Priorities (readonly) - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class PrioritiesController : ControllerBase
 
     // GET api/priorities
     /// <summary>
-    /// Get all priorities
+    /// Get all Priorities
     /// </summary>
-    /// <returns>All priorities</returns>
+    /// <returns>All Priorities</returns>
     [HttpGet("")]
     public async Task<ActionResult<IEnumerable<PriorityDto>>> GetPriorities()
     {
@@ -33,10 +36,10 @@ public class PrioritiesController : ControllerBase
 
     // GET api/priorities/{id}
     /// <summary>
-    /// Get a priority by ID
+    /// Get Priority by Id - Admin or User
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Priority by id</returns>
+    /// <returns>Priority by Id</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<PriorityDto>> GetPriority(Guid id)
     {
@@ -45,7 +48,7 @@ public class PrioritiesController : ControllerBase
 
     // POST api/priorities
     /// <summary>
-    /// Create a new priority
+    /// Create Priority - Admin only (INSERT is denied on db side)
     /// </summary>
     /// <param name="priority"></param>
     /// <returns></returns>
@@ -59,7 +62,7 @@ public class PrioritiesController : ControllerBase
 
     // PUT api/priorities
     /// <summary>
-    /// Update an existing priority
+    /// Update Priority - Admin only (UPDATE is denied on db side)
     /// </summary>
     /// <param name="updatedPriority"></param>
     /// <returns></returns>
@@ -73,7 +76,7 @@ public class PrioritiesController : ControllerBase
 
     // DELETE api/priorities/{id}
     /// <summary>
-    /// Delete a priority
+    /// Delete Priority by Id - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

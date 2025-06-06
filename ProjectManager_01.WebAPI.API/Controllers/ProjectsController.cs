@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.Projects;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Projects - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class ProjectsController : ControllerBase
 
     // GET: api/projects
     /// <summary>
-    /// Get all projects
+    /// Get all Projects - Admin only
     /// </summary>
-    /// <returns>All projects</returns>
+    /// <returns>All Projects</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
@@ -34,10 +37,10 @@ public class ProjectsController : ControllerBase
 
     // GET api/projects
     /// <summary>
-    /// Get a project by ID
+    /// Get Project by Id - User with ReadProject permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Project by its id</returns>
+    /// <returns>Project by Id</returns>
     [HttpGet("{id}")]
     [Authorize(Policy = Permissions.ReadProject)]
     public async Task<ActionResult<ProjectDto>> GetProject(Guid id)
@@ -47,11 +50,12 @@ public class ProjectsController : ControllerBase
 
     // GET api/projects/users/{userId}
     /// <summary>
-    /// Get projects by user ID
+    /// Get Projects by UserId - User with ReadProject permission and matching Project access
     /// </summary>
     /// <param name="userId"></param>
-    /// <returns>List of projects by userid</returns>
+    /// <returns>List of user ProjectDto</returns>
     [HttpGet("users/{userId}")]
+    [Authorize(Policy = Permissions.ReadProject)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectsByUserId(Guid userId)
     {
         var projects = await _projectService.GetProjectsByUserIdAsync(userId);
@@ -60,7 +64,7 @@ public class ProjectsController : ControllerBase
 
     // POST api/projects
     /// <summary>
-    /// Create a new project
+    /// Create Project - Admin only
     /// </summary>
     /// <param name="project"></param>
     /// <returns></returns>
@@ -74,7 +78,7 @@ public class ProjectsController : ControllerBase
 
     // PUT api/projects
     /// <summary>
-    /// Update an existing project
+    /// Update Project - Admin only
     /// </summary>
     /// <param name="updatedProject"></param>
     /// <returns></returns>
@@ -88,7 +92,7 @@ public class ProjectsController : ControllerBase
 
     // DELETE api/projects
     /// <summary>
-    /// Delete a project
+    /// Delete Project by Id - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

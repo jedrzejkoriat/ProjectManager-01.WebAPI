@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.ProjectRolePermissions;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing ProjectRolePermissions - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class ProjectRolePermissionsController : ControllerBase
 
     // GET: api/projectrolepermissions
     /// <summary>
-    /// Get all project role permissions
+    /// Get all ProjectRolePermissions - Admin only
     /// </summary>
-    /// <returns>All project role permissions</returns>
+    /// <returns>All ProjectRolePermissions</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectRolePermissionDto>>> GetProjectRolePermissions()
     {
@@ -33,11 +36,11 @@ public class ProjectRolePermissionsController : ControllerBase
 
     // GET: api/projectrolepermissions/{projectRoleId}/{permissionId}
     /// <summary>
-    /// Get a project role permission by project role id and permission id
+    /// Get ProjectRolePermission by ProjectRole Id and Permission Id - Admin only
     /// </summary>
     /// <param name="projectRoleId"></param>
     /// <param name="permissionId"></param>
-    /// <returns>Project role permission by its project role id and permission id</returns>
+    /// <returns>ProjectRolePermission by ProjectRoleId and PermissionId</returns>
     [HttpGet("{projectRoleId}/{permissionId}")]
     public async Task<ActionResult<ProjectRolePermissionDto>> GetProjectRolePermission(Guid projectRoleId, Guid permissionId)
     {
@@ -46,7 +49,7 @@ public class ProjectRolePermissionsController : ControllerBase
 
     // POST: api/projectrolepermissions
     /// <summary>
-    /// Create a new project role permission
+    /// Create ProjectRolePermission - Admin only
     /// </summary>
     /// <param name="projectRolePermission"></param>
     /// <returns></returns>
@@ -59,7 +62,7 @@ public class ProjectRolePermissionsController : ControllerBase
 
     // DELETE: api/projectrolepermissions/{projectRoleId}/{permissionId}
     /// <summary>
-    /// Delete a project role permission by project role id and permission id
+    /// Delete ProjectRolePermission by ProjectRole Id and Permission Id - Admin only
     /// </summary>
     /// <param name="projectRoleId"></param>
     /// <param name="permissionId"></param>

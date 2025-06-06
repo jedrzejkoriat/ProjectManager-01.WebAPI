@@ -7,6 +7,9 @@ using ProjectManager_01.Application.DTOs.TicketRelations;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Ticket Relations - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
@@ -22,9 +25,9 @@ public class TicketRelationsController : ControllerBase
 
     // GET: api/ticketrelations
     /// <summary>
-    /// Get all ticket relations
+    /// Get all TicketRelations - Admin only
     /// </summary>
-    /// <returns>All ticket relations</returns>
+    /// <returns>All TicketRelations</returns>
     [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketRelationDto>>> GetTicketRelations()
@@ -34,10 +37,10 @@ public class TicketRelationsController : ControllerBase
 
     // GET api/ticketrelations/{Id}
     /// <summary>
-    /// Get a ticket relation by Id
+    /// Get TicketRelation by Id - User with ReadTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="Id"></param>
-    /// <returns>Ticket relation by id</returns>
+    /// <returns>TicketRelation by Id</returns>
     [HttpGet("{Id}")]
     [Authorize(Policy = Permissions.ReadTicketRelation)]
     public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id)
@@ -47,7 +50,7 @@ public class TicketRelationsController : ControllerBase
 
     // POST api/ticketrelations
     /// <summary>
-    /// Create a new ticket relation
+    /// Create TicketRelation - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="ticketRelation"></param>
     /// <returns></returns>
@@ -61,7 +64,7 @@ public class TicketRelationsController : ControllerBase
 
     // PUT api/ticketrelations
     /// <summary>
-    /// Update an existing ticket relation
+    /// Update TicketRelation - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="updatedTicketRelation"></param>
     /// <returns></returns>
@@ -75,7 +78,7 @@ public class TicketRelationsController : ControllerBase
 
     // DELETE api/ticketrelations/{Id}
     /// <summary>
-    /// Delete a ticket relation
+    /// Delete TicketRelation by Id - User with WriteTicketRelation permission and matching Project access
     /// </summary>
     /// <param name="Id"></param>
     /// <returns></returns>

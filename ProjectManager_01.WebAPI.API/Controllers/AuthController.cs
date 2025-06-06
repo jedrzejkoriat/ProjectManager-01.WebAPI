@@ -4,6 +4,9 @@ using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
+/// <summary>
+/// Controller for user authentication - no authorization
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -17,7 +20,7 @@ public class AuthController : ControllerBase
 
     // POST: api/auth/login
     /// <summary>
-    /// Authenticate a user and return a JWT token
+    /// Authenticate user
     /// </summary>
     /// <param name="userLoginDto"></param>
     /// <returns>JWT token</returns>
