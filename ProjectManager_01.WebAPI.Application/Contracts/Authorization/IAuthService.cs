@@ -1,8 +1,7 @@
 ﻿using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.Application.Contracts.Authorization;
-
-public interface IJwtGenerator
+public interface IAuthService
 {
-    string GenerateToken(UserClaimsDto userClaimsDto);
+    Task<string> AuthenticateUser(UserLoginDto userLoginDto);
 }

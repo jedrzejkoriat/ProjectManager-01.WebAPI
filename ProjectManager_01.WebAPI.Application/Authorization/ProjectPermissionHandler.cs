@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using ProjectManager_01.Application.Authorization;
 
 namespace ProjectManager_01.Application.Authorization;
 
@@ -24,7 +17,7 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
     {
         var httpContext = _httpContextAccessor.HttpContext;
         var routeData = httpContext?.GetRouteData();
-        var projectId = routeData?.Values["projectId"]?.ToString();
+        var projectId = routeData?.Values["projectId"]?.ToString().ToLower();
 
         if (string.IsNullOrWhiteSpace(projectId))
         {
@@ -34,9 +27,11 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
 
         var permissionName = requirement.PermissionName;
 
-        var claims = context.User.FindAll("project_permission");
+        var claims = context.User.FindAll("ProjectPermission");
 
-        bool hasPermission = claims.Any(c =>
+        Console.WriteLine(claims);
+
+        var hasPermission = claims.Any(c =>
         {
             var parts = c.Value.Split(':');
             return parts.Length == 2 && parts[0] == projectId && parts[1] == requirement.PermissionName;

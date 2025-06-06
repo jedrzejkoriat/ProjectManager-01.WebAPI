@@ -7,8 +7,8 @@ internal static class BcryptPasswordHasher
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public static bool VerifyPassword(string hashedPassword, string providedPassword)
+    public static bool VerifyPassword(string password, string passwordHash)
     {
-        return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
+        return BCrypt.Net.BCrypt.Verify(password, passwordHash);
     }
 }

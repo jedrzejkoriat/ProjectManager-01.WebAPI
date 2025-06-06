@@ -60,7 +60,7 @@ public sealed class MapperConfig : Profile
         CreateMap<TicketRelationDto, TicketRelation>().ReverseMap();
         CreateMap<TicketRelationUpdateDto, TicketRelation>().ReverseMap();
 
-        CreateMap<TicketCreateDto, Ticket>().ReverseMap(); 
+        CreateMap<TicketCreateDto, Ticket>().ReverseMap();
         CreateMap<Ticket, TicketDto>()
             .ForMember(dest => dest.Assignee, opt => opt.MapFrom(src => src.Assignee));
         CreateMap<TicketOverviewDto, Ticket>().ReverseMap();

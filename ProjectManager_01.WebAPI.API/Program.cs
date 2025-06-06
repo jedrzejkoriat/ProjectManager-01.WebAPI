@@ -32,6 +32,8 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddHttpContextAccessor();
+
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -60,7 +62,8 @@ builder.Services.AddApplicationMapper();
 builder.Services.AddDapperRepositories();
 builder.Services.AddServices();
 
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthService();
+builder.Services.AddJwtGenerator();
 
 builder.Services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
 

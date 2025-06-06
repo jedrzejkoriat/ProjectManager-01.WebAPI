@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ProjectManager_01.Application.Authorization;
+using ProjectManager_01.Application.Contracts.Authorization;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.Services;
 
@@ -29,6 +31,13 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddApplicationMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(cfg => cfg.AddProfile<MapperConfig>());
+        return services;
+    }
+
+    public static IServiceCollection AddAuthService(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthService, AuthService>();
+
         return services;
     }
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ProjectManager_01.Application.Constants;
 
-namespace ProjectManager_01.Domain.Constants;
 public static class Permissions
 {
     public const string ReadComment = "ReadComment";

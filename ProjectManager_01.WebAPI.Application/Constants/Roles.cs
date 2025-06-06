@@ -1,4 +1,5 @@
-﻿namespace ProjectManager_01.Domain.Constants;
+﻿namespace ProjectManager_01.Application.Constants;
+
 public static class Roles
 {
     public const string Admin = "Admin";

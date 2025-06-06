@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using ProjectManager_01.Domain.Constants;
+﻿using Microsoft.AspNetCore.Authorization;
+using ProjectManager_01.Application.Constants;
 
 namespace ProjectManager_01.Application.Authorization;
+
 public static class AuthorizationPolicies
 {
     public static void RegisterPolicies(AuthorizationOptions options)

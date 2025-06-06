@@ -43,7 +43,7 @@ internal class UserRepository : IUserRepository
         return result.ToList();
     }
 
-    public async Task<User> GetByIdWithRolesAsync(Guid userId)
+    public async Task<User> GetByIdWithClaimsAsync(Guid userId)
     {
         var sql = @"SELECT 
                         u.*, 
@@ -54,7 +54,7 @@ internal class UserRepository : IUserRepository
                     FROM Users u
                     LEFT JOIN UserRoles ur ON ur.UserId = u.Id
                     LEFT JOIN Roles r ON ur.RoleId = r.Id
-                    LEFT JOIN ProjectUserRole pur ON pur.UserId = u.Id
+                    LEFT JOIN ProjectUserRoles pur ON pur.UserId = u.Id
                     LEFT JOIN ProjectRoles pr ON pur.ProjectRoleId = pr.Id
                     LEFT JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
                     LEFT JOIN Permissions p ON prp.PermissionId = p.Id
@@ -99,6 +99,15 @@ internal class UserRepository : IUserRepository
         );
 
         return userDict.Values.FirstOrDefault();
+    }
+
+    public async Task<User> GetByUserNameAsync(string userName)
+    {
+        var sql = @"SELECT * FROM Users
+                    WHERE UserName = @UserName";
+        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { UserName = userName });
+
+        return result;
     }
 
     // ============================= COMMANDS =============================
