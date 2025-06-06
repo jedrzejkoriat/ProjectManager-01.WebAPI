@@ -40,23 +40,23 @@ public class TicketsController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Ticket by its id</returns>
-    [HttpGet("id/{id}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id)
     {
         return Ok(await _ticketService.GetTicketByIdAsync(id));
     }
 
-    // GET: api/tickets/{projectKey}-{ticketNumber}
+    // GET: api/tickets/getByKeyAndNumber?projectKey=ABC&ticketNumber=123
     /// <summary>
     /// Get a ticket by project key and ticket number
     /// </summary>
     /// <param name="projectKey"></param>
-    /// <param name="ticketnumber"></param>
-    /// <returns></returns>
-    [HttpGet("{projectKey}-{ticketNumber}")]
-    public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber(string projectKey, int ticketnumber)
+    /// <param name="ticketNumber"></param>
+    /// <returns>ticket with all details by its key and number</returns>
+    [HttpGet("getByKeyAndNumber")]
+    public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber)
     {
-        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketnumber));
+        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber));
     }
 
     // GET: api/tickets/project/{projectId}
