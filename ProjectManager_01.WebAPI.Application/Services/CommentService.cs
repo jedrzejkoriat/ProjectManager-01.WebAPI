@@ -26,8 +26,7 @@ public class CommentService : ICommentService
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
-        if (!await ValidateProjectIdAsync(commentCreateDto.TicketId, projectId))
-            throw new Exception("Comment does not belong to the specified project.");
+        await ValidateProjectIdAsync(commentCreateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentCreateDto);
         await _commentRepository.CreateAsync(comment);
@@ -36,9 +35,7 @@ public class CommentService : ICommentService
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-
-        if (!await ValidateProjectIdAsync(comment.TicketId, projectId))
-            throw new Exception("Comment does not belong to the specified project.");
+        await ValidateProjectIdAsync(comment.TicketId, projectId);
 
         return _mapper.Map<CommentDto>(comment);
     }
@@ -52,8 +49,7 @@ public class CommentService : ICommentService
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto, Guid projectId)
     {
-        if (!await ValidateProjectIdAsync(commentUpdateDto.TicketId, projectId))
-            throw new Exception("Comment does not belong to the specified project.");
+        await ValidateProjectIdAsync(commentUpdateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentUpdateDto);
         await _commentRepository.UpdateAsync(comment);
@@ -62,9 +58,7 @@ public class CommentService : ICommentService
     public async Task DeleteCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-
-        if (!await ValidateProjectIdAsync(comment.TicketId, projectId))
-            throw new Exception("Comment does not belong to the specified project.");
+        await ValidateProjectIdAsync(comment.TicketId, projectId);
 
         await _commentRepository.DeleteAsync(commentId);
     }
@@ -85,13 +79,12 @@ public class CommentService : ICommentService
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 
-    private async Task<bool> ValidateProjectIdAsync(Guid ticketId, Guid projectId)
+    // This method validates if the comment belongs to the projectId provided through the route
+    private async Task ValidateProjectIdAsync(Guid ticketId, Guid projectId)
     {
         var ticket = await _ticketService.GetTicketByIdAsync(ticketId);
 
-        if (ticket == null)
-            return false;
-
-        return ticket.Project.Id == projectId;
+        if (ticket == null || ticket.Project.Id != projectId)
+            throw new Exception("Comment does not belong to the specified project.");
     }
 }
