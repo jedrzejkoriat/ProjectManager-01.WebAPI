@@ -32,6 +32,18 @@ internal class ProjectRepository : IProjectRepository
         return result;
     }
 
+    public async Task<IEnumerable<Project>> GetByUserIdAsync(Guid userId)
+    {
+        var sql = @"SELECT DISTINCT p.*
+                    FROM Projects p
+                    JOIN ProjectUserRole pur ON pur.ProjectId = p.Id
+                    WHERE pur.UserId = @UserId
+                    AND p.IsDeleted = 0";
+        var result = await _dbConnection.QueryAsync<Project>(sql, new { UserId = userId });
+
+        return result.ToList();
+    }
+
     // ============================= COMMANDS =============================
     public async Task<bool> SoftDeleteAsync(Guid id)
     {

@@ -7,4 +7,5 @@ public interface IProjectRepository : IRepository<Project>
 {
     Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
     Task<bool> SoftDeleteAsync(Guid id);
+    Task<IEnumerable<Project>> GetByUserIdAsync(Guid userId);
 }

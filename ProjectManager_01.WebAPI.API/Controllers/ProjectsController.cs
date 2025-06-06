@@ -45,6 +45,19 @@ public class ProjectsController : ControllerBase
         return Ok(await _projectService.GetProjectByIdAsync(id));
     }
 
+    // GET api/projects/users/{userId}
+    /// <summary>
+    /// Get projects by user ID
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns>List of projects by userid</returns>
+    [HttpGet("users/{userId}")]
+    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectsByUserId(Guid userId)
+    {
+        var projects = await _projectService.GetProjectsByUserIdAsync(userId);
+        return Ok(projects);
+    }
+
     // POST api/projects
     /// <summary>
     /// Create a new project

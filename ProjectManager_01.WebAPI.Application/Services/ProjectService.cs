@@ -79,4 +79,11 @@ public class ProjectService : IProjectService
     {
         await _projectRepository.SoftDeleteAsync(projectId);
     }
+
+    public async Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(Guid userId)
+    {
+        var projects = await _projectRepository.GetByUserIdAsync(userId);
+
+        return _mapper.Map<IEnumerable<ProjectDto>>(projects);
+    }
 }

@@ -11,7 +11,6 @@ public static class AuthorizationPolicies
         {
             Permissions.ReadComment,
             Permissions.WriteComment,
-            Permissions.ReadPriority,
             Permissions.ReadProject,
             Permissions.ReadTag,
             Permissions.WriteTag,
