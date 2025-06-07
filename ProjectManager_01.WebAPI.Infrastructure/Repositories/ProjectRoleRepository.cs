@@ -89,7 +89,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
             throw new Exception("Creating ProjectRole failed");
     }
 
-    public Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction)
+    public Task<bool> DeleteByIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRoles 
                     WHERE Id = @Id";
@@ -97,7 +97,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         return result.ContinueWith(t => t.Result > 0);
     }
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRoles
                     WHERE ProjectId = @ProjectId";
@@ -130,7 +130,7 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM ProjectRoles 
                     WHERE Id = @Id";

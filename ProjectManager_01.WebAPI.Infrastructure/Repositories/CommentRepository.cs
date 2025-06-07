@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.Exceptions;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Infrastructure.Repositories;
@@ -15,7 +17,7 @@ internal class CommentRepository : ICommentRepository
     }
 
     // ============================== QUERIES =============================
-    public async Task<IEnumerable<Comment>> GetByTicketIdAsync(Guid ticketId)
+    public async Task<IEnumerable<Comment>> GetAllByTicketIdAsync(Guid ticketId)
     {
         var sql = @"SELECT c.*,
                     u.Id AS UserId, u.UserName, u.Email, u.IsDeleted, u.CreatedAt
@@ -48,7 +50,7 @@ internal class CommentRepository : ICommentRepository
         new { Id = id },
         splitOn: "UserId");
 
-        return result.FirstOrDefault();
+        return result.First();
     }
 
     public async Task<IEnumerable<Comment>> GetAllAsync()
@@ -68,7 +70,7 @@ internal class CommentRepository : ICommentRepository
     }
 
     // ============================== COMMANDS ============================
-    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Comments
                     WHERE TicketId = @TicketId";
@@ -77,7 +79,7 @@ internal class CommentRepository : ICommentRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Comments
                     WHERE UserId = @UserId";
@@ -90,14 +92,12 @@ internal class CommentRepository : ICommentRepository
     {
         var sql = @"INSERT INTO Comments (Id, TicketId, UserId, Content, CreatedAt)
                     VALUES (@Id, @TicketId, @UserId, @Content, @CreatedAt)";
-        comment.Id = Guid.NewGuid();
-        comment.CreatedAt = DateTimeOffset.UtcNow;
         var result = await _dbConnection.ExecuteAsync(sql, comment);
 
         if (result > 0)
             return comment.Id;
         else
-            throw new Exception("Insert failed");
+            return Guid.Empty;
     }
 
     public async Task<bool> UpdateAsync(Comment comment)
@@ -110,7 +110,7 @@ internal class CommentRepository : ICommentRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = "DELETE FROM Comments WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });

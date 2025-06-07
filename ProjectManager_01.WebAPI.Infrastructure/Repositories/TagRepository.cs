@@ -31,7 +31,7 @@ internal class TagRepository : ITagRepository
 
         return result;
     }
-    public async Task<IEnumerable<Tag>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<Tag>> GetAllByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT * FROM Tags 
                     WHERE ProjectId = @ProjectId";
@@ -40,7 +40,7 @@ internal class TagRepository : ITagRepository
         return result.ToList();
     }
 
-    public async Task<IEnumerable<Tag>> GetByTicketIdAsync(Guid ticketId)
+    public async Task<IEnumerable<Tag>> GetAllByTicketIdAsync(Guid ticketId)
     {
         var sql = @"SELECT t.*
                     FROM Tags t
@@ -76,7 +76,7 @@ internal class TagRepository : ITagRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Tags 
                     WHERE Id = @Id";

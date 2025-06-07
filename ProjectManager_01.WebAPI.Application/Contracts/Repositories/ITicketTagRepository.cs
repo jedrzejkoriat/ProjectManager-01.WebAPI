@@ -7,7 +7,7 @@ public interface ITicketTagRepository
 {
     Task<IEnumerable<TicketTag>> GetAllAsync();
     Task<TicketTag> GetByIdAsync(Guid ticketId, Guid tagId);
-    Task<bool> DeleteAsync(Guid ticketId, Guid tagId);
+    Task<bool> DeleteByIdAsync(Guid ticketId, Guid tagId);
     Task<bool> CreateAsync(TicketTag ticketTag);
     Task<bool> CreateAsync(TicketTag ticketTag, IDbTransaction dbTransaction);
 }

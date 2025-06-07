@@ -34,17 +34,17 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
 
     public async Task DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
-        await _projectRolePermissionRepository.DeleteByPermissionIdAsync(permissionId, transaction);
+        await _projectRolePermissionRepository.DeleteAllByPermissionIdAsync(permissionId, transaction);
     }
 
     public async Task DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
-        await _projectRolePermissionRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
+        await _projectRolePermissionRepository.DeleteAllByProjectRoleIdAsync(projectRoleId, transaction);
     }
 
     public async Task DeleteProjectRolePermissionAsync(Guid projectRoleId, Guid permissionId)
     {
-        await _projectRolePermissionRepository.DeleteAsync(projectRoleId, permissionId);
+        await _projectRolePermissionRepository.DeleteByProjectRoleIdAndPermissionIdAsync(projectRoleId, permissionId);
     }
 
     public async Task<ProjectRolePermissionDto> GetProjectRolePermissionByIdAsync(Guid projectRoleId, Guid permissionId)

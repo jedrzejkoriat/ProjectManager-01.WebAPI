@@ -71,7 +71,7 @@ public class UserService : IUserService
 
         try
         {
-            await _userRepository.DeleteAsync(userId, transaction);
+            await _userRepository.DeleteByIdAsync(userId, transaction);
             await _userRoleService.DeleteByUserIdAsync(userId, transaction);
             await _projectUserRoleService.DeleteByUserIdAsync(userId, transaction);
             await _commentService.DeleteByUserIdAsync(userId, transaction);
@@ -103,12 +103,12 @@ public class UserService : IUserService
 
     public async Task SoftDeleteUserAsync(Guid userId)
     {
-        await _userRepository.SoftDeleteAsync(userId);
+        await _userRepository.SoftDeleteByIdAsync(userId);
     }
 
     public async Task<IEnumerable<UserDto>> GetUsersByProjectIdAsync(Guid projectId)
     {
-        var users = await _userRepository.GetByProjectIdAsync(projectId);
+        var users = await _userRepository.GetAllByProjectIdAsync(projectId);
 
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }

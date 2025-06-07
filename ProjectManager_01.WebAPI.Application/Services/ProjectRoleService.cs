@@ -67,7 +67,7 @@ public class ProjectRoleService : IProjectRoleService
 
         try
         {
-            await _projectRoleRepository.DeleteAsync(projectRoleId, transaction);
+            await _projectRoleRepository.DeleteByIdAsync(projectRoleId, transaction);
             await _projectUserRoleService.DeleteByProjectRoleId(projectRoleId, transaction);
             await _projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
 
@@ -96,7 +96,7 @@ public class ProjectRoleService : IProjectRoleService
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
-        await _projectRoleRepository.DeleteByProjectIdAsync(projectId, transaction);
+        await _projectRoleRepository.DeleteAllByProjectIdAsync(projectId, transaction);
         await _projectUserRoleService.DeleteByProjectIdAsync(projectId, transaction);
     }
 }

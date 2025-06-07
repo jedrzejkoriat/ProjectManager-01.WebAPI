@@ -54,7 +54,7 @@ public class ProjectService : IProjectService
 
         try
         {
-            await _projectRepository.DeleteAsync(projectId, transaction);
+            await _projectRepository.DeleteByIdAsync(projectId, transaction);
             await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
             await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
 
@@ -83,7 +83,7 @@ public class ProjectService : IProjectService
 
     public async Task SoftDeleteProjectAsync(Guid projectId)
     {
-        await _projectRepository.SoftDeleteAsync(projectId);
+        await _projectRepository.SoftDeleteByIdAsync(projectId);
     }
 
     public async Task<IEnumerable<ProjectDto>> GetUserProjectsAsync()

@@ -43,7 +43,7 @@ public class TagService : ITagService
     {
         _projectAccessValidator.ValidateProjectIds((await _tagRepository.GetByIdAsync(tagId)).ProjectId, projectId);
 
-        await _tagRepository.DeleteAsync(tagId);
+        await _tagRepository.DeleteByIdAsync(tagId);
     }
 
     public async Task<TagDto> GetTagByIdAsync(Guid tagId, Guid projectId)
@@ -63,14 +63,14 @@ public class TagService : ITagService
 
     public async Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId)
     {
-        var tags = await _tagRepository.GetByProjectIdAsync(projectId);
+        var tags = await _tagRepository.GetAllByProjectIdAsync(projectId);
 
         return _mapper.Map<IEnumerable<TagDto>>(tags);
     }
 
     public async Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId)
     {
-        var tags = await _tagRepository.GetByTicketIdAsync(ticketId);
+        var tags = await _tagRepository.GetAllByTicketIdAsync(ticketId);
 
         return _mapper.Map<IEnumerable<TagDto>>(tags);
     }

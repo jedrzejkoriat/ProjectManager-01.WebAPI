@@ -32,7 +32,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result;
     }
 
-    public async Task<IEnumerable<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+    public async Task<IEnumerable<ProjectUserRole>> GetAllByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
     {
         var sql = @"SELECT * FROM ProjectUserRoles 
                     WHERE UserId = @UserId AND ProjectId = @ProjectId";
@@ -51,7 +51,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectId = @ProjectId";
@@ -60,7 +60,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectRoleId = @ProjectRoleId";
@@ -94,7 +94,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM ProjectUserRoles WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });

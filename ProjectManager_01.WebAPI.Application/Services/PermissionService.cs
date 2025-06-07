@@ -39,7 +39,7 @@ public class PermissionService : IPermissionService
 
         try
         {
-            await _permissionRepository.DeleteAsync(permissionId, transaction);
+            await _permissionRepository.DeleteByIdAsync(permissionId, transaction);
             await _projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
 
             transaction.Commit();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.Exceptions;
 using ProjectManager_01.Domain.Models;
 
 namespace ProjectManager_01.Application.Auth;
@@ -41,6 +42,6 @@ public sealed class ProjectAccessValidator : IProjectAccessValidator
     public void ValidateProjectIds(Guid projectId, Guid providedProjectId)
     {
         if (projectId != providedProjectId)
-            throw new Exception("Project IDs do not much.");
+            throw new ForbiddenException("Route projectId and projectId related to provided entity do not match.");
     }
 }

@@ -5,10 +5,10 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
-    Task<bool> SoftDeleteAsync(Guid id);
-    Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
+    Task<bool> SoftDeleteByIdAsync(Guid id);
+    Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction);
     Task<Guid> CreateAsync(User entity, IDbTransaction transaction);
-    Task<IEnumerable<User>> GetByProjectIdAsync(Guid projectId);
+    Task<IEnumerable<User>> GetAllByProjectIdAsync(Guid projectId);
     Task<User> GetByUserNameAsync(string userName);
-    Task<User> GetByIdWithClaimsAsync(Guid userId);
+    Task<User> GetUserClaimsByIdAsync(Guid userId);
 }

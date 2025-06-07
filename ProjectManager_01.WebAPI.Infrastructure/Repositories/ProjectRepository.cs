@@ -32,7 +32,7 @@ internal class ProjectRepository : IProjectRepository
         return result;
     }
 
-    public async Task<IEnumerable<Project>> GetByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<Project>> GetAllByUserIdAsync(Guid userId)
     {
         var sql = @"SELECT DISTINCT p.*
                     FROM Projects p
@@ -45,7 +45,7 @@ internal class ProjectRepository : IProjectRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> SoftDeleteByIdAsync(Guid id)
     {
         var sql = @"UPDATE Projects
                         SET IsDeleted = 1
@@ -55,7 +55,7 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";
@@ -88,7 +88,7 @@ internal class ProjectRepository : IProjectRepository
 
         return result > 0;
     }
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";

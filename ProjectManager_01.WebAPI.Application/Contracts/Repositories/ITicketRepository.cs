@@ -7,13 +7,13 @@ public interface ITicketRepository : IRepository<Ticket>
 {
     Task<Guid> CreateAsync(Ticket entity, IDbTransaction transaction);
     Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
-    Task<IEnumerable<Ticket>> GetByProjectIdAsync(Guid projectId);
-    Task<Ticket> GetByKeyAndNumberAsync(string key, int ticketNumber);
-    Task<bool> SoftDeleteAsync(Guid id);
-    Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
-    Task<bool> ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction);
-    Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
-    Task<bool> DeleteByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
-    Task<IEnumerable<Ticket>> GetByPriorityIdAsync(Guid priorityId);
-    Task<IEnumerable<Ticket>> GetByReporterIdAsync(Guid reporterId, IDbTransaction transaction);
+    Task<IEnumerable<Ticket>> GetAllByProjectIdAsync(Guid projectId);
+    Task<Ticket> GetByProjectKeyAndTicketNumberAsync(string key, int ticketNumber);
+    Task<bool> SoftDeleteByIdAsync(Guid id);
+    Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction);
+    Task<bool> ClearUserAssignmentsAsync(Guid userId, IDbTransaction transaction);
+    Task<bool> DeleteAllByUserIdAsync(Guid userId, IDbTransaction transaction);
+    Task<bool> DeleteAllByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
+    Task<IEnumerable<Ticket>> GetAllByPriorityIdAsync(Guid priorityId);
+    Task<IEnumerable<Ticket>> GetAllByReporterIdAsync(Guid reporterId, IDbTransaction transaction);
 }

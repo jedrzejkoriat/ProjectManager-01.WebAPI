@@ -45,7 +45,7 @@ public class RoleService : IRoleService
 
         try
         {
-            await _roleRepository.DeleteAsync(roleId, transaction);
+            await _roleRepository.DeleteByIdAsync(roleId, transaction);
             await _userRoleService.DeleteByRoleIdAsync(roleId, transaction);
 
             transaction.Commit();

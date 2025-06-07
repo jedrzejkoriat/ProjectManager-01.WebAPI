@@ -40,7 +40,7 @@ public class TicketTagService : ITicketTagService
     public async Task DeleteTicketTagAsync(Guid ticketId, Guid tagId, Guid projectId)
     {
         await _projectAccessValidator.ValidateTagProjectIdAsync(tagId, projectId);
-        await _ticketTagRepository.DeleteAsync(ticketId, tagId);
+        await _ticketTagRepository.DeleteByIdAsync(ticketId, tagId);
     }
 
     public async Task<TicketTagDto> GetTicketTagByIdAsync(Guid ticketId, Guid tagId, Guid projectId)

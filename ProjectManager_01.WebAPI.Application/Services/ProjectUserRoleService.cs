@@ -34,7 +34,7 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
     public async Task DeleteProjectUserRoleAsync(Guid projectUserRoleId)
     {
-        await _projectUserRoleRepository.DeleteAsync(projectUserRoleId);
+        await _projectUserRoleRepository.DeleteByIdAsync(projectUserRoleId);
     }
 
     public async Task<ProjectUserRoleDto> GetProjectUserRoleByIdAsync(Guid projectUserRoleId)
@@ -53,12 +53,12 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
-        await _projectUserRoleRepository.DeleteByProjectIdAsync(projectId, transaction);
+        await _projectUserRoleRepository.DeleteAllByProjectIdAsync(projectId, transaction);
     }
 
     public async Task DeleteByProjectRoleId(Guid projectRoleId, IDbTransaction transaction)
     {
-        await _projectUserRoleRepository.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
+        await _projectUserRoleRepository.DeleteAllByProjectRoleIdAsync(projectRoleId, transaction);
     }
 
     public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
@@ -68,7 +68,7 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
     public async Task<IEnumerable<ProjectUserRoleDto>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
     {
-        var projectUserRole = await _projectUserRoleRepository.GetByUserIdAndProjectIdAsync(userId, projectId);
+        var projectUserRole = await _projectUserRoleRepository.GetAllByUserIdAndProjectIdAsync(userId, projectId);
 
         return _mapper.Map<List<ProjectUserRoleDto>>(projectUserRole);
     }

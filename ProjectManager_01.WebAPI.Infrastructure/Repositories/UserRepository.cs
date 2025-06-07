@@ -32,7 +32,7 @@ internal class UserRepository : IUserRepository
         return result;
     }
 
-    public async Task<IEnumerable<User>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<User>> GetAllByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT DISTINCT u.*
                     FROM Users u
@@ -43,7 +43,7 @@ internal class UserRepository : IUserRepository
         return result.ToList();
     }
 
-    public async Task<User> GetByIdWithClaimsAsync(Guid userId)
+    public async Task<User> GetUserClaimsByIdAsync(Guid userId)
     {
         var sql = @"SELECT 
                         u.*, 
@@ -149,7 +149,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
@@ -158,7 +158,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
@@ -167,7 +167,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> SoftDeleteByIdAsync(Guid id)
     {
         var sql = @"UPDATE Users
                     SET IsDeleted = 1

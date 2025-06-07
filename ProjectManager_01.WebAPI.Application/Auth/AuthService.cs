@@ -27,7 +27,7 @@ internal sealed class AuthService : IAuthService
             throw new UnauthorizedAccessException("Invalid username or password.");
         }
 
-        var userWithClaims = await _userRepository.GetByIdWithClaimsAsync(user.Id);
+        var userWithClaims = await _userRepository.GetUserClaimsByIdAsync(user.Id);
 
         var projectPermissions = new List<string>();
 

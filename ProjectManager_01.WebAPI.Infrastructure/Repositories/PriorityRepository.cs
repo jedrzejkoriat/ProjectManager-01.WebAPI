@@ -56,7 +56,7 @@ internal class PriorityRepository : IPriorityRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Priorities 
                     WHERE Id = @Id";
@@ -65,7 +65,7 @@ internal class PriorityRepository : IPriorityRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Priorities 
                     WHERE Id = @Id";

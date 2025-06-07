@@ -56,7 +56,7 @@ internal class PermissionRepository : IPermissionRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Permissions 
                         WHERE Id = @Id";
@@ -65,7 +65,7 @@ internal class PermissionRepository : IPermissionRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid permissionId, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid permissionId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Permissions 
                         WHERE Id = @Id";

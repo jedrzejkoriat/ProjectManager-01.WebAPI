@@ -46,7 +46,7 @@ public class TicketService : ITicketService
     {
         _projectAccessValidator.ValidateProjectIds(ticketCreateDto.ProjectId, projectId);
 
-        var projectTickets = await _ticketRepository.GetByProjectIdAsync(ticketCreateDto.ProjectId);
+        var projectTickets = await _ticketRepository.GetAllByProjectIdAsync(ticketCreateDto.ProjectId);
 
         using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
@@ -107,24 +107,24 @@ public class TicketService : ITicketService
     public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         await DeleteTicketsAsync(
-            tr => _ticketRepository.GetByProjectIdAsync(projectId),
-            tr => _ticketRepository.DeleteByProjectIdAsync(projectId, tr),
+            tr => _ticketRepository.GetAllByProjectIdAsync(projectId),
+            tr => _ticketRepository.DeleteAllByProjectIdAsync(projectId, tr),
             transaction);
     }
 
     public async Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         await DeleteTicketsAsync(
-            tr => _ticketRepository.GetByReporterIdAsync(userId, tr),
-            tr => _ticketRepository.DeleteByUserIdAsync(userId, tr),
+            tr => _ticketRepository.GetAllByReporterIdAsync(userId, tr),
+            tr => _ticketRepository.DeleteAllByUserIdAsync(userId, tr),
             transaction);
     }
 
     public async Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
     {
         await DeleteTicketsAsync(
-            tr => _ticketRepository.GetByPriorityIdAsync(priorityId),
-            tr => _ticketRepository.DeleteByPriorityIdAsync(priorityId, tr),
+            tr => _ticketRepository.GetAllByPriorityIdAsync(priorityId),
+            tr => _ticketRepository.DeleteAllByPriorityIdAsync(priorityId, tr),
             transaction);
     }
 
@@ -139,7 +139,7 @@ public class TicketService : ITicketService
 
     public async Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber, Guid projectId)
     {
-        var ticket = await _ticketRepository.GetByKeyAndNumberAsync(projectKey, ticketNumber);
+        var ticket = await _ticketRepository.GetByProjectKeyAndTicketNumberAsync(projectKey, ticketNumber);
 
         _projectAccessValidator.ValidateProjectIds(ticket.ProjectId, projectId);
 
@@ -155,19 +155,19 @@ public class TicketService : ITicketService
 
     public async Task ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction)
     {
-        await _ticketRepository.ClearUserAssignmentAsync(userId, transaction);
+        await _ticketRepository.ClearUserAssignmentsAsync(userId, transaction);
     }
 
     public async Task SoftDeleteTicketAsync(Guid ticketId, Guid projectId)
     {
         await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketId, projectId);
 
-        await _ticketRepository.SoftDeleteAsync(ticketId);
+        await _ticketRepository.SoftDeleteByIdAsync(ticketId);
     }
 
     public async Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId)
     {
-        var tickets = await _ticketRepository.GetByProjectIdAsync(projectId);
+        var tickets = await _ticketRepository.GetAllByProjectIdAsync(projectId);
 
         return _mapper.Map<IEnumerable<TicketDto>>(tickets);
     }

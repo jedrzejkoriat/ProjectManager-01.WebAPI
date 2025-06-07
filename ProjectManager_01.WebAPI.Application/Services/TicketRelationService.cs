@@ -41,7 +41,7 @@ public class TicketRelationService : ITicketRelationService
     public async Task DeleteTicketRelationAsync(Guid ticketRelationId, Guid projectId)
     {
         await _projectAccessValidator.ValidateTicketProjectIdAsync((await _ticketRelationRepository.GetByIdAsync(ticketRelationId)).SourceId, projectId);
-        await _ticketRelationRepository.DeleteAsync(ticketRelationId);
+        await _ticketRelationRepository.DeleteByIdAsync(ticketRelationId);
     }
 
     public async Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId, Guid projectId)
@@ -61,19 +61,19 @@ public class TicketRelationService : ITicketRelationService
 
     public async Task DeleteTicketRelationByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
-        await _ticketRelationRepository.DeleteByTicketIdAsync(ticketId, transaction);
+        await _ticketRelationRepository.DeleteAllByTicketIdAsync(ticketId, transaction);
     }
 
     public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsBySourceIdAsync(Guid ticketId)
     {
-        var ticketRelations = await _ticketRelationRepository.GetBySourceIdAsync(ticketId);
+        var ticketRelations = await _ticketRelationRepository.GetAllBySourceIdAsync(ticketId);
 
         return _mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
     }
 
     public async Task<IEnumerable<TicketRelationDto>> GetTicketRelationsByTargetIdAsync(Guid ticketId)
     {
-        var ticketRelations = await _ticketRelationRepository.GetByTargetIdAsync(ticketId);
+        var ticketRelations = await _ticketRelationRepository.GetAllByTargetIdAsync(ticketId);
 
         return _mapper.Map<IEnumerable<TicketRelationDto>>(ticketRelations);
     }

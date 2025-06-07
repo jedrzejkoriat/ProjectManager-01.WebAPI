@@ -40,7 +40,7 @@ public class UserRoleService : IUserRoleService
 
     public async Task DeleteUserRoleAsync(Guid userId)
     {
-        await _userRoleRepository.DeleteAsync(userId);
+        await _userRoleRepository.DeleteByIdAsync(userId);
     }
 
     public async Task<UserRoleDto> GetUserRoleByUserIdAsync(Guid userId)
@@ -59,11 +59,11 @@ public class UserRoleService : IUserRoleService
 
     public async Task DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
     {
-        await _userRoleRepository.DeleteByRoleIdAsync(roleId, transaction);
+        await _userRoleRepository.DeleteAllByRoleIdAsync(roleId, transaction);
     }
 
     public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await _userRoleRepository.DeleteByUserIdAsync(userId, transaction);
+        await _userRoleRepository.DeleteAllByUserIdAsync(userId, transaction);
     }
 }

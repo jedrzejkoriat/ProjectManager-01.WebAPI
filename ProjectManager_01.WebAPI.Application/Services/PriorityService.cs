@@ -40,7 +40,7 @@ public class PriorityService : IPriorityService
         try
         {
             await _ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
-            await _priorityRepository.DeleteAsync(priorityId, transaction);
+            await _priorityRepository.DeleteByIdAsync(priorityId, transaction);
 
             transaction.Commit();
         }

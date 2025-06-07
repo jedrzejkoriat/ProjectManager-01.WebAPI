@@ -43,7 +43,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE ProjectRoleId = @ProjectRoleId";
@@ -61,7 +61,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId)
+    public async Task<bool> DeleteByProjectRoleIdAndPermissionIdAsync(Guid projectRoleId, Guid permissionId)
     {
         var sql = @"DELETE FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId AND PermissionId = @PermissionId";
@@ -70,7 +70,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         return result > 0;
     }
 
-    public async Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByPermissionIdAsync(Guid permissionId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectRolePermissions 
                     WHERE PermissionId = @PermissionId";
