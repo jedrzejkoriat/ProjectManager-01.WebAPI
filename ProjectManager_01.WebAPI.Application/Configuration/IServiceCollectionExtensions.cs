@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using ProjectManager_01.Application.Authorization;
-using ProjectManager_01.Application.Contracts.Authorization;
+using ProjectManager_01.Application.Auth;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.Services;
 
@@ -75,6 +75,13 @@ public static class IServiceCollectionExtensions
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssembly(Assembly.Load("ProjectManager_01.Application"));
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationHelpers(this IServiceCollection services)
+    {
+        services.AddScoped<IProjectAccessValidator, ProjectAccessValidator>();
 
         return services;
     }

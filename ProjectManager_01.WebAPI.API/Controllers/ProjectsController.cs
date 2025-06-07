@@ -28,7 +28,7 @@ public class ProjectsController : ControllerBase
     /// Get all Projects - Admin only
     /// </summary>
     /// <returns>All Projects</returns>
-    [HttpGet]
+    [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
@@ -42,9 +42,9 @@ public class ProjectsController : ControllerBase
     /// <param name="projectId"></param>
     /// <returns>Project by Id</returns>
     [HttpGet("{projectId}")]
+    [Authorize(Policy = Permissions.ReadProject)]
     public async Task<ActionResult<ProjectDto>> GetProject(Guid projectId)
     {
-        // TODO Validate if user has projectrole with projectId
         return Ok(await _projectService.GetProjectByIdAsync(projectId));
     }
 
@@ -56,8 +56,7 @@ public class ProjectsController : ControllerBase
     [HttpGet("my")]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjectsByUserId()
     {
-        // TODO Delete UserId from here, use UserId from token
-        var projects = await _projectService.GetProjectsByUserIdAsync(Guid.NewGuid());
+        var projects = await _projectService.GetUserProjectsAsync();
         return Ok(projects);
     }
 

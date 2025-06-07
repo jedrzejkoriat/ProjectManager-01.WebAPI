@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectManager_01.Application.Contracts.Authorization;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.WebAPI.Controllers;

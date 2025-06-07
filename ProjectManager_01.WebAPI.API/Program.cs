@@ -50,6 +50,7 @@ builder.Services.AddDapperRepositories();
 
 // Services
 builder.Services.AddServices();
+builder.Services.AddApplicationHelpers();
 
 // Authentication and Authorization
 builder.Services.AddAuthServices(builder.Configuration);

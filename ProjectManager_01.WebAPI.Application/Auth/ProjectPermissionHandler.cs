@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using ProjectManager_01.Application.Constants;
 
-namespace ProjectManager_01.Application.Authorization;
+namespace ProjectManager_01.Application.Auth;
 
 public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermissionRequirement>
 {
@@ -17,7 +18,7 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
     {
         var httpContext = _httpContextAccessor.HttpContext;
         var routeData = httpContext?.GetRouteData();
-        var projectId = routeData?.Values["projectId"]?.ToString().ToLower();
+        var projectId = routeData?.Values["projectId"]?.ToString();
 
         if (string.IsNullOrWhiteSpace(projectId))
         {
@@ -34,7 +35,7 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
         var hasPermission = claims.Any(c =>
         {
             var parts = c.Value.Split(':');
-            return parts.Length == 2 && parts[0] == projectId && parts[1].ToLower() == requirement.PermissionName;
+            return parts.Length == 2 && parts[0] == projectId && parts[1].Equals(requirement.PermissionName, StringComparison.OrdinalIgnoreCase);
         });
 
         if (hasPermission)

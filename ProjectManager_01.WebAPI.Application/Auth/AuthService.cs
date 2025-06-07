@@ -1,9 +1,9 @@
-﻿using ProjectManager_01.Application.Contracts.Authorization;
+﻿using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.DTOs.Users;
 using ProjectManager_01.Application.Helpers;
 
-namespace ProjectManager_01.Application.Authorization;
+namespace ProjectManager_01.Application.Auth;
 
 internal sealed class AuthService : IAuthService
 {

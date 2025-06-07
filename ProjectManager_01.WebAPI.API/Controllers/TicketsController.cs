@@ -51,8 +51,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicket(Guid id, Guid projectId)
     {
-        // TODO: validate projectId
-        return Ok(await _ticketService.GetTicketByIdAsync(id));
+        return Ok(await _ticketService.GetTicketByIdAsync(id, projectId));
     }
 
     // GET: api/projects/{projectId}/tickets/getByKeyAndNumber?projectKey=ABC&ticketNumber=123
@@ -67,8 +66,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber, Guid projectId)
     {
-        // TODO: validate projectId
-        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber));
+        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber, projectId));
     }
 
     // GET: api/projects/{projectId}/tickets/project/{projectId}
@@ -81,7 +79,6 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
     {
-        // TODO: validate projectId
         var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
         return Ok(tickets);
     }
@@ -97,8 +94,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicket)]
     public async Task<ActionResult> CreateTicket([FromBody] TicketCreateDto ticket, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketService.CreateTicketAsync(ticket);
+        await _ticketService.CreateTicketAsync(ticket, projectId);
         return Ok();
     }
 
@@ -113,8 +109,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicket)]
     public async Task<ActionResult> UpdateTicket([FromBody] TicketUpdateDto updatedTicket, Guid projectId)
     {
-        // TODO: validate projectId
-        var ticket = await _ticketService.UpdateTicketAsync(updatedTicket);
+        var ticket = await _ticketService.UpdateTicketAsync(updatedTicket, projectId);
 
         await _hubContext.Clients
             .Group($"ticket-{ticket.Id}")
@@ -148,8 +143,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.DeleteTicket)]
     public async Task<ActionResult> SoftDeleteTicket(Guid id, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketService.SoftDeleteTicketAsync(id);
+        await _ticketService.SoftDeleteTicketAsync(id, projectId);
         return Ok();
     }
 }

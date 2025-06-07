@@ -45,8 +45,7 @@ public class TagsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTag)]
     public async Task<ActionResult<TagDto>> GetTag(Guid id, Guid projectId)
     {
-        // TODO: validate projectId
-        return Ok(await _tagService.GetTagByIdAsync(id));
+        return Ok(await _tagService.GetTagByIdAsync(id, projectId));
     }
 
     // GET: api/projects/{projectId}/tags
@@ -73,8 +72,7 @@ public class TagsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTag)]
     public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag, Guid projectId)
     {
-        // TODO: validate projectId
-        await _tagService.CreateTagAsync(tag);
+        await _tagService.CreateTagAsync(tag, projectId);
         return Ok();
     }
 
@@ -89,8 +87,7 @@ public class TagsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTag)]
     public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag, Guid projectId)
     {
-        // TODO: validate projectId
-        await _tagService.UpdateTagAsync(updatedTag);
+        await _tagService.UpdateTagAsync(updatedTag, projectId);
         return Ok();
     }
 
@@ -105,8 +102,7 @@ public class TagsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTag)]
     public async Task<ActionResult> DeleteTag(Guid id, Guid projectId)
     {
-        // TODO: validate projectId
-        await _tagService.DeleteTagAsync(id);
+        await _tagService.DeleteTagAsync(id, projectId);
         return Ok();
     }
 }

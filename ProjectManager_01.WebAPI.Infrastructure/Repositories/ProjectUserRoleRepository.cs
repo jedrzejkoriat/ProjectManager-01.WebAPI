@@ -32,6 +32,15 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result;
     }
 
+    public async Task<IEnumerable<ProjectUserRole>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE UserId = @UserId AND ProjectId = @ProjectId";
+        var result = await _dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
+
+        return result.ToList();
+    }
+
     // ============================= COMMANDS =============================
     public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {

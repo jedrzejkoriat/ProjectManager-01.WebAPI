@@ -16,13 +16,13 @@ public class TicketsHub : Hub
     }
 
     // Add subscriber to a group based on ticketId
-    public async Task SubscribeToTicket(string ticketId)
+    public async Task SubscribeToTicket(string ticketId, string projectId)
     {
-        if (Guid.TryParse(ticketId, out var guid))
+        if (Guid.TryParse(ticketId, out var ticketGuid) && Guid.TryParse(projectId, out var projectGuid))
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, GetTicketGroupName(guid));
+            await Groups.AddToGroupAsync(Context.ConnectionId, GetTicketGroupName(ticketGuid));
 
-            var ticket = await _ticketService.GetTicketByIdAsync(guid);
+            var ticket = await _ticketService.GetTicketByIdAsync(ticketGuid, projectGuid);
             await Clients.Caller.SendAsync("ReceiveTicket", ticket);
         }
         else

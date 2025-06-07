@@ -27,7 +27,7 @@ public class TicketRelationsController : ControllerBase
     /// Get all TicketRelations - Admin only
     /// </summary>
     /// <returns>All TicketRelations</returns>
-    [HttpGet]
+    [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketRelationDto>>> GetTicketRelations()
     {
@@ -45,8 +45,7 @@ public class TicketRelationsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicketRelation)]
     public async Task<ActionResult<TicketRelationDto>> GetTicketRelation(Guid Id, Guid projectId)
     {
-        // TODO: validate projectId
-        return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id));
+        return Ok(await _ticketRelationService.GetTicketRelationByIdAsync(Id, projectId));
     }
 
     // POST api/projects/{projectId}/ticketrelations
@@ -60,8 +59,7 @@ public class TicketRelationsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicketRelation)]
     public async Task<ActionResult> CreateTicketRelation([FromBody] TicketRelationCreateDto ticketRelation, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketRelationService.CreateTicketRelationAsync(ticketRelation);
+        await _ticketRelationService.CreateTicketRelationAsync(ticketRelation, projectId);
         return Ok();
     }
 
@@ -76,8 +74,7 @@ public class TicketRelationsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicketRelation)]
     public async Task<ActionResult> UpdateTicketRelation([FromBody] TicketRelationUpdateDto updatedTicketRelation, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation);
+        await _ticketRelationService.UpdateTicketRelationAsync(updatedTicketRelation, projectId);
         return Ok();
     }
 
@@ -92,8 +89,7 @@ public class TicketRelationsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicketRelation)]
     public async Task<ActionResult> DeleteTicketRelation(Guid Id, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketRelationService.DeleteTicketRelationAsync(Id);
+        await _ticketRelationService.DeleteTicketRelationAsync(Id, projectId);
         return Ok();
     }
 }

@@ -27,7 +27,7 @@ public class TicketTagsController : ControllerBase
     /// Get all TicketTags - Admin only
     /// </summary>
     /// <returns>All TicketTags</returns>
-    [HttpGet]
+    [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TicketTagDto>>> GetTicketTags()
     {
@@ -46,8 +46,7 @@ public class TicketTagsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicketTag)]
     public async Task<ActionResult<TicketTagDto>> GetTicketTag(Guid ticketId, Guid tagId, Guid projectId)
     {
-        // TODO: validate projectId
-        return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId));
+        return Ok(await _ticketTagService.GetTicketTagByIdAsync(ticketId, tagId, projectId));
     }
 
     // POST: api/projects/{projectId}/tickettags
@@ -61,8 +60,7 @@ public class TicketTagsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicketTag)]
     public async Task<ActionResult> CreateTicketTag([FromBody] TicketTagCreateDto ticketTag, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketTagService.CreateTicketTagAsync(ticketTag);
+        await _ticketTagService.CreateTicketTagAsync(ticketTag, projectId);
         return Ok();
     }
 
@@ -78,8 +76,7 @@ public class TicketTagsController : ControllerBase
     [Authorize(Policy = Permissions.WriteTicketTag)]
     public async Task<ActionResult> DeleteTicketTag(Guid ticketId, Guid tagId, Guid projectId)
     {
-        // TODO: validate projectId
-        await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId);
+        await _ticketTagService.DeleteTicketTagAsync(ticketId, tagId, projectId);
         return Ok();
     }
 }

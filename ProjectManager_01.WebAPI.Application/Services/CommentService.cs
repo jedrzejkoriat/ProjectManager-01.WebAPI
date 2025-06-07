@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Design;
 using System.Data;
 using AutoMapper;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Comments;
@@ -11,22 +12,22 @@ namespace ProjectManager_01.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly ITicketService _ticketService;
+    private readonly IProjectAccessValidator _projectValidatorHelper;
     private readonly IMapper _mapper;
 
     public CommentService(
         ICommentRepository commentRepository,
-        ITicketService ticketService,
+        IProjectAccessValidator projectValidatorHelper,
         IMapper mapper)
     {
         _commentRepository = commentRepository;
-        _ticketService = ticketService;
+        _projectValidatorHelper = projectValidatorHelper;
         _mapper = mapper;
     }
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
-        await ValidateProjectIdAsync(commentCreateDto.TicketId, projectId);
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentCreateDto);
         await _commentRepository.CreateAsync(comment);
@@ -35,7 +36,7 @@ public class CommentService : ICommentService
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        await ValidateProjectIdAsync(comment.TicketId, projectId);
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
 
         return _mapper.Map<CommentDto>(comment);
     }
@@ -49,7 +50,7 @@ public class CommentService : ICommentService
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto, Guid projectId)
     {
-        await ValidateProjectIdAsync(commentUpdateDto.TicketId, projectId);
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(commentUpdateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentUpdateDto);
         await _commentRepository.UpdateAsync(comment);
@@ -58,7 +59,7 @@ public class CommentService : ICommentService
     public async Task DeleteCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        await ValidateProjectIdAsync(comment.TicketId, projectId);
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
 
         await _commentRepository.DeleteAsync(commentId);
     }
@@ -77,14 +78,5 @@ public class CommentService : ICommentService
     {
         var comments = await _commentRepository.GetByTicketIdAsync(ticketId);
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
-    }
-
-    // This method validates if the comment belongs to the projectId provided through the route
-    private async Task ValidateProjectIdAsync(Guid ticketId, Guid projectId)
-    {
-        var ticket = await _ticketService.GetTicketByIdAsync(ticketId);
-
-        if (ticket == null || ticket.Project.Id != projectId)
-            throw new Exception("Comment does not belong to the specified project.");
     }
 }

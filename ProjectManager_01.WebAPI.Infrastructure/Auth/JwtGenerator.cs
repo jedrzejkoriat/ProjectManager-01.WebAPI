@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ProjectManager_01.Application.Contracts.Authorization;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.Infrastructure.Auth;
@@ -21,7 +21,7 @@ internal sealed class JwtGenerator : IJwtGenerator
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userClaimsDto.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, userClaimsDto.UserId.ToString()),
             new Claim(ClaimTypes.Role, userClaimsDto.Role)
         };
 

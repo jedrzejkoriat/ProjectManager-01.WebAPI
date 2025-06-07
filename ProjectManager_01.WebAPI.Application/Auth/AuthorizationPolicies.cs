@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using ProjectManager_01.Application.Constants;
 
-namespace ProjectManager_01.Application.Authorization;
+namespace ProjectManager_01.Application.Auth;
 
 public static class AuthorizationPolicies
 {
@@ -15,6 +15,7 @@ public static class AuthorizationPolicies
             Permissions.WriteTag,
             Permissions.ReadTicket,
             Permissions.WriteTicket,
+            Permissions.ReadProject,
             Permissions.DeleteTicket,
             Permissions.ReadTicketRelation,
             Permissions.WriteTicketRelation,

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace ProjectManager_01.Application.Authorization;
+namespace ProjectManager_01.Application.Auth;
 
 public sealed class ProjectPermissionRequirement : IAuthorizationRequirement
 {

@@ -10,5 +10,5 @@ public interface IProjectService
     Task<ProjectDto> GetProjectByIdAsync(Guid projectId);
     Task<IEnumerable<ProjectDto>> GetAllProjectsAsync();
     Task SoftDeleteProjectAsync(Guid projectId);
-    Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(Guid userId);
+    Task<IEnumerable<ProjectDto>> GetUserProjectsAsync();
 }

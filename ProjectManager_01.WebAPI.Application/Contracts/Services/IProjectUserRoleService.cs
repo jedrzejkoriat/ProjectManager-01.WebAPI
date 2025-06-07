@@ -13,4 +13,5 @@ public interface IProjectUserRoleService
     Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
     Task DeleteByProjectRoleId(Guid projectRoleId, IDbTransaction transaction);
     Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
+    Task<IEnumerable<ProjectUserRoleDto>> GetByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
 }

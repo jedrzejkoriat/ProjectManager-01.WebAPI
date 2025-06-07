@@ -2,7 +2,7 @@
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectManager_01.Application.Contracts.Authorization;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Infrastructure.Auth;
 using ProjectManager_01.Infrastructure.Repositories;

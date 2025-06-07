@@ -1,5 +1,8 @@
 ﻿using System.Data;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Projects;
@@ -15,19 +18,22 @@ public class ProjectService : IProjectService
     private readonly ITicketService _ticketService;
     private readonly IDbConnection _dbConnection;
     private readonly IProjectRoleService _projectRoleService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ProjectService(
         IProjectRepository projectRepository,
         IMapper mapper,
         ITicketService ticketService,
         IDbConnection dbConnection,
-        IProjectRoleService projectRoleService)
+        IProjectRoleService projectRoleService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _projectRepository = projectRepository;
         _mapper = mapper;
         _ticketService = ticketService;
         _dbConnection = dbConnection;
         _projectRoleService = projectRoleService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task CreateProjectAsync(ProjectCreateDto projectCreateDto)
@@ -80,9 +86,18 @@ public class ProjectService : IProjectService
         await _projectRepository.SoftDeleteAsync(projectId);
     }
 
-    public async Task<IEnumerable<ProjectDto>> GetProjectsByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<ProjectDto>> GetUserProjectsAsync()
     {
-        var projects = await _projectRepository.GetByUserIdAsync(userId);
+        var projectIds = _httpContextAccessor.HttpContext?.User.Claims
+            .Where(c => c.Type == "ProjectPermission")
+            .Select(c => c.Value.Split(':'))
+            .Where(parts => parts.Length == 2 && parts[1].Equals(Permissions.ReadProject, StringComparison.OrdinalIgnoreCase))
+            .Select(parts => parts[0])
+            .Distinct()
+            .ToList();
+
+        var projects = await Task.WhenAll(projectIds.Select(id => _projectRepository.GetByIdAsync(Guid.Parse(id))));
+        var projectsList = projects.ToList();
 
         return _mapper.Map<IEnumerable<ProjectDto>>(projects);
     }
