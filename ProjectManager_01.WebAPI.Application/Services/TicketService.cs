@@ -19,7 +19,7 @@ public class TicketService : ITicketService
     private readonly ITicketRelationService _ticketRelationService;
     private readonly ICommentService _commentService;
     private readonly ITicketTagService _ticketTagService;
-    private readonly IProjectAccessValidator _projectValidatorHelper;
+    private readonly IProjectAccessValidator _projectAccessValidator;
     private readonly ITagService _tagService;
 
     public TicketService(
@@ -29,7 +29,7 @@ public class TicketService : ITicketService
         ITicketRelationService ticketRelationService,
         ICommentService commentService,
         ITicketTagService ticketTagService,
-        IProjectAccessValidator projectValidatorHelper,
+        IProjectAccessValidator projectAccessValidator,
         ITagService tagService)
     {
         _ticketRepository = ticketRepository;
@@ -38,13 +38,13 @@ public class TicketService : ITicketService
         _ticketRelationService = ticketRelationService;
         _commentService = commentService;
         _ticketTagService = ticketTagService;
-        _projectValidatorHelper = projectValidatorHelper;
+        _projectAccessValidator = projectAccessValidator;
         _tagService = tagService;
     }
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto, Guid projectId)
     {
-        _projectValidatorHelper.ValidateProjectIds(ticketCreateDto.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(ticketCreateDto.ProjectId, projectId);
 
         var projectTickets = await _ticketRepository.GetByProjectIdAsync(ticketCreateDto.ProjectId);
 
@@ -74,7 +74,7 @@ public class TicketService : ITicketService
 
     public async Task<TicketDto> UpdateTicketAsync(TicketUpdateDto ticketUpdateDto, Guid projectId)
     {
-        _projectValidatorHelper.ValidateProjectIds(ticketUpdateDto.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(ticketUpdateDto.ProjectId, projectId);
 
         var ticket = _mapper.Map<Ticket>(ticketUpdateDto);
         await _ticketRepository.UpdateAsync(ticket);
@@ -132,7 +132,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepository.GetByIdAsync(ticketId);
 
-        _projectValidatorHelper.ValidateProjectIds(ticket.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(ticket.ProjectId, projectId);
 
         return await GetTicketDtoWithRelationsAsync(ticket);
     }
@@ -141,7 +141,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepository.GetByKeyAndNumberAsync(projectKey, ticketNumber);
 
-        _projectValidatorHelper.ValidateProjectIds(ticket.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(ticket.ProjectId, projectId);
 
         return await GetTicketDtoWithRelationsAsync(ticket);
     }
@@ -160,7 +160,7 @@ public class TicketService : ITicketService
 
     public async Task SoftDeleteTicketAsync(Guid ticketId, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTicketProjectIdAsync(ticketId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketId, projectId);
 
         await _ticketRepository.SoftDeleteAsync(ticketId);
     }

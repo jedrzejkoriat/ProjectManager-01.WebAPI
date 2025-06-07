@@ -10,22 +10,22 @@ namespace ProjectManager_01.Application.Services;
 public class TagService : ITagService
 {
     private readonly ITagRepository _tagRepository;
-    private readonly IProjectAccessValidator _projectValidatorHelper;
+    private readonly IProjectAccessValidator _projectAccessValidator;
     private readonly IMapper _mapper;
 
     public TagService(
         ITagRepository tagRepository,
-        IProjectAccessValidator projectValidatorHelper,
+        IProjectAccessValidator projectAccessValidator,
         IMapper mapper)
     {
         _tagRepository = tagRepository;
-        _projectValidatorHelper = projectValidatorHelper;
+        _projectAccessValidator = projectAccessValidator;
         _mapper = mapper;
     }
 
     public async Task CreateTagAsync(TagCreateDto tagCreateDto, Guid projectId)
     {
-        _projectValidatorHelper.ValidateProjectIds(tagCreateDto.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(tagCreateDto.ProjectId, projectId);
 
         var tag = _mapper.Map<Tag>(tagCreateDto);
         await _tagRepository.CreateAsync(tag);
@@ -33,7 +33,7 @@ public class TagService : ITagService
 
     public async Task UpdateTagAsync(TagUpdateDto tagUpdateDto, Guid projectId)
     {
-        _projectValidatorHelper.ValidateProjectIds(tagUpdateDto.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(tagUpdateDto.ProjectId, projectId);
 
         var tag = _mapper.Map<Tag>(tagUpdateDto);
         await _tagRepository.UpdateAsync(tag);
@@ -41,7 +41,7 @@ public class TagService : ITagService
 
     public async Task DeleteTagAsync(Guid tagId, Guid projectId)
     {
-        _projectValidatorHelper.ValidateProjectIds((await _tagRepository.GetByIdAsync(tagId)).ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds((await _tagRepository.GetByIdAsync(tagId)).ProjectId, projectId);
 
         await _tagRepository.DeleteAsync(tagId);
     }
@@ -49,7 +49,7 @@ public class TagService : ITagService
     public async Task<TagDto> GetTagByIdAsync(Guid tagId, Guid projectId)
     {
         var tag = await _tagRepository.GetByIdAsync(tagId);
-        _projectValidatorHelper.ValidateProjectIds(tag.ProjectId, projectId);
+        _projectAccessValidator.ValidateProjectIds(tag.ProjectId, projectId);
 
         return _mapper.Map<TagDto>(tag);
     }

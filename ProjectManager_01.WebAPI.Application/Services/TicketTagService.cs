@@ -11,16 +11,16 @@ namespace ProjectManager_01.Application.Services;
 public class TicketTagService : ITicketTagService
 {
     private readonly ITicketTagRepository _ticketTagRepository;
-    private readonly IProjectAccessValidator _projectValidatorHelper;
+    private readonly IProjectAccessValidator _projectAccessValidator;
     private readonly IMapper _mapper;
 
     public TicketTagService(
         ITicketTagRepository ticketTagRepository,
-        IProjectAccessValidator projectValidatorHelper,
+        IProjectAccessValidator projectAccessValidator,
         IMapper mapper)
     {
         _ticketTagRepository = ticketTagRepository;
-        _projectValidatorHelper = projectValidatorHelper;
+        _projectAccessValidator = projectAccessValidator;
         _mapper = mapper;
     }
 
@@ -32,20 +32,20 @@ public class TicketTagService : ITicketTagService
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTagProjectIdAsync(ticketTagCreateDto.TagId, projectId);
+        await _projectAccessValidator.ValidateTagProjectIdAsync(ticketTagCreateDto.TagId, projectId);
         var ticketTag = _mapper.Map<TicketTag>(ticketTagCreateDto);
         await _ticketTagRepository.CreateAsync(ticketTag);
     }
 
     public async Task DeleteTicketTagAsync(Guid ticketId, Guid tagId, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTagProjectIdAsync(tagId, projectId);
+        await _projectAccessValidator.ValidateTagProjectIdAsync(tagId, projectId);
         await _ticketTagRepository.DeleteAsync(ticketId, tagId);
     }
 
     public async Task<TicketTagDto> GetTicketTagByIdAsync(Guid ticketId, Guid tagId, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTagProjectIdAsync(tagId, projectId);
+        await _projectAccessValidator.ValidateTagProjectIdAsync(tagId, projectId);
         var ticketTag = await _ticketTagRepository.GetByIdAsync(ticketId, tagId);
 
         return _mapper.Map<TicketTagDto>(ticketTag);

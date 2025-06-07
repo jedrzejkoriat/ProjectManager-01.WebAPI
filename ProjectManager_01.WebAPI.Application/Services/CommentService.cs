@@ -12,22 +12,22 @@ namespace ProjectManager_01.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly IProjectAccessValidator _projectValidatorHelper;
+    private readonly IProjectAccessValidator _projectAccessValidator;
     private readonly IMapper _mapper;
 
     public CommentService(
         ICommentRepository commentRepository,
-        IProjectAccessValidator projectValidatorHelper,
+        IProjectAccessValidator projectAccessValidator,
         IMapper mapper)
     {
         _commentRepository = commentRepository;
-        _projectValidatorHelper = projectValidatorHelper;
+        _projectAccessValidator = projectAccessValidator;
         _mapper = mapper;
     }
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentCreateDto);
         await _commentRepository.CreateAsync(comment);
@@ -36,7 +36,7 @@ public class CommentService : ICommentService
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        await _projectValidatorHelper.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
 
         return _mapper.Map<CommentDto>(comment);
     }
@@ -50,7 +50,7 @@ public class CommentService : ICommentService
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto, Guid projectId)
     {
-        await _projectValidatorHelper.ValidateTicketProjectIdAsync(commentUpdateDto.TicketId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(commentUpdateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentUpdateDto);
         await _commentRepository.UpdateAsync(comment);
@@ -59,7 +59,7 @@ public class CommentService : ICommentService
     public async Task DeleteCommentAsync(Guid commentId, Guid projectId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        await _projectValidatorHelper.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
 
         await _commentRepository.DeleteAsync(commentId);
     }
