@@ -1,5 +1,7 @@
 using System.Data;
 using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using ProjectManager_01.Application.Configuration;
@@ -12,9 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-    {
+{
         options.JsonSerializerOptions.WriteIndented = true;
-    });
+});
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -42,6 +44,7 @@ builder.Services.AddDatabaseConnection(builder.Configuration);
 
 // Package services
 builder.Services.AddSignalR();
+
 builder.Services.AddApplicationMapper();
 builder.Services.AddDtoValidation();
 
@@ -70,6 +73,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.MapHub<TicketsHub>("/hubs/tickets");
 app.MapControllers();
