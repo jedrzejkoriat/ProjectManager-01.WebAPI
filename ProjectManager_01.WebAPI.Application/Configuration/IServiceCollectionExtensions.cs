@@ -40,6 +40,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
+        services.AddScoped<IProjectAccessValidator, ProjectAccessValidator>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -75,13 +76,6 @@ public static class IServiceCollectionExtensions
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssembly(Assembly.Load("ProjectManager_01.Application"));
-
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationHelpers(this IServiceCollection services)
-    {
-        services.AddScoped<IProjectAccessValidator, ProjectAccessValidator>();
 
         return services;
     }
