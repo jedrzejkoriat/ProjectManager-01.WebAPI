@@ -61,8 +61,7 @@ public class UserService : IUserService
                 throw new OperationFailedException("Creating User failed.");
             }
 
-            var userRoleCreateDto = new UserRoleCreateDto(user.Id);
-            await _userRoleService.CreateUserRoleAsync(userRoleCreateDto, transaction);
+            await _userRoleService.CreateDefaultUserRoleAsync(user.Id, transaction);
 
             transaction.Commit();
 

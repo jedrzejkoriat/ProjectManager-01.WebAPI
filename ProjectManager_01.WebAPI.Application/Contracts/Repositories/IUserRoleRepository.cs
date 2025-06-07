@@ -13,4 +13,5 @@ public interface IUserRoleRepository
     Task<bool> DeleteAllByRoleIdAsync(Guid roleId, IDbTransaction transaction);
     Task<bool> DeleteAllByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction);
+    Task<bool> CreateDefaultAsync(Guid userId, IDbTransaction transaction);
 }

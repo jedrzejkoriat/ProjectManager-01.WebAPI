@@ -35,6 +35,15 @@ internal class UserRoleRepository : IUserRoleRepository
 
     // ============================= COMMANDS =============================
 
+    public async Task<bool> CreateDefaultAsync(Guid userId, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO UserRoles (UserId)
+                    VALUES (@UserId)";
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+
+        return result > 0;
+    }
+
     public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO UserRoles (UserId, RoleId)

@@ -141,4 +141,18 @@ public class UserRoleService : IUserRoleService
 
         _logger.LogInformation("Deleting UserRoles by UserId transaction successful. UserId: {UserId}", userId);
     }
+
+    public async Task CreateDefaultUserRoleAsync(Guid userId, IDbTransaction transaction)
+    {
+        _logger.LogInformation("Creating default UserRole called. UserId: {UserId}", userId);
+
+        // Check if operation is successful
+        if (!await _userRoleRepository.CreateDefaultAsync(userId, transaction))
+        {
+            _logger.LogError("Creating default UserRole failed. UserId: {UserId}", userId);
+            throw new OperationFailedException("Creating default UserRole failed.");
+        }
+
+        _logger.LogInformation("Creating default UserRole successful. UserId: {UserId}", userId);
+    }
 }
