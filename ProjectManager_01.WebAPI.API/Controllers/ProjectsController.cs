@@ -28,7 +28,7 @@ public class ProjectsController : ControllerBase
     /// Get all Projects - Admin only
     /// </summary>
     /// <returns>All Projects</returns>
-    [HttpGet("api/[controller]")]
+    [HttpGet]
     [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
