@@ -27,34 +27,34 @@ public class UserRoleService : IUserRoleService
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto)
     {
-        _logger.LogWarning("Creating UserRole called. UserId: {UserId}", userRoleCreateDto.UserId);
+        _logger.LogWarning("Creating UserRole called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
 
         var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
 
         // Check if operation is successful
         if (!await _userRoleRepository.CreateAsync(userRole))
         {
-            _logger.LogError("Creating UserRole failed. UserId: {UserId}", userRoleCreateDto.UserId);
+            _logger.LogError("Creating UserRole failed. UserId: UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
             throw new OperationFailedException("Creating UserRole failed.");
         }
 
-        _logger.LogInformation("Creating UserRole successful. UserId: {UserId}", userRoleCreateDto.UserId);
+        _logger.LogInformation("Creating UserRole successful. UserId: UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
     }
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto, IDbTransaction transaction)
     {
-        _logger.LogWarning("Creating UserRole transaction called. UserId: {UserId}", userRoleCreateDto.UserId);
+        _logger.LogWarning("Creating UserRole transaction called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
 
         var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
 
         // Check if operation is successful
         if (!await _userRoleRepository.CreateAsync(userRole, transaction))
         {
-            _logger.LogError("Creating UserRole transaction failed. UserId: {UserId}", userRoleCreateDto.UserId);
+            _logger.LogError("Creating UserRole transaction failed. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
             throw new OperationFailedException("Creating UserRole transaction failed.");
         }
 
-        _logger.LogInformation("Creating UserRole transaction successful. UserId: {UserId}", userRoleCreateDto.UserId);
+        _logger.LogInformation("Creating UserRole transaction successful. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
     }
 
     public async Task UpdateUserRoleAsync(UserRoleUpdateDto userRoleUpdateDto)

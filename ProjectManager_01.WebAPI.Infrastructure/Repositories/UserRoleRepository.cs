@@ -37,8 +37,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
     {
-        var sql = @"INSERT INTO UserRoles (UserId)
-                    VALUES (@UserId)";
+        var sql = @"INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
         var result = await _dbConnection.ExecuteAsync(sql, userRole, transaction);
 
         return result > 0;
@@ -64,8 +64,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<bool> CreateAsync(UserRole entity)
     {
-        var sql = @"INSERT INTO UserRoles (UserId)
-                    VALUES (@UserId)";
+        var sql = @"INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
