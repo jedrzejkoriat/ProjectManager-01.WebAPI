@@ -18,6 +18,9 @@ builder.Services.AddControllers()
 // Swagger
 builder.Services.AddSwaggerConfiguration();
 
+// Logger
+builder.Logging.AddConsole();
+
 builder.Services.AddHealthChecks().AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // Http Context
