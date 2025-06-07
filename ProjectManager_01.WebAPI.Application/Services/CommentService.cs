@@ -33,82 +33,135 @@ public class CommentService : ICommentService
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
-        _logger.LogInformation("Creating comment for ticket {TicketId} by user {UserId}",commentCreateDto.TicketId, commentCreateDto.UserId);
+        _logger.LogInformation("Creating comment called. Ticket: {TicketId}, User: {UserId}",commentCreateDto.TicketId, commentCreateDto.UserId);
 
-        // Validate that the project ID matches the ticket's project ID
+        // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
 
-        // Map the DTO and add missing properties
         var comment = _mapper.Map<Comment>(commentCreateDto);
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
 
-        if (await _commentRepository.CreateAsync(comment))
+        // Check if operation is successful
+        if (!await _commentRepository.CreateAsync(comment))
         {
-            _logger.LogError("Failed to create comment in ticket {TicketId} by user {UserId}", comment.TicketId, comment.UserId);
-            throw new OperationFailedException("Failed to create comment.");
+            _logger.LogError("Creating comment failed. Ticket: {TicketId}, User: {UserId}", comment.TicketId, comment.UserId);
+            throw new OperationFailedException("Create comment failed.");
         }
 
-        _logger.LogInformation("Comment created with ID: {CommentId}", comment.Id);
+        _logger.LogInformation("Creating comment {CommentId} successfull. Ticket: {TicketId}, User: {UserId}", comment.Id, comment.TicketId, comment.UserId);
     }
 
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
-        _logger.LogInformation("Retrieving comment with ID: {CommentId}", commentId);
+        _logger.LogInformation("Getting comment called. Comment: {CommentId}", commentId);
 
         var comment = await _commentRepository.GetByIdAsync(commentId);
 
+        // Check if operation is successful
         if (comment == null)
         {
-            _logger.LogError("Comment with ID {CommentId} not found", commentId);
-            throw new NotFoundException($"Comment with ID {commentId} not found.");
+            _logger.LogError("Getting comment failed. Comment: {CommentId}", commentId);
+            throw new NotFoundException($"Comment not found.");
         }
 
+        // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
-        _logger.LogInformation("Retrieved comment with ID: {CommentId}", commentId);
+        _logger.LogInformation("Getting comment succesfull. Comment: {CommentId}", commentId);
 
         return _mapper.Map<CommentDto>(comment);
     }
 
     public async Task<IEnumerable<CommentDto>> GetAllCommentsAsync()
     {
-        _logger.LogWarning("Get all comments called");
+        _logger.LogWarning("Getting comments called.");
 
         var comments = await _commentRepository.GetAllAsync();
-        _logger.LogInformation("Retrieved {Count} comments", comments.Count());
+        _logger.LogInformation("Getting comments ({Count}) successfull.", comments.Count());
 
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 
     public async Task UpdateCommentAsync(CommentUpdateDto commentUpdateDto, Guid projectId)
     {
+        _logger.LogInformation("Update comment called. Comment: {CommentId}", commentUpdateDto.Id);
+
+        // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(commentUpdateDto.TicketId, projectId);
 
         var comment = _mapper.Map<Comment>(commentUpdateDto);
-        await _commentRepository.UpdateAsync(comment);
+
+        // Check if operation is successful
+        if (!await _commentRepository.UpdateAsync(comment))
+        {
+            _logger.LogError("Udate comment failed. Comment: {CommentId}", commentUpdateDto.Id);
+            throw new OperationFailedException($"Update comment failed.");
+        }
+
+        _logger.LogInformation("Update comment succesfull. Comment: {ComentId}", commentUpdateDto.Id);
     }
 
     public async Task DeleteCommentAsync(Guid commentId, Guid projectId)
     {
+        _logger.LogInformation("Delete comment called. Comment: {CommentId}", commentId);
+
         var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        // Check if comment exsists
+        if (comment == null)
+        {
+            _logger.LogError("Delete comment failed. Comment: {CommentId}", commentId);
+            throw new NotFoundException("Comment not found.");
+        }
+
+        // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
 
-        await _commentRepository.DeleteByIdAsync(commentId);
+        // Check if operation is successful
+        if (!await _commentRepository.DeleteByIdAsync(commentId))
+        {
+            _logger.LogError("Delete comment failed. Comment: {CommentId}", commentId);
+            throw new OperationFailedException("Delete comment failed.");
+        }
+
+        _logger.LogInformation("Delete comment succesfull. Comment: {CommentId}", commentId);
     }
 
     public async Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
-        await _commentRepository.DeleteAllByUserIdAsync(userId, transaction);
+        _logger.LogInformation("Delete comments by userId called. User: {UserId}", userId);
+
+        // Check if operation is successful
+        if (!await _commentRepository.DeleteAllByUserIdAsync(userId, transaction))
+        {
+            _logger.LogError("Delete comments by userId failed. User: {UserId}", userId);
+            throw new OperationFailedException("Delete comments failed.");
+        }
+
+        _logger.LogInformation("Delete comments by userId successfull. User: {UserId}", userId);
     }
 
     public async Task DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
-        await _commentRepository.DeleteAllByTicketIdAsync(ticketId, transaction);
+        _logger.LogInformation("Delete comments by ticketId called. Ticket: {TicketId}", ticketId);
+
+        // Check if operation is successful
+        if (!await _commentRepository.DeleteAllByTicketIdAsync(ticketId, transaction))
+        {
+            _logger.LogError("Delete comments by ticketId failed. Ticket: {TicketId}", ticketId);
+            throw new OperationFailedException("Delete comments failed.");
+        }
+
+        _logger.LogInformation("Delete comments by ticketId successfull. Ticket: {TicketId}", ticketId);
     }
 
     public async Task<IEnumerable<CommentDto>> GetByTicketIdAsync(Guid ticketId)
     {
+        _logger.LogInformation("Get comments by ticketId called. Ticket: {TicketId}", ticketId);
+
         var comments = await _commentRepository.GetAllByTicketIdAsync(ticketId);
+        _logger.LogInformation("Getting comments ({Count}) successfull.", comments.Count());
+
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
 }

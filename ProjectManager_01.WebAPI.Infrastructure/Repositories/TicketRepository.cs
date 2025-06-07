@@ -72,7 +72,7 @@ internal class TicketRepository : ITicketRepository
                     AND t.IsDeleted = 0;
 ";
 
-        var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
+        var result = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
             sql,
             (ticket, project, priority, assignee, reporter) =>
             {
@@ -84,9 +84,9 @@ internal class TicketRepository : ITicketRepository
             },
             new { Id = id },
             splitOn: "Id,Id,Id,Id"
-        )).FirstOrDefault();
+        ));
 
-        return ticket;
+        return result.FirstOrDefault();
     }
 
     public async Task<Ticket> GetByProjectKeyAndTicketNumberAsync(string projectKey, int ticketNumber)
@@ -117,9 +117,9 @@ internal class TicketRepository : ITicketRepository
             },
         new { TicketNumber = ticketNumber, ProjectKey = projectKey },
         splitOn: "ProjectId,PriorityId,AssigneeId,ReporterId"
-        )).FirstOrDefault();
+        ));
 
-        return ticket;
+        return ticket.FirstOrDefault();
     }
 
     public async Task<IEnumerable<Ticket>> GetAllByReporterIdAsync(Guid reporterId, IDbTransaction transaction)

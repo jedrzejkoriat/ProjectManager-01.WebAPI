@@ -50,7 +50,7 @@ internal class CommentRepository : ICommentRepository
         new { Id = id },
         splitOn: "UserId");
 
-        return result.First();
+        return result.FirstOrDefault();
     }
 
     public async Task<IEnumerable<Comment>> GetAllAsync()
