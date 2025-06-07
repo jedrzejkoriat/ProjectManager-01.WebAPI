@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Configuration;
 using ProjectManager_01.Application.Configuration;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
@@ -16,6 +17,8 @@ builder.Services.AddControllers()
 
 // Swagger
 builder.Services.AddSwaggerConfiguration();
+
+builder.Services.AddHealthChecks().AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // Http Context
 builder.Services.AddHttpContextAccessor();
@@ -57,6 +60,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<TicketsHub>("/hubs/tickets");
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
