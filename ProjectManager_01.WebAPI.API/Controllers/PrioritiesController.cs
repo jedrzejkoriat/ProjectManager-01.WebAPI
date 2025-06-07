@@ -43,7 +43,7 @@ public class PrioritiesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<PriorityDto>> GetPriority(Guid id)
     {
-        return Ok(await _priorityService.GetPriorityByIdAsync(id));
+        return Ok(await _priorityService.GetPriorityAsync(id));
     }
 
     // POST api/priorities
