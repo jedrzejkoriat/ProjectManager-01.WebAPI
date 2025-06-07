@@ -9,4 +9,6 @@ public interface IUserRepository : IRepository<User>
     Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
     Task<Guid> CreateAsync(User entity, IDbTransaction transaction);
     Task<IEnumerable<User>> GetByProjectIdAsync(Guid projectId);
+    Task<User> GetByUserNameAsync(string userName);
+    Task<User> GetByIdWithClaimsAsync(Guid userId);
 }

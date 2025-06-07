@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Permissions;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Permissions (readonly) - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class PermissionsController : ControllerBase
 {
     private readonly IPermissionService _permissionService;
@@ -19,9 +25,9 @@ public class PermissionsController : ControllerBase
 
     // GET: api/permissions
     /// <summary>
-    /// Get all permissions
+    /// Get all Permissions - Admin only
     /// </summary>
-    /// <returns>All permissions</returns>
+    /// <returns>All Permissions</returns>
     [HttpGet]
     public ActionResult<IEnumerable<PermissionDto>> GetPermissions()
     {
@@ -30,10 +36,10 @@ public class PermissionsController : ControllerBase
 
     // GET api/permissions/{id}
     /// <summary>
-    /// Get a permission by ID
+    /// Get Permission by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Permission by its id</returns>
+    /// <returns>Permission by Id</returns>
     [HttpGet("{id}")]
     public ActionResult<PermissionDto> GetPermission(Guid id)
     {
@@ -42,7 +48,7 @@ public class PermissionsController : ControllerBase
 
     // POST api/permissions
     /// <summary>
-    /// Create a new permission
+    /// Create Permission - Admin only (INSERT is denied on db side)
     /// </summary>
     /// <param name="permission"></param>
     /// <returns></returns>
@@ -55,7 +61,7 @@ public class PermissionsController : ControllerBase
 
     // PUT api/permissions
     /// <summary>
-    /// Update an existing permission
+    /// Update Permission - Admin only (UPDATE is denied on db side)
     /// </summary>
     /// <param name="updatedPermission"></param>
     /// <returns></returns>
@@ -68,7 +74,7 @@ public class PermissionsController : ControllerBase
 
     // DELETE api/permissions/{id}
     /// <summary>
-    /// Delete a permission
+    /// Delete Permission by Id - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

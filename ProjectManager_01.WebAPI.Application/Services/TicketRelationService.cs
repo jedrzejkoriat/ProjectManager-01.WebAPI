@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using AutoMapper;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.TicketRelations;
@@ -10,36 +11,43 @@ namespace ProjectManager_01.Application.Services;
 public class TicketRelationService : ITicketRelationService
 {
     private readonly ITicketRelationRepository _ticketRelationRepository;
+    private readonly IProjectAccessValidator _projectValidatorHelper;
     private readonly IMapper _mapper;
 
     public TicketRelationService(
         ITicketRelationRepository ticketRelationRepository,
+        IProjectAccessValidator projectValidatorHelper,
         IMapper mapper)
     {
         _ticketRelationRepository = ticketRelationRepository;
+        _projectValidatorHelper = projectValidatorHelper;
         _mapper = mapper;
     }
 
-    public async Task CreateTicketRelationAsync(TicketRelationCreateDto ticketRelationCreateDto)
+    public async Task CreateTicketRelationAsync(TicketRelationCreateDto ticketRelationCreateDto, Guid projectId)
     {
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(ticketRelationCreateDto.SourceId, projectId);
         var ticketRelation = _mapper.Map<TicketRelation>(ticketRelationCreateDto);
         await _ticketRelationRepository.CreateAsync(ticketRelation);
     }
 
-    public async Task UpdateTicketRelationAsync(TicketRelationUpdateDto ticketRelationUpdateDto)
+    public async Task UpdateTicketRelationAsync(TicketRelationUpdateDto ticketRelationUpdateDto, Guid projectId)
     {
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(ticketRelationUpdateDto.SourceId, projectId);
         var ticketRelation = _mapper.Map<TicketRelation>(ticketRelationUpdateDto);
         await _ticketRelationRepository.UpdateAsync(ticketRelation);
     }
 
-    public async Task DeleteTicketRelationAsync(Guid ticketRelationId)
+    public async Task DeleteTicketRelationAsync(Guid ticketRelationId, Guid projectId)
     {
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync((await _ticketRelationRepository.GetByIdAsync(ticketRelationId)).SourceId, projectId);
         await _ticketRelationRepository.DeleteAsync(ticketRelationId);
     }
 
-    public async Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId)
+    public async Task<TicketRelationDto> GetTicketRelationByIdAsync(Guid ticketRelationId, Guid projectId)
     {
         var ticketRelation = await _ticketRelationRepository.GetByIdAsync(ticketRelationId);
+        await _projectValidatorHelper.ValidateTicketProjectIdAsync(ticketRelation.SourceId, projectId);
 
         return _mapper.Map<TicketRelationDto>(ticketRelation);
     }

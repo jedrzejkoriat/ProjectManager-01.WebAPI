@@ -14,10 +14,14 @@ public sealed class UserCreateDtoValidator : AbstractValidator<UserCreateDto>
         RuleFor(u => u.Email)
             .NotEmpty().WithMessage("Email cannot be empty.")
             .EmailAddress().WithMessage("Email must be a valid email address.")
-            .MaximumLength(100).WithMessage("UserName cannot be longer that 50 characters.");
+            .MaximumLength(100).WithMessage("Email cannot be longer that 100 characters.");
 
         RuleFor(u => u.Password)
-            .NotEmpty().WithMessage("Password cannot be empty.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.");
+            .NotEmpty()
+            .MinimumLength(8)
+            .Matches("[A-Z]").WithMessage("Password needs to contain a capital letter.")
+            .Matches("[a-z]").WithMessage("Password needs to contain a small letter.")
+            .Matches("[0-9]").WithMessage("Password needs to contain a numer.")
+            .Matches("[^a-zA-Z0-9]").WithMessage("Password needs to contain a symbol.");
     }
 }
