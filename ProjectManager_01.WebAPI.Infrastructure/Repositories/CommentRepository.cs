@@ -88,16 +88,13 @@ internal class CommentRepository : ICommentRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(Comment comment)
+    public async Task<bool> CreateAsync(Comment comment)
     {
         var sql = @"INSERT INTO Comments (Id, TicketId, UserId, Content, CreatedAt)
                     VALUES (@Id, @TicketId, @UserId, @Content, @CreatedAt)";
         var result = await _dbConnection.ExecuteAsync(sql, comment);
 
-        if (result > 0)
-            return comment.Id;
-        else
-            return Guid.Empty;
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Comment comment)

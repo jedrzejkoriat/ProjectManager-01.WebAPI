@@ -2,6 +2,7 @@
 using System.Data;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.Contracts.Services;
@@ -32,8 +33,12 @@ public class CommentService : ICommentService
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
+        _logger.LogInformation("Creating comment for ticket {TicketId} by user {UserId}",commentCreateDto.TicketId, commentCreateDto.UserId);
+
+        // Validate that the project ID matches the ticket's project ID
         await _projectAccessValidator.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
 
+        // Map the DTO and add missing properties
         var comment = _mapper.Map<Comment>(commentCreateDto);
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
@@ -42,23 +47,37 @@ public class CommentService : ICommentService
 
         if (commentId == Guid.Empty)
         {
-            _logger.LogError("Failed to create comment in {TicketId} by {UserId}", comment.TicketId, comment.UserId);
+            _logger.LogError("Failed to create comment in ticket {TicketId} by user {UserId}", comment.TicketId, comment.UserId);
             throw new OperationFailedException("Failed to create comment.");
         }
+
         _logger.LogInformation("Comment created with ID: {CommentId}", commentId);
     }
 
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)
     {
+        _logger.LogInformation("Retrieving comment with ID: {CommentId}", commentId);
+
         var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        if (comment == null)
+        {
+            _logger.LogError("Comment with ID {CommentId} not found", commentId);
+            throw new NotFoundException($"Comment with ID {commentId} not found.");
+        }
+
         await _projectAccessValidator.ValidateTicketProjectIdAsync(comment.TicketId, projectId);
+        _logger.LogInformation("Retrieved comment with ID: {CommentId}", commentId);
 
         return _mapper.Map<CommentDto>(comment);
     }
 
     public async Task<IEnumerable<CommentDto>> GetAllCommentsAsync()
     {
+        _logger.LogWarning("Get all comments called");
+
         var comments = await _commentRepository.GetAllAsync();
+        _logger.LogInformation("Retrieved {Count} comments", comments.Count());
 
         return _mapper.Map<IEnumerable<CommentDto>>(comments);
     }
