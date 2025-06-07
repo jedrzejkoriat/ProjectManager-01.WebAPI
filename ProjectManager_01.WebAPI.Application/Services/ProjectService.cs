@@ -39,6 +39,8 @@ public class ProjectService : IProjectService
     public async Task CreateProjectAsync(ProjectCreateDto projectCreateDto)
     {
         var project = _mapper.Map<Project>(projectCreateDto);
+        project.Id = Guid.NewGuid();
+        project.CreatedAt = DateTimeOffset.UtcNow;
         await _projectRepository.CreateAsync(project);
     }
 

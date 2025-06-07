@@ -38,11 +38,12 @@ public class ProjectRoleService : IProjectRoleService
         try
         {
             var projectRole = _mapper.Map<ProjectRole>(projectRoleCreateDto);
-            var projectRoleId = await _projectRoleRepository.CreateAsync(projectRole, transaction);
+            projectRole.Id = Guid.NewGuid();
+            await _projectRoleRepository.CreateAsync(projectRole, transaction);
 
             foreach (var permissionId in projectRoleCreateDto.PermissionIds)
             {
-                var projectRolePermissionDto = new ProjectRolePermissionCreateDto(projectRoleId, permissionId);
+                var projectRolePermissionDto = new ProjectRolePermissionCreateDto(projectRole.Id, permissionId);
                 await _projectRolePermissionService.CreateProjectRolePermissionAsync(projectRolePermissionDto, transaction);
             }
 

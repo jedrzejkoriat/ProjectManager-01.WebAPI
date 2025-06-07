@@ -76,17 +76,13 @@ internal class ProjectRoleRepository : IProjectRoleRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction)
+    public async Task<bool> CreateAsync(ProjectRole entity, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
                     VALUES (@Id, @ProjectId, @Name)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ProjectRole failed");
+        return result > 0;
     }
 
     public Task<bool> DeleteByIdAsync(Guid projectRoleId, IDbTransaction transaction)
@@ -106,17 +102,13 @@ internal class ProjectRoleRepository : IProjectRoleRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(ProjectRole entity)
+    public async Task<bool> CreateAsync(ProjectRole entity)
     {
         var sql = @"INSERT INTO ProjectRoles (Id, ProjectId, Name)
                     VALUES (@Id, @ProjectId, @Name)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ProjectRole failed");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(ProjectRole entity)

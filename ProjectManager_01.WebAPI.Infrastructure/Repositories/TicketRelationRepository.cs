@@ -171,17 +171,13 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(TicketRelation entity)
+    public async Task<bool> CreateAsync(TicketRelation entity)
     {
         var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
 					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating TicketRelation failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(TicketRelation entity)

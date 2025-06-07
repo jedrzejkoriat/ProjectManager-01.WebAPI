@@ -5,7 +5,7 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface ITicketRepository : IRepository<Ticket>
 {
-    Task<Guid> CreateAsync(Ticket entity, IDbTransaction transaction);
+    Task<bool> CreateAsync(Ticket entity, IDbTransaction transaction);
     Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
     Task<IEnumerable<Ticket>> GetAllByProjectIdAsync(Guid projectId);
     Task<Ticket> GetByProjectKeyAndTicketNumberAsync(string key, int ticketNumber);

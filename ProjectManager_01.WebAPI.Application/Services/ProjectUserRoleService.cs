@@ -23,6 +23,7 @@ public class ProjectUserRoleService : IProjectUserRoleService
     public async Task CreateProjectUserRoleAsync(ProjectUserRoleCreateDto projectUserRoleCreateDto)
     {
         var projectUserRole = _mapper.Map<ProjectUserRole>(projectUserRoleCreateDto);
+        projectUserRole.Id = Guid.NewGuid();
         await _projectUserRoleRepository.CreateAsync(projectUserRole);
     }
 

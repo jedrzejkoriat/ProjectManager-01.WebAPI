@@ -33,17 +33,13 @@ internal class PriorityRepository : IPriorityRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(Priority entity)
+    public async Task<bool> CreateAsync(Priority entity)
     {
         var sql = @"INSERT INTO Priorities (Id, Name) 
                     VALUES (@Id, @Name)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating new Priority failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Priority entity)

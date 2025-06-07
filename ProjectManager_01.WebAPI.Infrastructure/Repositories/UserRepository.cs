@@ -111,30 +111,22 @@ internal class UserRepository : IUserRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(User entity, IDbTransaction transaction)
+    public async Task<bool> CreateAsync(User entity, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
                     VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
+        return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(User entity)
+    public async Task<bool> CreateAsync(User entity)
     {
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
                     VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(User entity)

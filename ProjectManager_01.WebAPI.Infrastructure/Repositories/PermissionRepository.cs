@@ -33,17 +33,13 @@ internal class PermissionRepository : IPermissionRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(Permission permission)
+    public async Task<bool> CreateAsync(Permission permission)
     {
         var sql = @"INSERT INTO Permissions (Id, Name) 
                     VALUES (@Id, @Name)";
-        permission.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, permission);
 
-        if (result > 0)
-            return permission.Id;
-        else
-            throw new Exception("Insert to permissions failed");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Permission entity)

@@ -30,6 +30,7 @@ public class PriorityService : IPriorityService
     public async Task CreatePriorityAsync(PriorityCreateDto priorityCreateDto)
     {
         var priority = _mapper.Map<Priority>(priorityCreateDto);
+        priority.Id = Guid.NewGuid();
         await _priorityRepository.CreateAsync(priority);
     }
 

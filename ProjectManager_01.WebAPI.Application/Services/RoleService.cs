@@ -30,6 +30,7 @@ public class RoleService : IRoleService
     public async Task CreateRoleAsync(RoleCreateDto roleCreateDto)
     {
         var role = _mapper.Map<Role>(roleCreateDto);
+        role.Id = Guid.NewGuid();
         await _roleRepository.CreateAsync(role);
     }
 

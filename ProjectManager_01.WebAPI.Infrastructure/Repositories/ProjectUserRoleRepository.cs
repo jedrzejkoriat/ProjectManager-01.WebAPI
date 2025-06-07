@@ -69,17 +69,13 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(ProjectUserRole entity)
+    public async Task<bool> CreateAsync(ProjectUserRole entity)
     {
         var sql = @"INSERT INTO ProjectUserRoles (Id, ProjectId, ProjectRoleId, UserId)
 					VALUES (@Id, @ProjectId, @ProjectRoleId, @UserId)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ProjectUserRoles failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(ProjectUserRole entity)

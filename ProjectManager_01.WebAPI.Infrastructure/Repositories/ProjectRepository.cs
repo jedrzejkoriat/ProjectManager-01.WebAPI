@@ -64,18 +64,13 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(Project project)
+    public async Task<bool> CreateAsync(Project project)
     {
         var sql = @"INSERT INTO Projects(Id, Name, [Key], CreatedAt, IsDeleted)
                     VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted)";
-        project.Id = Guid.NewGuid();
-        project.CreatedAt = DateTimeOffset.UtcNow;
         var result = await _dbConnection.ExecuteAsync(sql, project);
 
-        if (result > 0)
-            return project.Id;
-        else
-            throw new Exception("Insert to projects table failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Project project)

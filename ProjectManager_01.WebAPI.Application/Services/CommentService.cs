@@ -43,15 +43,13 @@ public class CommentService : ICommentService
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
 
-        var commentId = await _commentRepository.CreateAsync(comment);
-
-        if (commentId == Guid.Empty)
+        if (await _commentRepository.CreateAsync(comment))
         {
             _logger.LogError("Failed to create comment in ticket {TicketId} by user {UserId}", comment.TicketId, comment.UserId);
             throw new OperationFailedException("Failed to create comment.");
         }
 
-        _logger.LogInformation("Comment created with ID: {CommentId}", commentId);
+        _logger.LogInformation("Comment created with ID: {CommentId}", comment.Id);
     }
 
     public async Task<CommentDto> GetCommentAsync(Guid commentId, Guid projectId)

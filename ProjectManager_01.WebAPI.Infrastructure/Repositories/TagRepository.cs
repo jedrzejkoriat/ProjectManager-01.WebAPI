@@ -52,17 +52,13 @@ internal class TagRepository : ITagRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(Tag entity)
+    public async Task<bool> CreateAsync(Tag entity)
     {
         var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
 					VALUES (@Id, @Name, @ProjectId)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating tag failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Tag entity)

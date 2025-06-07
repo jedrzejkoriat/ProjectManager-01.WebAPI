@@ -30,6 +30,7 @@ public class PermissionService : IPermissionService
     public async Task CreatePermissionAsync(PermissionCreateDto permissionCreateDto)
     {
         var permission = _mapper.Map<Permission>(permissionCreateDto);
+        permission.Id = Guid.NewGuid();
         await _permissionRepository.CreateAsync(permission);
     }
 

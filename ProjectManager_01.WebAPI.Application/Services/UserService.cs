@@ -45,9 +45,10 @@ public class UserService : IUserService
         {
             var user = _mapper.Map<User>(userCreateDto);
             user.PasswordHash = BcryptPasswordHasher.HashPassword(userCreateDto.Password);
-            var userId = await _userRepository.CreateAsync(user, transaction);
+            user.Id = Guid.NewGuid();
+            await _userRepository.CreateAsync(user, transaction);
 
-            var userRoleCreateDto = new UserRoleCreateDto(userId);
+            var userRoleCreateDto = new UserRoleCreateDto(user.Id);
             await _userRoleService.CreateUserRoleAsync(userRoleCreateDto, transaction);
 
             transaction.Commit();

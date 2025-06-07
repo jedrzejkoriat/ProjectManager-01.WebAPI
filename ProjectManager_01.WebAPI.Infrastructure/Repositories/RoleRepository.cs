@@ -51,17 +51,13 @@ internal class RoleRepository : IRoleRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(Role entity)
+    public async Task<bool> CreateAsync(Role entity)
     {
         var sql = @"INSERT INTO Roles (Id, Name)
 					VALUES (@Id, @Name)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating new role failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Role entity)

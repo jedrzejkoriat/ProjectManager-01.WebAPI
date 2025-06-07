@@ -142,7 +142,7 @@ internal class TicketRepository : ITicketRepository
 
     // ============================= COMMANDS =============================
 
-    public async Task<Guid> CreateAsync(Ticket entity, IDbTransaction transaction)
+    public async Task<bool> CreateAsync(Ticket entity, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO Tickets (Id, ProjectId, PriorityId, ReporterId, Status, Resolution, TicketType, TicketNumber, Title, Description, Version, CreatedAt)
 					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
@@ -150,10 +150,7 @@ internal class TicketRepository : ITicketRepository
         entity.CreatedAt = DateTimeOffset.UtcNow;
         var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ticket failed");
+        return result > 0;
     }
 
     public async Task<bool> DeleteAllByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
@@ -211,7 +208,7 @@ internal class TicketRepository : ITicketRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(Ticket entity)
+    public async Task<bool> CreateAsync(Ticket entity)
     {
         var sql = @"INSERT INTO Tickets (Id, ProjectId, PriorityId, ReporterId, Status, Resolution, TicketType, TicketNumber, Title, Description, Version, CreatedAt)
 					VALUES (@Id, @ProjectId, @PriorityId, @ReporterId, @Status, @Resolution, @TicketType, @TicketNumber, @Title, @Description, @Version, @CreatedAt)";
@@ -219,10 +216,7 @@ internal class TicketRepository : ITicketRepository
         entity.CreatedAt = DateTimeOffset.UtcNow;
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ticket failed");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Ticket entity)

@@ -28,6 +28,7 @@ public class TagService : ITagService
         _projectAccessValidator.ValidateProjectIds(tagCreateDto.ProjectId, projectId);
 
         var tag = _mapper.Map<Tag>(tagCreateDto);
+        tag.Id = Guid.NewGuid();
         await _tagRepository.CreateAsync(tag);
     }
 

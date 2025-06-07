@@ -28,6 +28,7 @@ public class TicketRelationService : ITicketRelationService
     {
         await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationCreateDto.SourceId, projectId);
         var ticketRelation = _mapper.Map<TicketRelation>(ticketRelationCreateDto);
+        ticketRelation.Id = Guid.NewGuid();
         await _ticketRelationRepository.CreateAsync(ticketRelation);
     }
 

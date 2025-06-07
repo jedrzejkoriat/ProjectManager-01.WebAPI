@@ -54,12 +54,13 @@ public class TicketService : ITicketService
         {
             var ticket = _mapper.Map<Ticket>(ticketCreateDto);
             ticket.TicketNumber = projectTickets.Any() ? projectTickets.Max(t => t.TicketNumber) + 1 : 1;
+            ticket.Id = Guid.NewGuid();
 
-            var ticketId = await _ticketRepository.CreateAsync(ticket, transaction);
+            await _ticketRepository.CreateAsync(ticket, transaction);
 
             foreach (var tagId in ticketCreateDto.TagIds)
             {
-                var ticketTag = new TicketTagCreateDto(tagId, ticketId);
+                var ticketTag = new TicketTagCreateDto(tagId, ticket.Id);
                 await _ticketTagService.CreateTicketTagAsync(ticketTag, transaction);
             }
 
