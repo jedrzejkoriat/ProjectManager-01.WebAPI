@@ -1,4 +1,5 @@
-﻿using ProjectManager_01.Application.Contracts.Auth;
+﻿using Microsoft.Extensions.Logging;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
 using ProjectManager_01.Application.DTOs.Users;
 using ProjectManager_01.Application.Helpers;
@@ -9,13 +10,16 @@ internal sealed class AuthService : IAuthService
 {
     private readonly IJwtGenerator _jwtGenerator;
     private readonly IUserRepository _userRepository;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         IJwtGenerator jwtGenerator,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        ILogger<AuthService> logger)
     {
         _jwtGenerator = jwtGenerator;
         _userRepository = userRepository;
+        _logger = logger;
     }
 
     public async Task<string> AuthenticateUser(UserLoginDto userLoginDto)
@@ -24,6 +28,7 @@ internal sealed class AuthService : IAuthService
 
         if (user == null || !BcryptPasswordHasher.VerifyPassword(userLoginDto.Password, user.PasswordHash))
         {
+            _logger.LogWarning("User authentication failed: {UserName}.", userLoginDto.UserName);
             throw new UnauthorizedAccessException("Invalid username or password.");
         }
 
@@ -43,6 +48,8 @@ internal sealed class AuthService : IAuthService
 
         var userClaimsDto = new UserClaimsDto(userWithClaims.Id, userWithClaims.Role.Name, projectPermissions);
 
+
+        _logger.LogInformation("User authenticated successfully: {UserName}.", userLoginDto.UserName);
         return _jwtGenerator.GenerateToken(userClaimsDto);
     }
 }

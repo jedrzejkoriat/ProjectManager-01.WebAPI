@@ -23,6 +23,10 @@ public class ExceptionHandlerMiddleware
         {
             await HandleExceptionAsync(context, HttpStatusCode.Forbidden, "Access Denied", ex.Message);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, "Unauthorized", ex.Message);
+        }
         catch (NotFoundException ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, "Resource Not Found", ex.Message);
