@@ -57,14 +57,14 @@ public class PriorityService : IPriorityService
 
         try
         {
+            await _ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
+
             // Check if operation is successful
             if (!await _priorityRepository.DeleteByIdAsync(priorityId, transaction))
             {
                 _logger.LogWarning("Deleting Priority failed. Priority: {PriorityId}", priorityId);
                 throw new OperationFailedException("Deleting Priority transaction failed.");
             }
-
-            await _ticketService.DeleteTicketByPriorityIdAsync(priorityId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting Priority transaction successful. Priority: {PriorityId}", priorityId);

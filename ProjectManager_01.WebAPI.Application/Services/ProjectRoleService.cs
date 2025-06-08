@@ -88,15 +88,15 @@ public class ProjectRoleService : IProjectRoleService
 
         try
         {
+            await _projectUserRoleService.DeleteByProjectRoleId(projectRoleId, transaction);
+            await _projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
+
             // Check if operation is successful
             if (!await _projectRoleRepository.DeleteByIdAsync(projectRoleId, transaction))
             {
                 _logger.LogError("Deleting ProjectRole failed. ProjectRole: {ProjectRoleId}", projectRoleId);
                 throw new OperationFailedException("Deleting ProjectRole failed.");
             }
-
-            await _projectUserRoleService.DeleteByProjectRoleId(projectRoleId, transaction);
-            await _projectRolePermissionService.DeleteByProjectRoleIdAsync(projectRoleId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting ProjectRole successful. ProjectRole: {ProjectRoleId}", projectRoleId);
@@ -143,8 +143,8 @@ public class ProjectRoleService : IProjectRoleService
         // Check if operation is successful
         if (!await _projectRoleRepository.DeleteAllByProjectIdAsync(projectId, transaction))
         {
-            _logger.LogError("Deleting ProjectRoles by projectId failed. Project: {ProjectId}", projectId);
-            throw new OperationFailedException("Deleting ProjectRoles failed.");
+            _logger.LogWarning("No ProjectRoles related to Project: {ProjectId}", projectId);
+            return;
         }
 
         await _projectUserRoleService.DeleteByProjectIdAsync(projectId, transaction);

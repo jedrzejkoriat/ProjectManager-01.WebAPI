@@ -134,8 +134,8 @@ public class CommentService : ICommentService
         // Check if operation is successful
         if (!await _commentRepository.DeleteAllByUserIdAsync(userId, transaction))
         {
-            _logger.LogError("Deleting Comments by userId failed. User: {UserId}", userId);
-            throw new OperationFailedException("Deleting Comments failed.");
+            _logger.LogWarning("No Comments found related to User: {UserId}", userId);
+            return;
         }
 
         _logger.LogInformation("Deleting Comments by userId successfull. User: {UserId}", userId);
@@ -148,8 +148,8 @@ public class CommentService : ICommentService
         // Check if operation is successful
         if (!await _commentRepository.DeleteAllByTicketIdAsync(ticketId, transaction))
         {
-            _logger.LogError("Deleting Comments by ticketId failed. Ticket: {TicketId}", ticketId);
-            throw new OperationFailedException("Deleting Comments failed.");
+            _logger.LogWarning("No comments related to ticket found. Ticket: {TicketId}", ticketId);
+            return;
         }
 
         _logger.LogInformation("Deleting Comments by ticketId successfull. Ticket: {TicketId}", ticketId);

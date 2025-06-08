@@ -1,4 +1,5 @@
-﻿using ProjectManager_01.Application.DTOs.Tags;
+﻿using System.Data;
+using ProjectManager_01.Application.DTOs.Tags;
 
 namespace ProjectManager_01.Application.Contracts.Services;
 
@@ -11,4 +12,5 @@ public interface ITagService
     Task<IEnumerable<TagDto>> GetAllTagsAsync();
     Task<IEnumerable<TagDto>> GetTagsByProjectIdAsync(Guid projectId);
     Task<IEnumerable<TagDto>> GetTagsByTicketIdAsync(Guid ticketId);
+    Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
 }

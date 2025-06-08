@@ -10,6 +10,7 @@ using ProjectManager_01.Application.DTOs.TicketTags;
 using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Application.Exceptions;
 using ProjectManager_01.Domain.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ProjectManager_01.Application.Services;
 
@@ -49,7 +50,7 @@ public class TicketService : ITicketService
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto, Guid projectId)
     {
-        _logger.LogWarning("Creating Ticket called. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, ticketCreateDto.ReporterId);
+        _logger.LogInformation("Creating Ticket called. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, ticketCreateDto.ReporterId);
 
         // Validate if project access is allowed
         _projectAccessValidator.ValidateProjectIds(ticketCreateDto.ProjectId, projectId);
@@ -112,7 +113,7 @@ public class TicketService : ITicketService
 
     public async Task DeleteTicketAsync(Guid ticketId)
     {
-        _logger.LogWarning("Deleting Ticket transaction called. Ticket: {TicketId}", ticketId);
+        _logger.LogInformation("Deleting Ticket transaction called. Ticket: {TicketId}", ticketId);
 
         using var transaction = DbTransactionHelper.BeginTransaction(_dbConnection);
 
@@ -222,8 +223,8 @@ public class TicketService : ITicketService
 
         if (!await _ticketRepository.ClearUserAssignmentsAsync(userId, transaction))
         {
-            _logger.LogError("Clearing user assignments failed. UserId: {UserId}", userId);
-            throw new OperationFailedException("Clearing user assignments failed.");
+            _logger.LogWarning("No user assignment found related to UserId: {UserId}", userId);
+            return;
         }
 
         _logger.LogInformation("Clearing user assignments successful. UserId: {UserId}", userId);
@@ -255,7 +256,7 @@ public class TicketService : ITicketService
 
     public async Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
     {
-        _logger.LogInformation("Deleting Tickets by priority called. PriorityId: {PriorityId}", priorityId);
+        _logger.LogWarning("Deleting Tickets by priority called. PriorityId: {PriorityId}", priorityId);
 
         await DeleteTicketsAsync(
             tr => _ticketRepository.GetAllByPriorityIdAsync(priorityId, tr),
@@ -287,8 +288,7 @@ public class TicketService : ITicketService
 
         if (!await deleteTickets(transaction))
         {
-            _logger.LogError("Deleting Tickets failed. ProjectId: {ProjectId}", tickets.FirstOrDefault()?.ProjectId);
-            throw new OperationFailedException("Deleting Tickets failed.");
+            _logger.LogWarning("No tickets related found.");
         }
     }
 

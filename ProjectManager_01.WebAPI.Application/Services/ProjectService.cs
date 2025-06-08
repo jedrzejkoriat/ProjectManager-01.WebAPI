@@ -21,6 +21,8 @@ public class ProjectService : IProjectService
     private readonly IDbConnection _dbConnection;
     private readonly IProjectRoleService _projectRoleService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IProjectUserRoleService _projectUserRoleService;
+    private readonly ITagService _tagService;
     private readonly ILogger<ProjectService> _logger;
 
     public ProjectService(
@@ -30,6 +32,8 @@ public class ProjectService : IProjectService
         IDbConnection dbConnection,
         IProjectRoleService projectRoleService,
         IHttpContextAccessor httpContextAccessor,
+        IProjectUserRoleService projectUserRoleService,
+        ITagService tagService,
         ILogger<ProjectService> logger)
     {
         _projectRepository = projectRepository;
@@ -38,6 +42,8 @@ public class ProjectService : IProjectService
         _dbConnection = dbConnection;
         _projectRoleService = projectRoleService;
         _httpContextAccessor = httpContextAccessor;
+        _projectUserRoleService = projectUserRoleService;
+        _tagService = tagService;
         _logger = logger;
     }
 
@@ -85,9 +91,9 @@ public class ProjectService : IProjectService
 
         try
         {
-
             await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
             await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
+            await _tagService.DeleteByProjectIdAsync(projectId, transaction);
 
             // Check if operation is successful
             if (!await _projectRepository.DeleteByIdAsync(projectId, transaction))

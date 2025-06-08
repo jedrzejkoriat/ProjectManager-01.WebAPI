@@ -70,8 +70,8 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
         // Check if operation is successful
         if (!await _projectRolePermissionRepository.DeleteAllByPermissionIdAsync(permissionId, transaction))
         {
-            _logger.LogError("Deleting ProjectRolePermissions by PermissionId ailed. Permission: {PermissionId}", permissionId);
-            throw new OperationFailedException("Deleting ProjectRolePermissions failed.");
+            _logger.LogError("No ProjectRolePermissions related found. Permission: {PermissionId}", permissionId);
+            return;
         }
 
         _logger.LogInformation("Deleting ProjectRolePermissions by PermissionId successful. Permission: {PermissionId}", permissionId);
@@ -84,8 +84,8 @@ public class ProjectRolePermissionService : IProjectRolePermissionService
         // Check if operation is successful
         if (!await _projectRolePermissionRepository.DeleteAllByProjectRoleIdAsync(projectRoleId, transaction))
         {
-            _logger.LogError("Deleting ProjectRolePermissions by ProjectRoleId failed. ProjectRole: {ProjectRoleId}", projectRoleId);
-            throw new OperationFailedException("Deleting ProjectRolePermissions failed.");
+            _logger.LogWarning("No ProjectRolePermissions found related to ProjectRole: {ProjectRoleId}", projectRoleId);
+            return;
         }
 
         _logger.LogInformation("Deleting ProjectRolePermissions by ProjectRoleId successful. ProjectRole: {ProjectRoleId}", projectRoleId);

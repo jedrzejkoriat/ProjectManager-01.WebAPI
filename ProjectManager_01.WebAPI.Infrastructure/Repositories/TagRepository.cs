@@ -80,4 +80,13 @@ internal class TagRepository : ITagRepository
 
         return result > 0;
     }
+
+    public async Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tags
+                    WHERE ProjectId = @ProjectId";
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
+
+        return result > 0;
+    }
 }

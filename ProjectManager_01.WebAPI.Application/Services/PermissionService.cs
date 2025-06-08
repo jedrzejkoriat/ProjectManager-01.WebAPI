@@ -57,14 +57,14 @@ public class PermissionService : IPermissionService
 
         try
         {
+            await _projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
+
             // Check if operation is successful
             if (!await _permissionRepository.DeleteByIdAsync(permissionId, transaction))
             {
                 _logger.LogError("Deleting Permission failed. Permission: {PermissionId}", permissionId);
                 throw new OperationFailedException("Deleting Permission transaction failed.");
             }
-
-            await _projectRolePermissionService.DeleteByPermissionIdAsync(permissionId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting Permission transaction successful. Permission: {PermissionId}", permissionId);

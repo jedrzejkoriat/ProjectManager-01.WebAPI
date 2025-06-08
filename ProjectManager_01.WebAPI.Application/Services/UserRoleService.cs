@@ -27,7 +27,7 @@ public class UserRoleService : IUserRoleService
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto)
     {
-        _logger.LogWarning("Creating UserRole called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
+        _logger.LogInformation("Creating UserRole called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
 
         var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
 
@@ -43,7 +43,7 @@ public class UserRoleService : IUserRoleService
 
     public async Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto, IDbTransaction transaction)
     {
-        _logger.LogWarning("Creating UserRole transaction called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
+        _logger.LogInformation("Creating UserRole transaction called. UserId: {UserId}, RoleId {RoleId}", userRoleCreateDto.UserId, userRoleCreateDto.RoleId);
 
         var userRole = _mapper.Map<UserRole>(userRoleCreateDto);
 
@@ -121,8 +121,8 @@ public class UserRoleService : IUserRoleService
         // Check if operation is successful
         if (!await _userRoleRepository.DeleteAllByRoleIdAsync(roleId, transaction))
         {
-            _logger.LogError("Deleting UserRoles by RoleId transaction failed. RoleId: {RoleId}", roleId);
-            throw new OperationFailedException("Deleting UserRoles by RoleId transaction failed.");
+            _logger.LogError("No UserRoles found related to RoleId: {RoleId}", roleId);
+            return;
         }
 
         _logger.LogInformation("Deleting UserRoles by RoleId transaction successful. RoleId: {RoleId}", roleId);
@@ -135,8 +135,8 @@ public class UserRoleService : IUserRoleService
         // Check if operation is successful
         if (!await _userRoleRepository.DeleteAllByUserIdAsync(userId, transaction))
         {
-            _logger.LogError("Deleting UserRoles by UserId transaction failed. UserId: {UserId}", userId);
-            throw new OperationFailedException("Deleting UserRoles by UserId transaction failed.");
+            _logger.LogError("No UserRoles found related to UserId: {UserId}", userId);
+            return;
         }
 
         _logger.LogInformation("Deleting UserRoles by UserId transaction successful. UserId: {UserId}", userId);

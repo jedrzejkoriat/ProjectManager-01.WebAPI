@@ -105,8 +105,8 @@ public class ProjectUserRoleService : IProjectUserRoleService
 
         if (!await _projectUserRoleRepository.DeleteAllByProjectIdAsync(projectId, transaction))
         {
-            _logger.LogError("Deleting ProjectUserRoles by ProjectId failed. ProjectId: {ProjectId}", projectId);
-            throw new OperationFailedException("Delete ProjectUserRoles failed.");
+            _logger.LogWarning("No ProjectUserRoles found related to ProjectId: {ProjectId}", projectId);
+            return;
         }
 
         _logger.LogInformation("Deleting ProjectUserRoles by ProjectId successful. ProjectId: {ProjectId}", projectId);
@@ -119,8 +119,8 @@ public class ProjectUserRoleService : IProjectUserRoleService
         // Check if operation is successful
         if (!await _projectUserRoleRepository.DeleteAllByProjectRoleIdAsync(projectRoleId, transaction))
         {
-            _logger.LogError("Deleting ProjectUserRoles by ProjectRoleId failed. ProjectRoleId: {ProjectRoleId}", projectRoleId);
-            throw new OperationFailedException("Delete ProjectUserRoles by ProjectRoleId failed.");
+            _logger.LogWarning("No ProjectUserRoles found related to ProjectRoleId: {ProjectRoleId}", projectRoleId);
+            return;
         }
 
         _logger.LogInformation("Deleting ProjectUserRoles by ProjectRoleId successful. ProjectRoleId: {ProjectRoleId}", projectRoleId);
@@ -133,8 +133,8 @@ public class ProjectUserRoleService : IProjectUserRoleService
         // Check if operation is successful
         if (!await _projectUserRoleRepository.DeleteByUserIdAsync(userId, transaction))
         {
-            _logger.LogError("Deleting ProjectUserRoles by UserId failed. UserId: {UserId}", userId);
-            throw new OperationFailedException("Delete ProjectUserRoles by UserId failed.");
+            _logger.LogWarning("No ProjectUserRoles found related to UserId: {UserId}", userId);
+            return;
         }
 
         _logger.LogInformation("Deleting ProjectUserRoles by UserId successful. UserId: {UserId}", userId);

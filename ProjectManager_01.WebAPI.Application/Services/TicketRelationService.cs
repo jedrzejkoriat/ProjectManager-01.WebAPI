@@ -125,7 +125,7 @@ public class TicketRelationService : ITicketRelationService
 
         if (!await _ticketRelationRepository.DeleteAllByTicketIdAsync(ticketId, transaction))
         {
-            _logger.LogError("No ticket relations found. TicketId: {TicketId}", ticketId);
+            _logger.LogWarning("No ticket relations found. TicketId: {TicketId}", ticketId);
             return;
         }
 

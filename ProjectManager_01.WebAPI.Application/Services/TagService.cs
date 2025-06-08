@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
@@ -136,5 +137,18 @@ public class TagService : ITagService
 
         _logger.LogInformation("Getting Tags by TicketId successful. Count: {Count}", tags.Count());
         return _mapper.Map<IEnumerable<TagDto>>(tags);
+    }
+
+    public async Task DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    {
+        _logger.LogInformation("Deleting Tags by ProjectId called. ProjectId: {ProjectId}", projectId);
+
+        if (! await _tagRepository.DeleteAllByProjectIdAsync(projectId, transaction))
+        {
+            _logger.LogWarning("No Tags found related to ProjectId: {ProjectId}", projectId);
+            return;
+        }
+
+        _logger.LogInformation("Deleting Tags by ProjectId successful. ProjectId: {ProjectId}", projectId);
     }
 }

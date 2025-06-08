@@ -31,7 +31,7 @@ public class TicketTagService : ITicketTagService
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, IDbTransaction dbTransaction)
     {
-        _logger.LogWarning("Creating TicketTag called. TagId: {TagId}, TicketId: {TicketId}", ticketTagCreateDto.TagId, ticketTagCreateDto.TicketId);
+        _logger.LogInformation("Creating TicketTag called. TagId: {TagId}, TicketId: {TicketId}", ticketTagCreateDto.TagId, ticketTagCreateDto.TicketId);
 
         var ticketTag = _mapper.Map<TicketTag>(ticketTagCreateDto);
 
@@ -47,7 +47,7 @@ public class TicketTagService : ITicketTagService
 
     public async Task CreateTicketTagAsync(TicketTagCreateDto ticketTagCreateDto, Guid projectId)
     {
-        _logger.LogWarning("Creating TicketTag called. TagId: {TagId}, TicketId: {TicketId}", ticketTagCreateDto.TagId, ticketTagCreateDto.TicketId);
+        _logger.LogInformation("Creating TicketTag called. TagId: {TagId}, TicketId: {TicketId}", ticketTagCreateDto.TagId, ticketTagCreateDto.TicketId);
 
         await _projectAccessValidator.ValidateTagProjectIdAsync(ticketTagCreateDto.TagId, projectId);
         var ticketTag = _mapper.Map<TicketTag>(ticketTagCreateDto);
@@ -64,7 +64,7 @@ public class TicketTagService : ITicketTagService
 
     public async Task DeleteTicketTagAsync(Guid ticketId, Guid tagId, Guid projectId)
     {
-        _logger.LogWarning("Deleting TicketTag called. TagId: {TagId}, TicketId: {TicketId}", tagId, ticketId);
+        _logger.LogInformation("Deleting TicketTag called. TagId: {TagId}, TicketId: {TicketId}", tagId, ticketId);
 
         await _projectAccessValidator.ValidateTagProjectIdAsync(tagId, projectId);
 

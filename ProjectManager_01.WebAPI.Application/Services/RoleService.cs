@@ -73,14 +73,14 @@ public class RoleService : IRoleService
 
         try
         {
+            await _userRoleService.DeleteByRoleIdAsync(roleId, transaction);
+
             // Check if operation is successful
             if (!await _roleRepository.DeleteByIdAsync(roleId, transaction))
             {
                 _logger.LogError("Deleting Role failed. RoleId: {RoleId}", roleId);
                 throw new OperationFailedException("Deleting Role transaction failed.");
             }
-
-            await _userRoleService.DeleteByRoleIdAsync(roleId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting Role transaction successful. RoleId: {RoleId}", roleId);
