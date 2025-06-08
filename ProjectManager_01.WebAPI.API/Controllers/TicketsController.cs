@@ -36,7 +36,7 @@ public class TicketsController : ControllerBase
     /// <returns>All Tickets</returns>
     [HttpGet("api/[controller]")]
     [Authorize(Roles = Roles.Admin)]
-    public async Task<ActionResult<IEnumerable<TicketDto>>> GetTickets()
+    public async Task<ActionResult<IEnumerable<TicketOverviewDto>>> GetTickets()
     {
         return Ok(await _ticketService.GetAllTicketsAsync());
     }
@@ -78,7 +78,7 @@ public class TicketsController : ControllerBase
     /// <returns>Tickets by ProjectId</returns>
     [HttpGet("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.ReadTicket)]
-    public async Task<ActionResult<IEnumerable<TicketDto>>> GetTicketsByProjectId(Guid projectId)
+    public async Task<ActionResult<IEnumerable<TicketOverviewDto>>> GetTicketsByProjectId(Guid projectId)
     {
         var tickets = await _ticketService.GetTicketsByProjectIdAsync(projectId);
         return Ok(tickets);

@@ -35,6 +35,7 @@ public class TicketRelationService : ITicketRelationService
 
         // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.SourceId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.TargetId, projectId);
 
         var relation = _mapper.Map<TicketRelation>(ticketRelationDto);
         relation.Id = Guid.NewGuid();
@@ -54,6 +55,7 @@ public class TicketRelationService : ITicketRelationService
 
         // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.SourceId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.TargetId, projectId);
 
         var relation = _mapper.Map<TicketRelation>(ticketRelationDto);
 

@@ -179,24 +179,24 @@ public class TicketService : ITicketService
         return await GetTicketDtoWithRelationsAsync(ticket);
     }
 
-    public async Task<IEnumerable<TicketDto>> GetAllTicketsAsync()
+    public async Task<IEnumerable<TicketOverviewDto>> GetAllTicketsAsync()
     {
         _logger.LogInformation("Getting all Tickets called.");
 
         var tickets = await _ticketRepository.GetAllAsync();
 
         _logger.LogInformation("Getting all Tickets successful. Count: {Count}", tickets.Count());
-        return _mapper.Map<IEnumerable<TicketDto>>(tickets);
+        return _mapper.Map<IEnumerable<TicketOverviewDto>>(tickets);
     }
 
-    public async Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<TicketOverviewDto>> GetTicketsByProjectIdAsync(Guid projectId)
     {
         _logger.LogInformation("Getting Tickets by project called. ProjectId: {ProjectId}", projectId);
 
         var tickets = await _ticketRepository.GetAllByProjectIdAsync(projectId);
 
         _logger.LogInformation("Getting Tickets by project successful. Count: {Count}", tickets.Count());
-        return _mapper.Map<IEnumerable<TicketDto>>(tickets);
+        return _mapper.Map<IEnumerable<TicketOverviewDto>>(tickets);
     }
 
     public async Task SoftDeleteTicketAsync(Guid ticketId, Guid projectId)

@@ -10,11 +10,11 @@ public interface ITicketService
     Task<TicketDto> UpdateTicketAsync(TicketUpdateDto ticketUpdateDto, Guid projectId);
     Task DeleteTicketAsync(Guid ticketId);
     Task<TicketDto> GetTicketByIdAsync(Guid ticketId, Guid projectId);
-    Task<IEnumerable<TicketDto>> GetAllTicketsAsync();
+    Task<IEnumerable<TicketOverviewDto>> GetAllTicketsAsync();
     Task ClearUserAssignmentAsync(Guid userId, IDbTransaction transaction);
     Task DeleteTicketByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task SoftDeleteTicketAsync(Guid ticketId, Guid projectId);
     Task DeleteTicketByPriorityIdAsync(Guid priorityId, IDbTransaction transaction);
     Task<TicketDto> GetTicketByKeyAndNumberAsync(string projectKey, int ticketNumber, Guid projectId);
-    Task<IEnumerable<TicketDto>> GetTicketsByProjectIdAsync(Guid projectId);
+    Task<IEnumerable<TicketOverviewDto>> GetTicketsByProjectIdAsync(Guid projectId);
 }

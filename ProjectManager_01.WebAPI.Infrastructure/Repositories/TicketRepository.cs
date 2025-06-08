@@ -93,17 +93,17 @@ internal class TicketRepository : ITicketRepository
     {
         var sql = @"SELECT 
                         t.*, 
-                        proj.Id AS ProjectId, proj.Name AS ProjectName, proj.[Key] AS ProjectKey, proj.IsDeleted AS ProjectIsDeleted, proj.CreatedAt AS ProjectCreatedAt,
-                        prio.Id AS PriorityId, prio.Name AS PriorityName, prio.Level AS PriorityLevel, 
-                        a.Id AS AssigneeId, a.UserName AS AssigneeUserName, a.Email AS AssigneeEmail,
-                        r.Id AS ReporterId, r.UserName AS ReporterUserName, r.Email AS ReporterEmail
+                        proj.*, 
+                        prio.*, 
+                        a.*, 
+                        r.*
                     FROM Tickets t
                     JOIN Projects proj ON t.ProjectId = proj.Id
                     JOIN Priorities prio ON t.PriorityId = prio.Id
                     LEFT JOIN Users a ON t.AssigneeId = a.Id
                     JOIN Users r ON t.ReporterId = r.Id
                     WHERE t.TicketNumber = @TicketNumber
-                    AND proj.Key = @ProjectKey
+                    AND proj.[Key] = @ProjectKey
                     AND t.IsDeleted = 0";
 
         var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
@@ -116,7 +116,7 @@ internal class TicketRepository : ITicketRepository
                 return ticket;
             },
         new { TicketNumber = ticketNumber, ProjectKey = projectKey },
-        splitOn: "ProjectId,PriorityId,AssigneeId,ReporterId"
+        splitOn: "Id,Id,Id,Id"
         ));
 
         return ticket.FirstOrDefault();
