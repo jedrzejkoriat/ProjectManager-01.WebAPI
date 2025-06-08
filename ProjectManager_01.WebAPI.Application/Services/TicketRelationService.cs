@@ -29,41 +29,41 @@ public class TicketRelationService : ITicketRelationService
         _logger = logger;
     }
 
-    public async Task CreateTicketRelationAsync(TicketRelationCreateDto dto, Guid projectId)
+    public async Task CreateTicketRelationAsync(TicketRelationCreateDto ticketRelationDto, Guid projectId)
     {
-        _logger.LogInformation("Creating TicketRelation called. SourceId: {SourceId}, TargetId: {TargetId}", dto.SourceId, dto.TargetId);
+        _logger.LogInformation("Creating TicketRelation called. SourceId: {SourceId}, TargetId: {TargetId}", ticketRelationDto.SourceId, ticketRelationDto.TargetId);
 
         // Validate if project access is allowed
-        await _projectAccessValidator.ValidateTicketProjectIdAsync(dto.SourceId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.SourceId, projectId);
 
-        var relation = _mapper.Map<TicketRelation>(dto);
+        var relation = _mapper.Map<TicketRelation>(ticketRelationDto);
         relation.Id = Guid.NewGuid();
 
         if (!await _ticketRelationRepository.CreateAsync(relation))
         {
-            _logger.LogError("Creating TicketRelation failed. SourceId: {SourceId}, TargetId: {TargetId}", dto.SourceId, dto.TargetId);
+            _logger.LogError("Creating TicketRelation failed. SourceId: {SourceId}, TargetId: {TargetId}", ticketRelationDto.SourceId, ticketRelationDto.TargetId);
             throw new OperationFailedException("Creating TicketRelation failed.");
         }
 
         _logger.LogInformation("Creating TicketRelation successful. Id: {Id}", relation.Id);
     }
 
-    public async Task UpdateTicketRelationAsync(TicketRelationUpdateDto dto, Guid projectId)
+    public async Task UpdateTicketRelationAsync(TicketRelationUpdateDto ticketRelationDto, Guid projectId)
     {
-        _logger.LogInformation("Updating TicketRelation called. Id: {Id}", dto.Id);
+        _logger.LogInformation("Updating TicketRelation called. Id: {Id}", ticketRelationDto.Id);
 
         // Validate if project access is allowed
-        await _projectAccessValidator.ValidateTicketProjectIdAsync(dto.SourceId, projectId);
+        await _projectAccessValidator.ValidateTicketProjectIdAsync(ticketRelationDto.SourceId, projectId);
 
-        var relation = _mapper.Map<TicketRelation>(dto);
+        var relation = _mapper.Map<TicketRelation>(ticketRelationDto);
 
         if (!await _ticketRelationRepository.UpdateAsync(relation))
         {
-            _logger.LogError("Updating TicketRelation failed. Id: {Id}", dto.Id);
+            _logger.LogError("Updating TicketRelation failed. Id: {Id}", ticketRelationDto.Id);
             throw new OperationFailedException("Updating TicketRelation failed.");
         }
 
-        _logger.LogInformation("Updating TicketRelation successful. Id: {Id}", dto.Id);
+        _logger.LogInformation("Updating TicketRelation successful. Id: {Id}", ticketRelationDto.Id);
     }
 
     public async Task DeleteTicketRelationAsync(Guid ticketRelationId, Guid projectId)

@@ -53,6 +53,7 @@ public class UserService : IUserService
             var user = _mapper.Map<User>(userCreateDto);
             user.PasswordHash = BcryptPasswordHasher.HashPassword(userCreateDto.Password);
             user.Id = Guid.NewGuid();
+            user.CreatedAt = DateTimeOffset.UtcNow;
 
             // Check if operation is successful
             if (!await _userRepository.CreateAsync(user, transaction))

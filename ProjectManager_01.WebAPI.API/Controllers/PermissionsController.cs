@@ -29,9 +29,9 @@ public class PermissionsController : ControllerBase
     /// </summary>
     /// <returns>All Permissions</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<PermissionDto>> GetPermissions()
+    public async Task<ActionResult<IEnumerable<PermissionDto>>> GetPermissions()
     {
-        return Ok(_permissionService.GetAllPermissionsAsync());
+        return Ok(await _permissionService.GetAllPermissionsAsync());
     }
 
     // GET api/permissions/{id}
@@ -41,9 +41,9 @@ public class PermissionsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Permission by Id</returns>
     [HttpGet("{id}")]
-    public ActionResult<PermissionDto> GetPermission(Guid id)
+    public async Task<ActionResult<PermissionDto>> GetPermission(Guid id)
     {
-        return Ok(_permissionService.GetPermissionByIdAsync(id));
+        return Ok(await _permissionService.GetPermissionByIdAsync(id));
     }
 
     // POST api/permissions
@@ -55,7 +55,7 @@ public class PermissionsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreatePermission([FromBody] PermissionCreateDto permission)
     {
-        await _permissionService.CreatePermissionAsync(permission);
+        await  _permissionService.CreatePermissionAsync(permission);
         return Ok();
     }
 
@@ -81,7 +81,7 @@ public class PermissionsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeletePermission(Guid id)
     {
-        await _permissionService.DeletePermissionAsync(id);
+        await  _permissionService.DeletePermissionAsync(id);
         return Ok();
     }
 }

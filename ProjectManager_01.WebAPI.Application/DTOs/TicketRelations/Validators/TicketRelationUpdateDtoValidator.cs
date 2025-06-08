@@ -14,5 +14,9 @@ public sealed class TicketRelationUpdateDtoValidator : AbstractValidator<TicketR
 
         RuleFor(t => t.TargetId)
             .Must(id => id != Guid.Empty).WithMessage("TargetId must be a valid GUID.");
+
+        RuleFor(t => t.TargetId)
+            .Must((dto, targetId) => targetId != dto.SourceId)
+            .WithMessage("SourceId and TargetId must be different.");
     }
 }

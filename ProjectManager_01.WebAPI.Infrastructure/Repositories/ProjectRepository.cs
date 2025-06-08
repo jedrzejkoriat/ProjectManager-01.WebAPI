@@ -77,7 +77,7 @@ internal class ProjectRepository : IProjectRepository
     {
         var sql = @"UPDATE Projects
                     SET Name = @Name,
-                        Key = @Key
+                        [Key] = @Key
                     WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, project);
 

@@ -6,8 +6,8 @@ public sealed class ProjectRoleCreateDtoValidator : AbstractValidator<ProjectRol
 {
     public ProjectRoleCreateDtoValidator()
     {
-        RuleFor(p => p.ProjectRoleId)
-            .Must(id => id != Guid.Empty).WithMessage("ProjectRoleId must be a valid GUID.");
+        RuleFor(p => p.ProjectId)
+            .Must(id => id != Guid.Empty).WithMessage("ProjectId must be a valid GUID.");
 
         RuleFor(p => p.Name)
             .NotEmpty().WithMessage("Name cannot be empty.")
