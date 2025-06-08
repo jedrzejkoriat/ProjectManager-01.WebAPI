@@ -31,4 +31,18 @@ public class AuthController : ControllerBase
         return Ok(new { token });
     }
 
+
+
+    // POST: api/auth/register
+    /// <summary>
+    /// Register user
+    /// </summary>
+    /// <param name="userRegisterDto"></param>
+    /// <returns></returns>
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
+    {
+        await _authService.RegisterUser(userRegisterDto);
+        return Ok();
+    }
 }
