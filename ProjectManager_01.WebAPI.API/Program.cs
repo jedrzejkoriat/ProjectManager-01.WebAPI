@@ -8,6 +8,8 @@ using ProjectManager_01.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -46,24 +48,37 @@ builder.Services.AddJwtGenerator();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.MapHub<TicketsHub>("/hubs/tickets");
+    app.MapHealthChecks("/health");
+    app.MapControllers();
+
+    logger.LogInformation("Application starting...");
+
+    app.Run();
+
+    logger.LogInformation("Application started successfully.");
 }
-
-// Use middleware for global exception handling
-app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHub<TicketsHub>("/hubs/tickets");
-app.MapHealthChecks("/health");
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    logger.LogCritical(ex, "Application failed to start.");
+    throw;
+}
