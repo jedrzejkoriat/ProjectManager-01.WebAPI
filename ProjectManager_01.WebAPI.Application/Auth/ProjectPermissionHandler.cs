@@ -30,8 +30,6 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
 
         var claims = context.User.FindAll("ProjectPermission");
 
-        Console.WriteLine(claims);
-
         var hasPermission = claims.Any(c =>
         {
             var parts = c.Value.Split(':');
