@@ -67,7 +67,7 @@ public class TicketsController : ControllerBase
     [Authorize(Policy = Permissions.ReadTicket)]
     public async Task<ActionResult<TicketDto>> GetTicketByKeyAndNumber([FromQuery] string projectKey, [FromQuery] int ticketNumber, Guid projectId)
     {
-        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey, ticketNumber, projectId));
+        return Ok(await _ticketService.GetTicketByKeyAndNumberAsync(projectKey.ToUpper(), ticketNumber, projectId));
     }
 
     // GET: api/projects/{projectId}/tickets/project/{projectId}

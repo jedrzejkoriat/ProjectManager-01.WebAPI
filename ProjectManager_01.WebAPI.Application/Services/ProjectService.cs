@@ -48,6 +48,7 @@ public class ProjectService : IProjectService
         var project = _mapper.Map<Project>(projectCreateDto);
         project.Id = Guid.NewGuid();
         project.CreatedAt = DateTimeOffset.UtcNow;
+        project.Key.ToUpper();
 
         // Check if operation is successful
         if (!await _projectRepository.CreateAsync(project))
@@ -64,6 +65,7 @@ public class ProjectService : IProjectService
         _logger.LogInformation("Updating Project called. Project: {ProjectId}", projectUpdateDto.Id);
 
         var project = _mapper.Map<Project>(projectUpdateDto);
+        project.Key.ToUpper();
 
         // Check if operation is successful
         if (!await _projectRepository.UpdateAsync(project))
