@@ -70,9 +70,9 @@ public class CommentsController : ControllerBase
     /// <returns></returns>
     [HttpPut("api/projects/{projectId}/[controller]")]
     [Authorize(Policy = Permissions.WriteComment)]
-    public ActionResult UpdateComment([FromBody] CommentUpdateDto updatedComment, Guid projectId)
+    public async Task<ActionResult> UpdateComment([FromBody] CommentUpdateDto updatedComment, Guid projectId)
     {
-        _commentService.UpdateCommentAsync(updatedComment, projectId);
+        await _commentService.UpdateCommentAsync(updatedComment, projectId);
         return Ok();
     }
 

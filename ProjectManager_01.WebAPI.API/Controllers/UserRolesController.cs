@@ -29,9 +29,9 @@ public class UserRolesController : ControllerBase
     /// </summary>
     /// <returns>All UserRoles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<UserRoleDto>> GetUserRoles()
+    public async Task<ActionResult<IEnumerable<UserRoleDto>>> GetUserRoles()
     {
-        return Ok(_userRoleService.GetAllUserRolesAsync());
+        return Ok(await _userRoleService.GetAllUserRolesAsync());
     }
 
     // GET: api/userroles/{userId}
