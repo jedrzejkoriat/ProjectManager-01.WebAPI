@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManager_01.Application.Contracts.Auth;
-using ProjectManager_01.Application.DTOs.Users;
+using ProjectManager_01.Application.DTOs.Auth;
 
 namespace ProjectManager_01.Infrastructure.Auth;
 

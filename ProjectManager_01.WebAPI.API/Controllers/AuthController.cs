@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectManager_01.Application.Contracts.Auth;
-using ProjectManager_01.Application.DTOs.Users;
+using ProjectManager_01.Application.DTOs.Auth;
 
 namespace ProjectManager_01.WebAPI.Controllers;
 
@@ -30,4 +30,5 @@ public class AuthController : ControllerBase
         var token = await _authService.AuthenticateUser(userLoginDto);
         return Ok(new { token });
     }
+
 }

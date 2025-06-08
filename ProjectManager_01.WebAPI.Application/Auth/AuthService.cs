@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Application.DTOs.Auth;
 using ProjectManager_01.Application.DTOs.Users;
 using ProjectManager_01.Application.Helpers;
 

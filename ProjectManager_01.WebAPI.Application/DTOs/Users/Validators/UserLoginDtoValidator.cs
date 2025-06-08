@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ProjectManager_01.Application.DTOs.Auth;
 
 namespace ProjectManager_01.Application.DTOs.Users.Validators;
 public sealed class UserLoginDtoValidator : AbstractValidator<UserLoginDto>

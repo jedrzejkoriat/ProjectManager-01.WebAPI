@@ -1,4 +1,4 @@
-﻿using ProjectManager_01.Application.DTOs.Users;
+﻿using ProjectManager_01.Application.DTOs.Auth;
 
 namespace ProjectManager_01.Application.Contracts.Auth;
 
