@@ -15,9 +15,6 @@ public sealed class TicketUpdateDtoValidator : AbstractValidator<TicketUpdateDto
         RuleFor(t => t.PriorityId)
             .Must(id => id != Guid.Empty).WithMessage("PriorityId must be a valid GUID.");
 
-        RuleFor(t => t.ReporterId)
-            .Must(id => id != Guid.Empty).WithMessage("ReporterId must be a valid GUID.");
-
         RuleFor(t => t.AssigneeId)
             .Must(id => id == null || id != Guid.Empty)
             .WithMessage("AssigneeId must be a valid GUID when specified.");

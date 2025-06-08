@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Design;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManager_01.Application.Contracts.Auth;
@@ -16,24 +18,30 @@ public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IProjectAccessValidator _projectAccessValidator;
+    private readonly IUserAccessValidator _userAccessValidator;
     private readonly ILogger<CommentService> _logger;
     private readonly IMapper _mapper;
 
     public CommentService(
         ICommentRepository commentRepository,
         IProjectAccessValidator projectAccessValidator,
+        IUserAccessValidator userAccessValidator,
         ILogger<CommentService> logger,
         IMapper mapper)
     {
         _commentRepository = commentRepository;
         _projectAccessValidator = projectAccessValidator;
+        _userAccessValidator = userAccessValidator;
         _logger = logger;
         _mapper = mapper;
     }
 
     public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, Guid projectId)
     {
-        _logger.LogInformation("Creating Comment called. Ticket: {TicketId}, User: {UserId}",commentCreateDto.TicketId, commentCreateDto.UserId);
+        // Get userId from token
+        var userId = _userAccessValidator.GetAuthenticatedUser();
+
+        _logger.LogInformation("Creating Comment called. Ticket: {TicketId}, User: {UserId}",commentCreateDto.TicketId, userId);
 
         // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(commentCreateDto.TicketId, projectId);
@@ -41,6 +49,7 @@ public class CommentService : ICommentService
         var comment = _mapper.Map<Comment>(commentCreateDto);
         comment.Id = Guid.NewGuid();
         comment.CreatedAt = DateTimeOffset.UtcNow;
+        comment.UserId = userId;
 
         // Check if operation is successful
         if (!await _commentRepository.CreateAsync(comment))
@@ -88,6 +97,10 @@ public class CommentService : ICommentService
 
         // Validate if project access is allowed
         await _projectAccessValidator.ValidateTicketProjectIdAsync(commentUpdateDto.TicketId, projectId);
+
+        // Validate if comment owner matches with requesting user
+        var userId = (await _commentRepository.GetByIdAsync(commentUpdateDto.Id)).UserId;
+        _userAccessValidator.ValidateUserIdAsync(userId);
 
         var comment = _mapper.Map<Comment>(commentUpdateDto);
 

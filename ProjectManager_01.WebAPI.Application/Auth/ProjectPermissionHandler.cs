@@ -26,6 +26,8 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
             return Task.CompletedTask;
         }
 
+        Guid.TryParse(projectId, out var parsedProjectId);
+
         var permissionName = requirement.PermissionName;
 
         var claims = context.User.FindAll("ProjectPermission");
@@ -33,7 +35,7 @@ public sealed class ProjectPermissionHandler : AuthorizationHandler<ProjectPermi
         var hasPermission = claims.Any(c =>
         {
             var parts = c.Value.Split(':');
-            return parts.Length == 2 && parts[0] == projectId && parts[1].Equals(requirement.PermissionName, StringComparison.OrdinalIgnoreCase);
+            return parts.Length == 2 && Guid.Parse(parts[0]) == parsedProjectId && parts[1].Equals(requirement.PermissionName);
         });
 
         if (hasPermission)

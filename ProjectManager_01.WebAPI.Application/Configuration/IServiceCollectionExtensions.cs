@@ -42,6 +42,7 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
         services.AddScoped<IProjectAccessValidator, ProjectAccessValidator>();
         services.AddScoped<IProjectPermissionSignalR, ProjectPermissionSignalR>();
+        services.AddScoped<IUserAccessValidator, UserAccessValidator>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

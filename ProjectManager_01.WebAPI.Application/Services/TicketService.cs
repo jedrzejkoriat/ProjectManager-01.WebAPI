@@ -11,6 +11,7 @@ using ProjectManager_01.Application.Helpers;
 using ProjectManager_01.Application.Exceptions;
 using ProjectManager_01.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
+using ProjectManager_01.Application.DTOs.Comments;
 
 namespace ProjectManager_01.Application.Services;
 
@@ -25,6 +26,7 @@ public class TicketService : ITicketService
     private readonly IProjectAccessValidator _projectAccessValidator;
     private readonly ITagService _tagService;
     private readonly ILogger<TicketService> _logger;
+    private readonly IUserAccessValidator _userAccessValidator;
 
     public TicketService(
         ITicketRepository ticketRepository,
@@ -35,7 +37,8 @@ public class TicketService : ITicketService
         ITicketTagService ticketTagService,
         IProjectAccessValidator projectAccessValidator,
         ITagService tagService,
-        ILogger<TicketService> logger)
+        ILogger<TicketService> logger,
+        IUserAccessValidator userAccessValidator)
     {
         _ticketRepository = ticketRepository;
         _mapper = mapper;
@@ -46,11 +49,14 @@ public class TicketService : ITicketService
         _projectAccessValidator = projectAccessValidator;
         _tagService = tagService;
         _logger = logger;
+        _userAccessValidator = userAccessValidator;
     }
 
     public async Task CreateTicketAsync(TicketCreateDto ticketCreateDto, Guid projectId)
     {
-        _logger.LogInformation("Creating Ticket called. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, ticketCreateDto.ReporterId);
+        var userId = _userAccessValidator.GetAuthenticatedUser();
+
+        _logger.LogInformation("Creating Ticket called. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, userId);
 
         // Validate if project access is allowed
         _projectAccessValidator.ValidateProjectIds(ticketCreateDto.ProjectId, projectId);
@@ -64,11 +70,12 @@ public class TicketService : ITicketService
             var ticket = _mapper.Map<Ticket>(ticketCreateDto);
             ticket.TicketNumber = projectTickets.Any() ? projectTickets.Max(t => t.TicketNumber) + 1 : 1;
             ticket.Id = Guid.NewGuid();
+            ticket.ReporterId = userId;
 
             // Check if operation is successful
             if (!await _ticketRepository.CreateAsync(ticket, transaction))
             {
-                _logger.LogError("Creating Ticket failed. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, ticketCreateDto.ReporterId);
+                _logger.LogError("Creating Ticket failed. Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, userId);
                 throw new OperationFailedException("Creating Ticket failed.");
             }
 
@@ -84,7 +91,7 @@ public class TicketService : ITicketService
         catch
         {
             transaction.Rollback();
-            _logger.LogError("Creating Ticket transaction failed. Ticket: Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, ticketCreateDto.ReporterId);
+            _logger.LogError("Creating Ticket transaction failed. Ticket: Project: {ProjectId}, User: {UserId}", ticketCreateDto.ProjectId, userId);
             throw new Exception("Creating Ticket failed.");
         }
     }
@@ -95,6 +102,10 @@ public class TicketService : ITicketService
 
         // Validate if project access is allowed
         _projectAccessValidator.ValidateProjectIds(ticketUpdateDto.ProjectId, projectId);
+
+        // Validate if ticket owner matches with requesting user
+        var userId = (await _ticketRepository.GetByIdAsync(ticketUpdateDto.Id)).ReporterId;
+        _userAccessValidator.ValidateUserIdAsync(userId);
 
         var ticket = _mapper.Map<Ticket>(ticketUpdateDto);
 
