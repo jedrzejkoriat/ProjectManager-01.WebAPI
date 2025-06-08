@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managing Ticket Relations - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TicketRelationsController : ControllerBase

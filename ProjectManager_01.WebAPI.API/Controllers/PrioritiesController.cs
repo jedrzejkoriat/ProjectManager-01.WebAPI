@@ -28,7 +28,7 @@ public class PrioritiesController : ControllerBase
     /// Get all Priorities
     /// </summary>
     /// <returns>All Priorities</returns>
-    [HttpGet("")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<PriorityDto>>> GetPriorities()
     {
         return Ok(await _priorityService.GetAllPrioritiesAsync());

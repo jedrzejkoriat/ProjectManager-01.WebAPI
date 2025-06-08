@@ -11,7 +11,6 @@ namespace ProjectManager_01.Controllers;
 /// Controller for managin Tags - Admin or User authorization.
 /// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class TagsController : ControllerBase
