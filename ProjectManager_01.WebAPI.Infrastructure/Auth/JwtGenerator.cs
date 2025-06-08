@@ -25,7 +25,7 @@ internal sealed class JwtGenerator : IJwtGenerator
             new Claim(ClaimTypes.Role, userClaimsDto.Role)
         };
 
-        foreach (var permission in userClaimsDto.projectPermissions)
+        foreach (var permission in userClaimsDto.ProjectPermissions)
         {
             claims.Add(new Claim("ProjectPermission", permission));
         }
