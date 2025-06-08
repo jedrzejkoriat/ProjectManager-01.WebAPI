@@ -10,5 +10,5 @@ public interface IUserRepository : IRepository<User>
     Task<bool> CreateAsync(User entity, IDbTransaction transaction);
     Task<IEnumerable<User>> GetAllByProjectIdAsync(Guid projectId);
     Task<User> GetByUserNameAsync(string userName);
-    Task<User> GetUserClaimsByIdAsync(Guid userId);
+    Task<User> GetByIdWithRolesAndPermissionsAsync(Guid userId);
 }

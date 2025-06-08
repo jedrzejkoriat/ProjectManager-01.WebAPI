@@ -43,7 +43,7 @@ internal class UserRepository : IUserRepository
         return result.ToList();
     }
 
-    public async Task<User> GetUserClaimsByIdAsync(Guid userId)
+    public async Task<User> GetByIdWithRolesAndPermissionsAsync(Guid userId)
     {
         var sql = @"SELECT 
                         u.*, 
