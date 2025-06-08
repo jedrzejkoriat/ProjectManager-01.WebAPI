@@ -94,6 +94,7 @@ public class ProjectService : IProjectService
             await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
             await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
             await _tagService.DeleteByProjectIdAsync(projectId, transaction);
+            await _projectUserRoleService.DeleteByProjectIdAsync(projectId, transaction);
 
             // Check if operation is successful
             if (!await _projectRepository.DeleteByIdAsync(projectId, transaction))
