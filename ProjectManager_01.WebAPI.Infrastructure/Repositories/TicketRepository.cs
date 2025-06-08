@@ -55,6 +55,28 @@ internal class TicketRepository : ITicketRepository
         return tickets.ToList();
     }
 
+    public async Task<IEnumerable<Ticket>> GetAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    {
+        var sql = @"SELECT t.*, p.*
+                    FROM Tickets t
+                    JOIN Projects p ON t.ProjectId = p.Id
+                    WHERE t.ProjectId = @ProjectId";
+
+        var tickets = await _dbConnection.QueryAsync<Ticket, Project, Ticket>(
+            sql,
+            (ticket, project) =>
+            {
+                ticket.Project = project;
+                return ticket;
+            },
+            new { ProjectId = projectId },
+            transaction,
+            splitOn: "Id"
+        );
+
+        return tickets.ToList();
+    }
+
     public async Task<Ticket> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT 
@@ -136,6 +158,15 @@ internal class TicketRepository : ITicketRepository
         var sql = @"SELECT * FROM Tickets 
                     WHERE PriorityId = @PriorityId";
         var result = await _dbConnection.QueryAsync<Ticket>(sql, new { PriorityId = priorityId });
+
+        return result.ToList();
+    }
+
+    public async Task<IEnumerable<Ticket>> GetAllByPriorityIdAsync(Guid priorityId, IDbTransaction transaction)
+    {
+        var sql = @"SELECT * FROM Tickets 
+                    WHERE PriorityId = @PriorityId";
+        var result = await _dbConnection.QueryAsync<Ticket>(sql, new { PriorityId = priorityId }, transaction);
 
         return result.ToList();
     }

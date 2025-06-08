@@ -234,7 +234,7 @@ public class TicketService : ITicketService
         _logger.LogWarning("Deleting Tickets by project called. ProjectId: {ProjectId}", projectId);
 
         await DeleteTicketsAsync(
-            tr => _ticketRepository.GetAllByProjectIdAsync(projectId),
+            tr => _ticketRepository.GetAllByProjectIdAsync(projectId, tr),
             tr => _ticketRepository.DeleteAllByProjectIdAsync(projectId, tr),
             transaction);
 
@@ -258,7 +258,7 @@ public class TicketService : ITicketService
         _logger.LogInformation("Deleting Tickets by priority called. PriorityId: {PriorityId}", priorityId);
 
         await DeleteTicketsAsync(
-            tr => _ticketRepository.GetAllByPriorityIdAsync(priorityId),
+            tr => _ticketRepository.GetAllByPriorityIdAsync(priorityId, tr),
             tr => _ticketRepository.DeleteAllByPriorityIdAsync(priorityId, tr),
             transaction);
 

@@ -85,15 +85,16 @@ public class ProjectService : IProjectService
 
         try
         {
+
+            await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
+            await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
+
             // Check if operation is successful
             if (!await _projectRepository.DeleteByIdAsync(projectId, transaction))
             {
                 _logger.LogError("Deleting Project failed. Project: {ProjectId}", projectId);
                 throw new OperationFailedException("Deleting Project transaction failed.");
             }
-
-            await _ticketService.DeleteByProjectIdAsync(projectId, transaction);
-            await _projectRoleService.DeleteByProjectIdAsync(projectId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting Project transaction successful. Project: {ProjectId}", projectId);

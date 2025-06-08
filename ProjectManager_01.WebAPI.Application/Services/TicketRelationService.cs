@@ -125,8 +125,8 @@ public class TicketRelationService : ITicketRelationService
 
         if (!await _ticketRelationRepository.DeleteAllByTicketIdAsync(ticketId, transaction))
         {
-            _logger.LogError("Deleting TicketRelations by TicketId failed. TicketId: {TicketId}", ticketId);
-            throw new OperationFailedException("Deleting TicketRelations failed.");
+            _logger.LogError("No ticket relations found. TicketId: {TicketId}", ticketId);
+            return;
         }
 
         _logger.LogInformation("Deleting TicketRelations by TicketId successful. TicketId: {TicketId}", ticketId);
