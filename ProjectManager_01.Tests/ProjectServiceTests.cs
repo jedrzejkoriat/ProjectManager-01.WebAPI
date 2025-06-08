@@ -46,6 +46,7 @@ public class ProjectServiceTests
     [Fact]
     public async Task CreateProjectAsync_CreateProject_WhenRepositorySucceeds()
     {
+        // Arrange
         var projectCreateDto = new ProjectCreateDto("TestProject", "ABC");
         var project = new Project { Name = projectCreateDto.Name, Key = projectCreateDto.Key };
 
@@ -54,14 +55,17 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act
         await service.CreateProjectAsync(projectCreateDto);
 
+        // Assert
         _projectRepositoryMock.Verify(r => r.CreateAsync(It.Is<Project>(p => p.Name == projectCreateDto.Name && p.Key == projectCreateDto.Key.ToUpper())), Times.Once);
     }
 
     [Fact]
     public async Task CreateProjectAsync_ThrowOperationFailedException_WhenRepositoryFails()
     {
+        // Arrange
         var projectCreateDto = new ProjectCreateDto("TestProject", "ABC");
         var project = new Project { Name = projectCreateDto.Name, Key = projectCreateDto.Key };
 
@@ -70,12 +74,14 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act & Assert
         await Assert.ThrowsAsync<OperationFailedException>(() => service.CreateProjectAsync(projectCreateDto));
     }
 
     [Fact]
     public async Task UpdateProjectAsync_UpdateProject_WhenRepositoryReturnsTrue()
     {
+        // Arrange
         var projectCreateDto = new ProjectUpdateDto(Guid.NewGuid(), "UpdatedName", "TPP");
         var project = new Project { Id = projectCreateDto.Id, Name = projectCreateDto.Name, Key = projectCreateDto.Key };
 
@@ -84,14 +90,17 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act
         await service.UpdateProjectAsync(projectCreateDto);
 
+        // Assert
         _projectRepositoryMock.Verify(r => r.UpdateAsync(It.Is<Project>(p => p.Id == projectCreateDto.Id && p.Key == projectCreateDto.Key.ToUpper())), Times.Once);
     }
 
     [Fact]
     public async Task UpdateProjectAsync_ShouldThrowOperationFailedException_WhenRepositoryReturnsFalse()
     {
+        // Arrange
         var projectCreateDto = new ProjectUpdateDto(Guid.NewGuid(), "UpdatedName", "UK");
         var project = new Project { Id = projectCreateDto.Id, Name = projectCreateDto.Name, Key = projectCreateDto.Key };
 
@@ -100,12 +109,14 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act & Assert
         await Assert.ThrowsAsync<OperationFailedException>(() => service.UpdateProjectAsync(projectCreateDto));
     }
 
     [Fact]
     public async Task GetProjectByIdAsync_ShouldReturnProjectDto_WhenProjectExists()
     {
+        // Arrange
         var projectId = Guid.NewGuid();
         var project = new Project { Id = projectId, Name = "P", Key = "K", IsDeleted = false, CreatedAt = DateTimeOffset.UtcNow };
         var projectDto = new ProjectDto(project.Id, project.Name, project.Key, project.IsDeleted, project.CreatedAt);
@@ -115,86 +126,99 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act
         var result = await service.GetProjectByIdAsync(projectId);
 
+        // Assert
         Assert.Equal(projectDto, result);
     }
 
     [Fact]
     public async Task GetProjectByIdAsync_ShouldThrowNotFoundException_WhenProjectIsNull()
     {
+        // Arrange
         var projectId = Guid.NewGuid();
         _projectRepositoryMock.Setup(r => r.GetByIdAsync(projectId)).ReturnsAsync((Project)null);
 
         var service = CreateService();
 
+        // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => service.GetProjectByIdAsync(projectId));
     }
 
     [Fact]
     public async Task GetAllProjectsAsync_ShouldReturnMappedProjectDtos()
     {
+        // Arrange
         var projects = new List<Project>
-        {
-            new Project { Id = Guid.NewGuid(), Name = "Project1", Key = "ABC" },
-            new Project { Id = Guid.NewGuid(), Name = "Project2", Key = "CDE" }
-        };
+    {
+        new Project { Id = Guid.NewGuid(), Name = "Project1", Key = "ABC" },
+        new Project { Id = Guid.NewGuid(), Name = "Project2", Key = "CDE" }
+    };
 
         var projectDtos = new List<ProjectDto>
-        {
-            new ProjectDto(projects[0].Id, projects[0].Name, projects[0].Key, false, DateTimeOffset.UtcNow),
-            new ProjectDto(projects[1].Id, projects[1].Name, projects[1].Key, false, DateTimeOffset.UtcNow)
-        };
+    {
+        new ProjectDto(projects[0].Id, projects[0].Name, projects[0].Key, false, DateTimeOffset.UtcNow),
+        new ProjectDto(projects[1].Id, projects[1].Name, projects[1].Key, false, DateTimeOffset.UtcNow)
+    };
 
         _projectRepositoryMock.Setup(r => r.GetAllAsync()).ReturnsAsync(projects);
         _mapperMock.Setup(m => m.Map<IEnumerable<ProjectDto>>(projects)).Returns(projectDtos);
 
         var service = CreateService();
 
+        // Act
         var result = await service.GetAllProjectsAsync();
 
+        // Assert
         Assert.Equal(projectDtos, result);
     }
 
     [Fact]
     public async Task SoftDeleteProjectAsync_ShouldCallSoftDelete_WhenRepositoryReturnsTrue()
     {
+        // Arrange
         var projectId = Guid.NewGuid();
 
         _projectRepositoryMock.Setup(r => r.SoftDeleteByIdAsync(projectId)).ReturnsAsync(true);
 
         var service = CreateService();
 
+        // Act
         await service.SoftDeleteProjectAsync(projectId);
 
+        // Assert
         _projectRepositoryMock.Verify(r => r.SoftDeleteByIdAsync(projectId), Times.Once);
     }
 
     [Fact]
     public async Task SoftDeleteProjectAsync_ShouldThrowOperationFailedException_WhenRepositoryReturnsFalse()
     {
+        // Arrange
         var projectId = Guid.NewGuid();
 
         _projectRepositoryMock.Setup(r => r.SoftDeleteByIdAsync(projectId)).ReturnsAsync(false);
 
         var service = CreateService();
 
+        // Act & Assert
         await Assert.ThrowsAsync<OperationFailedException>(() => service.SoftDeleteProjectAsync(projectId));
     }
 
     [Fact]
     public async Task GetUserProjectsAsync_ShouldReturnUserProjectsBasedOnClaims()
     {
+        // Arrange
         var projectId1 = Guid.NewGuid();
         var projectId2 = Guid.NewGuid();
 
         var claims = new List<Claim>
-        {
-            new Claim("ProjectPermission", $"{projectId1}:ReadProject"),
-            new Claim("ProjectPermission", $"{projectId2}:ReadProject"),
-            new Claim("ProjectPermission", $"{projectId1}:WriteProject"),
-            new Claim("OtherClaim", "value")
-        };
+    {
+        new Claim("ProjectPermission", $"{projectId1}:ReadProject"),
+        new Claim("ProjectPermission", $"{projectId2}:ReadProject"),
+        new Claim("ProjectPermission", $"{projectId1}:WriteProject"),
+        new Claim("OtherClaim", "value")
+    };
 
         var httpContextMock = new Mock<HttpContext>();
         httpContextMock.Setup(c => c.User.Claims).Returns(claims);
@@ -203,9 +227,9 @@ public class ProjectServiceTests
 
         var projects = new[]
         {
-            new Project { Id = projectId1, Name = "P1", Key = "K1" },
-            new Project { Id = projectId2, Name = "P2", Key = "K2" }
-        };
+        new Project { Id = projectId1, Name = "P1", Key = "K1" },
+        new Project { Id = projectId2, Name = "P2", Key = "K2" }
+    };
 
         _projectRepositoryMock.Setup(r => r.GetByIdAsync(projectId1)).ReturnsAsync(projects[0]);
         _projectRepositoryMock.Setup(r => r.GetByIdAsync(projectId2)).ReturnsAsync(projects[1]);
@@ -215,8 +239,10 @@ public class ProjectServiceTests
 
         var service = CreateService();
 
+        // Act
         var result = await service.GetUserProjectsAsync();
 
+        // Assert
         Assert.Equal(projectDtos.Count, result.Count());
     }
 
