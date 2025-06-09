@@ -37,7 +37,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
-                    VALUES (@ProjectRoleId, PermissionId)";
+                    VALUES (@ProjectRoleId, @PermissionId)";
         var result = await _dbConnection.ExecuteAsync(sql, projectRolePermission, transaction);
 
         return result > 0;
