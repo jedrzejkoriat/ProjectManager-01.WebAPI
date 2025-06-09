@@ -103,10 +103,6 @@ public class TicketService : ITicketService
         // Validate if project access is allowed
         _projectAccessValidator.ValidateProjectIds(ticketUpdateDto.ProjectId, projectId);
 
-        // Validate if ticket owner matches with requesting user
-        var userId = (await _ticketRepository.GetByIdAsync(ticketUpdateDto.Id)).ReporterId;
-        _userAccessValidator.ValidateUserIdAsync(userId);
-
         var ticket = _mapper.Map<Ticket>(ticketUpdateDto);
 
         // Check if operation is successful
