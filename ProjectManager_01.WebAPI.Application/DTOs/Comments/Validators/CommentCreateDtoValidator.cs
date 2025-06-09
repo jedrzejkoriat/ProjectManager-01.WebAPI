@@ -13,8 +13,5 @@ public sealed class CommentCreateDtoValidator : AbstractValidator<CommentCreateD
 
         RuleFor(c => c.TicketId)
             .Must(id => id != Guid.Empty).WithMessage("TicketId must be a valid GUID.");
-
-        RuleFor(c => c.UserId)
-            .Must(id => id != Guid.Empty).WithMessage("UserId must be a valid GUID.");
     }
 }

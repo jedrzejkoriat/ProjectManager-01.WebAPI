@@ -8,9 +8,10 @@ public interface IUserRoleRepository
     Task<IEnumerable<UserRole>> GetAllAsync();
     Task<bool> CreateAsync(UserRole userRole);
     Task<UserRole> GetByUserIdAsync(Guid userId);
-    Task<bool> DeleteAsync(Guid userId);
+    Task<bool> DeleteByIdAsync(Guid userId);
     Task<bool> UpdateAsync(UserRole userRole);
-    Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction);
-    Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
+    Task<bool> DeleteAllByRoleIdAsync(Guid roleId, IDbTransaction transaction);
+    Task<bool> DeleteAllByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction);
+    Task<bool> CreateDefaultAsync(Guid userId, IDbTransaction transaction);
 }

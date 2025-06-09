@@ -85,7 +85,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return relation;
     }
 
-    public async Task<IEnumerable<TicketRelation>> GetBySourceIdAsync(Guid ticketId)
+    public async Task<IEnumerable<TicketRelation>> GetAllBySourceIdAsync(Guid ticketId)
     {
         var sql = @"SELECT tr.*, 
                        s.*, sp.*, 
@@ -123,7 +123,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return relationDict.Values.ToList();
     }
 
-    public async Task<IEnumerable<TicketRelation>> GetByTargetIdAsync(Guid ticketId)
+    public async Task<IEnumerable<TicketRelation>> GetAllByTargetIdAsync(Guid ticketId)
     {
         var sql = @"SELECT tr.*, 
                        s.*, sp.*, 
@@ -162,7 +162,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByTicketIdAsync(Guid ticketId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM TicketRelations 
                     WHERE SourceId = @TicketId OR TargetId = @TicketId";
@@ -171,17 +171,13 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(TicketRelation entity)
+    public async Task<bool> CreateAsync(TicketRelation entity)
     {
         var sql = @"INSERT INTO TicketRelations (Id, SourceId, TargetId, RelationType)
 					VALUES (@Id, @SourceId, @TargetId, @RelationType)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating TicketRelation failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(TicketRelation entity)
@@ -196,7 +192,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM TicketRelations 
                     WHERE Id = @Id";

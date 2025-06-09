@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectManager_01.Application.Exceptions;
+using System.Net;
 
 namespace ProjectManager_01.WebAPI.Middleware;
 
 public class ExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
+
     public ExceptionHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -16,19 +19,40 @@ public class ExceptionHandlerMiddleware
         {
             await _next(context);
         }
+        catch (ForbiddenException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Forbidden, "Access Denied", ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, "Unauthorized", ex.Message);
+        }
+        catch (NotFoundException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.NotFound, "Resource Not Found", ex.Message);
+        }
+        catch (OperationFailedException ex)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, "Operation Failed", ex.Message);
+        }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-
-            var problemDetails = new ProblemDetails
-            {
-                Status = 500,
-                Title = "Internal Server Error",
-                Detail = ex.Message
-            };
-
-            await context.Response.WriteAsJsonAsync(problemDetails);
+            await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, "Internal Server Error", ex.Message);
         }
+    }
+
+    private async Task HandleExceptionAsync(HttpContext context, HttpStatusCode statusCode, string title, string detail)
+    {
+        context.Response.StatusCode = (int)statusCode;
+        context.Response.ContentType = "application/json";
+
+        var problemDetails = new ProblemDetails
+        {
+            Status = (int)statusCode,
+            Title = title,
+            Detail = detail
+        };
+
+        await context.Response.WriteAsJsonAsync(problemDetails);
     }
 }

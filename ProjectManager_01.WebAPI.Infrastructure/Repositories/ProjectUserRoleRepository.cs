@@ -32,6 +32,15 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result;
     }
 
+    public async Task<IEnumerable<ProjectUserRole>> GetAllByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+    {
+        var sql = @"SELECT * FROM ProjectUserRoles 
+                    WHERE UserId = @UserId AND ProjectId = @ProjectId";
+        var result = await _dbConnection.QueryAsync<ProjectUserRole>(sql, new { UserId = userId, ProjectId = projectId });
+
+        return result.ToList();
+    }
+
     // ============================= COMMANDS =============================
     public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
@@ -42,7 +51,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectId = @ProjectId";
@@ -51,7 +60,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM ProjectUserRoles 
                     WHERE ProjectRoleId = @ProjectRoleId";
@@ -60,17 +69,13 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(ProjectUserRole entity)
+    public async Task<bool> CreateAsync(ProjectUserRole entity)
     {
         var sql = @"INSERT INTO ProjectUserRoles (Id, ProjectId, ProjectRoleId, UserId)
 					VALUES (@Id, @ProjectId, @ProjectRoleId, @UserId)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating ProjectUserRoles failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(ProjectUserRole entity)
@@ -85,7 +90,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM ProjectUserRoles WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });

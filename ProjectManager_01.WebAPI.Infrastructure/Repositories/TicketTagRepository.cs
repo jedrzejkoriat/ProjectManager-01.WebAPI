@@ -52,7 +52,7 @@ internal class TicketTagRepository : ITicketTagRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid ticketId, Guid tagId)
+    public async Task<bool> DeleteByIdAsync(Guid ticketId, Guid tagId)
     {
         var sql = @"DELETE FROM TicketTags 
                     WHERE TicketId = @TicketId 

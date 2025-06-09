@@ -13,4 +13,5 @@ public interface IUserRoleService
     Task DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction);
     Task DeleteByUserIdAsync(Guid userId, IDbTransaction transaction);
     Task CreateUserRoleAsync(UserRoleCreateDto userRoleCreateDto, IDbTransaction transaction);
+    Task CreateDefaultUserRoleAsync(Guid userId, IDbTransaction transaction);
 }

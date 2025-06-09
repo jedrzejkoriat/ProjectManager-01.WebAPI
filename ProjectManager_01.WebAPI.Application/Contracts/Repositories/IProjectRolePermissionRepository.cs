@@ -8,8 +8,8 @@ public interface IProjectRolePermissionRepository
     Task<ProjectRolePermission> GetByIdAsync(Guid projectRoleId, Guid permissionId);
     Task<IEnumerable<ProjectRolePermission>> GetAllAsync();
     Task<bool> CreateAsync(ProjectRolePermission projectRolePermission);
-    Task<bool> DeleteAsync(Guid projectRoleId, Guid permissionId);
-    Task<bool> DeleteByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction);
-    Task<bool> DeleteByPermissionIdAsync(Guid permissionId, IDbTransaction transaction);
+    Task<bool> DeleteByProjectRoleIdAndPermissionIdAsync(Guid projectRoleId, Guid permissionId);
+    Task<bool> DeleteAllByProjectRoleIdAsync(Guid projectRoleId, IDbTransaction transaction);
+    Task<bool> DeleteAllByPermissionIdAsync(Guid permissionId, IDbTransaction transaction);
     Task<bool> CreateAsync(ProjectRolePermission projectRolePermission, IDbTransaction transaction);
 }

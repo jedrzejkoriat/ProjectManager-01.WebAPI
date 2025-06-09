@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Users;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing Users - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -19,9 +25,9 @@ public class UsersController : ControllerBase
 
     // GET: api/users
     /// <summary>
-    /// Get all users
+    /// Get all Users - Admin only
     /// </summary>
-    /// <returns>All urses</returns>
+    /// <returns>All users</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
@@ -30,10 +36,10 @@ public class UsersController : ControllerBase
 
     // GET: api/users/{id}
     /// <summary>
-    /// Get a user by ID
+    /// Get User by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>User by its id</returns>
+    /// <returns>User by Id</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(Guid id)
     {
@@ -42,7 +48,7 @@ public class UsersController : ControllerBase
 
     // GET: api/users/project/{projectId}
     /// <summary>
-    /// Get users by project ID
+    /// Get Users by ProjectId - Admin only
     /// </summary>
     /// <param name="projectId"></param>
     /// <returns></returns>
@@ -54,7 +60,7 @@ public class UsersController : ControllerBase
 
     // POST: api/users
     /// <summary>
-    /// Create a new user
+    /// Create User - Admin only
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
@@ -67,7 +73,7 @@ public class UsersController : ControllerBase
 
     // PUT: api/users/{id}
     /// <summary>
-    /// Update an existing user
+    /// Update User - Admin only
     /// </summary>
     /// <param name="updatedUser"></param>
     /// <returns></returns>
@@ -80,7 +86,7 @@ public class UsersController : ControllerBase
 
     // DELETE: api/users/{id}
     /// <summary>
-    /// Delete a user
+    /// Delete User - Admin only (DELETE is denied on db side)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -93,7 +99,7 @@ public class UsersController : ControllerBase
 
     // PATCH api/users/{id}/soft-delete
     /// <summary>
-    /// Soft delete a user
+    /// Soft-delete User - Admin only
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

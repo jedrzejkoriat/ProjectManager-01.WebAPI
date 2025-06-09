@@ -1,78 +1,84 @@
-using System.Data;
-using System.Reflection;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using ProjectManager_01.Application.Configuration;
 using ProjectManager_01.Hubs;
 using ProjectManager_01.Infrastructure.Configuration;
+using ProjectManager_01.WebAPI.Configuration;
 using ProjectManager_01.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddScoped<IDbConnection>(sp =>
-{
-    return new SqlConnection(connectionString);
-});
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
-});
-
+// Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.WriteIndented = true;
     });
 
+// Swagger
+builder.Services.AddSwaggerConfiguration();
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
+// Logger
+builder.Logging.AddConsole();
 
-builder.Services.AddValidatorsFromAssembly(Assembly.Load("ProjectManager_01.Application"));
+builder.Services.AddHealthChecks().AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("fixedlimit", opt =>
-    {
-        opt.Window = TimeSpan.FromSeconds(10);
-        opt.PermitLimit = 500;
-    });
-});
+// Http Context
+builder.Services.AddHttpContextAccessor();
 
+// Database connection
+builder.Services.AddDatabaseConnection(builder.Configuration);
+
+// Package services
 builder.Services.AddSignalR();
-
 builder.Services.AddApplicationMapper();
+builder.Services.AddDtoValidation();
 
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
+// Repositories
 builder.Services.AddDapperRepositories();
+
+// Services
 builder.Services.AddServices();
 
+// Authentication and Authorization
+builder.Services.AddAuthServices(builder.Configuration);
+builder.Services.AddJwtGenerator();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.MapHub<TicketsHub>("/hubs/tickets");
+    app.MapHealthChecks("/health");
+    app.MapControllers();
+
+    logger.LogInformation("Application starting...");
+
+    app.Run();
+
+    logger.LogInformation("Application started successfully.");
 }
-
-app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHub<TicketsHub>("/hubs/tickets");
-
-app.Run();
+catch (Exception ex)
+{
+    logger.LogCritical(ex, "Application failed to start.");
+    throw;
+}

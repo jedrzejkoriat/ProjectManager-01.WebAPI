@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProjectManager_01.Application.DTOs.Auth;
 using ProjectManager_01.Application.DTOs.Comments;
 using ProjectManager_01.Application.DTOs.Permissions;
 using ProjectManager_01.Application.DTOs.Priorities;
@@ -76,5 +77,7 @@ public sealed class MapperConfig : Profile
         CreateMap<UserCreateDto, User>().ReverseMap();
         CreateMap<UserDto, User>().ReverseMap();
         CreateMap<UserUpdateDto, User>().ReverseMap();
+
+        CreateMap<UserRegisterDto, UserCreateDto>().ReverseMap();
     }
 }

@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.UserRoles;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing UserRoles - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class UserRolesController : ControllerBase
 {
     private readonly IUserRoleService _userRoleService;
@@ -19,21 +25,21 @@ public class UserRolesController : ControllerBase
 
     // GET: api/userroles
     /// <summary>
-    /// Get all user roles
+    /// Get all UserRoles - Admin only
     /// </summary>
-    /// <returns>All user roles</returns>
+    /// <returns>All UserRoles</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<UserRoleDto>> GetUserRoles()
+    public async Task<ActionResult<IEnumerable<UserRoleDto>>> GetUserRoles()
     {
-        return Ok(_userRoleService.GetAllUserRolesAsync());
+        return Ok(await _userRoleService.GetAllUserRolesAsync());
     }
 
     // GET: api/userroles/{userId}
     /// <summary>
-    /// Get a user role by user id
+    /// Get UserRole by Id - Admin only
     /// </summary>
     /// <param name="userId"></param>
-    /// <returns>User role by user id</returns>
+    /// <returns>UserRole by UserId</returns>
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserRoleDto>> GetUserRole(Guid userId)
     {
@@ -42,7 +48,7 @@ public class UserRolesController : ControllerBase
 
     // POST: api/userroles
     /// <summary>
-    /// Create a new user role
+    /// Create UserRole - Admin only
     /// </summary>
     /// <param name="userRole"></param>
     /// <returns></returns>
@@ -55,7 +61,7 @@ public class UserRolesController : ControllerBase
 
     // PUT: api/userroles/{userId}
     /// <summary>
-    /// Update an existing user role
+    /// Update UserRole - Admin only
     /// </summary>
     /// <param name="updatedUserRole"></param>
     /// <returns></returns>
@@ -68,7 +74,7 @@ public class UserRolesController : ControllerBase
 
     // DELETE: api/userroles/{userId}
     /// <summary>
-    /// Delete a user role by user id
+    /// Delete UserRole by UserId - Admin only
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>

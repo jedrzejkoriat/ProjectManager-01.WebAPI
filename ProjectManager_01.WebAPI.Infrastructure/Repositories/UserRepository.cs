@@ -32,7 +32,7 @@ internal class UserRepository : IUserRepository
         return result;
     }
 
-    public async Task<IEnumerable<User>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<User>> GetAllByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT DISTINCT u.*
                     FROM Users u
@@ -43,7 +43,7 @@ internal class UserRepository : IUserRepository
         return result.ToList();
     }
 
-    public async Task<User> GetByIdWithRolesAsync(Guid userId)
+    public async Task<User> GetByIdWithRolesAndPermissionsAsync(Guid userId)
     {
         var sql = @"SELECT 
                         u.*, 
@@ -54,7 +54,7 @@ internal class UserRepository : IUserRepository
                     FROM Users u
                     LEFT JOIN UserRoles ur ON ur.UserId = u.Id
                     LEFT JOIN Roles r ON ur.RoleId = r.Id
-                    LEFT JOIN ProjectUserRole pur ON pur.UserId = u.Id
+                    LEFT JOIN ProjectUserRoles pur ON pur.UserId = u.Id
                     LEFT JOIN ProjectRoles pr ON pur.ProjectRoleId = pr.Id
                     LEFT JOIN ProjectRolePermissions prp ON pr.Id = prp.ProjectRoleId
                     LEFT JOIN Permissions p ON prp.PermissionId = p.Id
@@ -101,31 +101,32 @@ internal class UserRepository : IUserRepository
         return userDict.Values.FirstOrDefault();
     }
 
-    // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(User entity, IDbTransaction transaction)
+    public async Task<User> GetByUserNameAsync(string userName)
     {
-        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
-                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
-        var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
+        var sql = @"SELECT * FROM Users
+                    WHERE UserName = @UserName";
+        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { UserName = userName });
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
+        return result;
     }
 
-    public async Task<Guid> CreateAsync(User entity)
+    // ============================= COMMANDS =============================
+    public async Task<bool> CreateAsync(User entity, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
                     VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
-        entity.Id = Guid.NewGuid();
+        var result = await _dbConnection.ExecuteAsync(sql, entity, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> CreateAsync(User entity)
+    {
+        var sql = @"INSERT INTO Users (Id, UserName, Email, PasswordHash, CreatedAt)
+                    VALUES (@Id, @UserName, @Email, @PasswordHash, @CreatedAt)";
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating user failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(User entity)
@@ -140,7 +141,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
@@ -149,7 +150,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Users 
                     WHERE Id = @Id";
@@ -158,7 +159,7 @@ internal class UserRepository : IUserRepository
         return result > 0;
     }
 
-    public async Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> SoftDeleteByIdAsync(Guid id)
     {
         var sql = @"UPDATE Users
                     SET IsDeleted = 1

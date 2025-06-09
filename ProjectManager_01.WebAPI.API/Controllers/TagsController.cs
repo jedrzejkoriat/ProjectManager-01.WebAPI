@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.Tags;
 
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managin Tags - Admin or User authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
-[Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TagsController : ControllerBase
 {
     private readonly ITagService _tagService;
@@ -19,75 +24,85 @@ public class TagsController : ControllerBase
 
     // GET: api/tags
     /// <summary>
-    /// Get all tags
+    /// Get all Tags - Admin only
     /// </summary>
-    /// <returns>All tags</returns>
-    [HttpGet]
+    /// <returns>All Tags</returns>
+    [HttpGet("api/[controller]")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
     {
         return Ok(await _tagService.GetAllTagsAsync());
     }
 
-    // GET: api/tags/{id}
+    // GET: api/projects/{projectId}/tags/{id}
     /// <summary>
-    /// Get a tag by ID
+    /// Get Tag by Id - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TagDto>> GetTag(Guid id)
+    /// <param name="projectId"></param>
+    /// <returns>Tag by Id</returns>
+    [HttpGet("api/projects/{projectId}/[controller]/{id}")]
+    [Authorize(Policy = Permissions.ReadTag)]
+    public async Task<ActionResult<TagDto>> GetTag(Guid id, Guid projectId)
     {
-        return Ok(await _tagService.GetTagByIdAsync(id));
+        return Ok(await _tagService.GetTagByIdAsync(id, projectId));
     }
 
-    // GET: api/tags/project/{projectId}
+    // GET: api/projects/{projectId}/tags
     /// <summary>
-    /// Get all tags by project ID
+    /// Get Tags by ProjectId - User with ReadTag permission and matching Project access
     /// </summary>
     /// <param name="projectId"></param>
-    /// <returns></returns>
-    [HttpGet("project/{projectId}")]
+    /// <returns>All project Tags</returns>
+    [HttpGet("api/projects/{projectId}/[controller]/")]
+    [Authorize(Policy = Permissions.ReadTag)]
     public async Task<ActionResult<IEnumerable<TagDto>>> GetTagsByProjectId(Guid projectId)
     {
         return Ok(await _tagService.GetTagsByProjectIdAsync(projectId));
     }
 
-    // POST: api/tags
+    // POST: api/projects/{projectId}/tags
     /// <summary>
-    /// Create a new tag
+    /// Create Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="tag"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpPost]
-    public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag)
+    [HttpPost("api/projects/{projectId}/[controller]/")]
+    [Authorize(Policy = Permissions.WriteTag)]
+    public async Task<ActionResult> CreateTag([FromBody] TagCreateDto tag, Guid projectId)
     {
-        await _tagService.CreateTagAsync(tag);
+        await _tagService.CreateTagAsync(tag, projectId);
         return Ok();
     }
 
-    // PUT: api/tags
+    // PUT: api/projects/{projectId}/tags
     /// <summary>
-    /// Update an existing tag
+    /// Update Tag - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="updatedTag"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpPut]
-    public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag)
+    [HttpPut("api/projects/{projectId}/[controller]/")]
+    [Authorize(Policy = Permissions.WriteTag)]
+    public async Task<ActionResult> UpdateTag([FromBody] TagUpdateDto updatedTag, Guid projectId)
     {
-        await _tagService.UpdateTagAsync(updatedTag);
+        await _tagService.UpdateTagAsync(updatedTag, projectId);
         return Ok();
     }
 
-    // DELETE: api/tags/{id}
+    // DELETE: api/projects/{projectId}/tags/{id}
     /// <summary>
-    /// Delete a tag
+    /// Delete Tag by Id - User with WriteTag permission and matching Project access
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="projectId"></param>"
     /// <returns></returns>
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteTag(Guid id)
+    [HttpDelete("api/projects/{projectId}/[controller]/{id}")]
+    [Authorize(Policy = Permissions.WriteTag)]
+    public async Task<ActionResult> DeleteTag(Guid id, Guid projectId)
     {
-        await _tagService.DeleteTagAsync(id);
+        await _tagService.DeleteTagAsync(id, projectId);
         return Ok();
     }
 }

@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ProjectManager_01.Application.Constants;
 using ProjectManager_01.Application.Contracts.Services;
 using ProjectManager_01.Application.DTOs.ProjectUserRoles;
+
 namespace ProjectManager_01.Controllers;
 
+/// <summary>
+/// Controller for managing ProjectUserRoles - Admin authorization.
+/// </summary>
 [EnableRateLimiting("fixedlimit")]
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class ProjectUserRolesController : ControllerBase
 {
     private readonly IProjectUserRoleService _projectUserRoleService;
@@ -18,9 +25,9 @@ public class ProjectUserRolesController : ControllerBase
 
     // GET api/projectuserroles
     /// <summary>
-    /// Get all project user roles
+    /// Get all ProjectUserRoles - Admin only
     /// </summary>
-    /// <returns>All project user roles</returns>
+    /// <returns>All ProjectUserRoles</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectUserRoleDto>>> GetProjectUserRoles()
     {
@@ -29,10 +36,10 @@ public class ProjectUserRolesController : ControllerBase
 
     // GET api/projectuserroles/{id}
     /// <summary>
-    /// Get a project user role by ID
+    /// Get ProjectUserRole by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>Project user role by id</returns>
+    /// <returns>ProjectUserRole by Id</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectUserRoleDto>> GetProjectUserRole(Guid id)
     {
@@ -41,7 +48,7 @@ public class ProjectUserRolesController : ControllerBase
 
     // POST api/projectuserroles
     /// <summary>
-    /// Create a new project user role
+    /// Create ProjectUserRole - Admin only
     /// </summary>
     /// <param name="projectUserRole"></param>
     /// <returns></returns>
@@ -54,7 +61,7 @@ public class ProjectUserRolesController : ControllerBase
 
     // PUT api/projectuserrole
     /// <summary>
-    /// Update an existing project user role
+    /// Update ProjectUserRole - Admin only
     /// </summary>
     /// <param name="updatedProjectUserRole"></param>
     /// <returns></returns>
@@ -67,7 +74,7 @@ public class ProjectUserRolesController : ControllerBase
 
     // DELETE api/projectuserrole/{id}
     /// <summary>
-    /// Delete a project user role
+    /// Delete ProjectUserRole by Id - Admin only
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

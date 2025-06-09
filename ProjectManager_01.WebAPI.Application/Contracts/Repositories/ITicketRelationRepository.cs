@@ -5,7 +5,7 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface ITicketRelationRepository : IRepository<TicketRelation>
 {
-    Task<bool> DeleteByTicketIdAsync(Guid ticketId, IDbTransaction transaction);
-    Task<IEnumerable<TicketRelation>> GetBySourceIdAsync(Guid ticketId);
-    Task<IEnumerable<TicketRelation>> GetByTargetIdAsync(Guid ticketId);
+    Task<bool> DeleteAllByTicketIdAsync(Guid ticketId, IDbTransaction transaction);
+    Task<IEnumerable<TicketRelation>> GetAllBySourceIdAsync(Guid ticketId);
+    Task<IEnumerable<TicketRelation>> GetAllByTargetIdAsync(Guid ticketId);
 }

@@ -31,7 +31,7 @@ internal class TagRepository : ITagRepository
 
         return result;
     }
-    public async Task<IEnumerable<Tag>> GetByProjectIdAsync(Guid projectId)
+    public async Task<IEnumerable<Tag>> GetAllByProjectIdAsync(Guid projectId)
     {
         var sql = @"SELECT * FROM Tags 
                     WHERE ProjectId = @ProjectId";
@@ -40,7 +40,7 @@ internal class TagRepository : ITagRepository
         return result.ToList();
     }
 
-    public async Task<IEnumerable<Tag>> GetByTicketIdAsync(Guid ticketId)
+    public async Task<IEnumerable<Tag>> GetAllByTicketIdAsync(Guid ticketId)
     {
         var sql = @"SELECT t.*
                     FROM Tags t
@@ -52,17 +52,13 @@ internal class TagRepository : ITagRepository
     }
 
     // ============================= COMMANDS =============================
-    public async Task<Guid> CreateAsync(Tag entity)
+    public async Task<bool> CreateAsync(Tag entity)
     {
         var sql = @"INSERT INTO Tags (Id, Name, ProjectId)
 					VALUES (@Id, @Name, @ProjectId)";
-        entity.Id = Guid.NewGuid();
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
-        if (result > 0)
-            return entity.Id;
-        else
-            throw new Exception("Creating tag failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Tag entity)
@@ -76,11 +72,20 @@ internal class TagRepository : ITagRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Tags 
                     WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, new { Id = id });
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction)
+    {
+        var sql = @"DELETE FROM Tags
+                    WHERE ProjectId = @ProjectId";
+        var result = await _dbConnection.ExecuteAsync(sql, new { ProjectId = projectId }, transaction);
 
         return result > 0;
     }

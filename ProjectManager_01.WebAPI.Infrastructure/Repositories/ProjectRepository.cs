@@ -32,8 +32,20 @@ internal class ProjectRepository : IProjectRepository
         return result;
     }
 
+    public async Task<IEnumerable<Project>> GetAllByUserIdAsync(Guid userId)
+    {
+        var sql = @"SELECT DISTINCT p.*
+                    FROM Projects p
+                    JOIN ProjectUserRole pur ON pur.ProjectId = p.Id
+                    WHERE pur.UserId = @UserId
+                    AND p.IsDeleted = 0";
+        var result = await _dbConnection.QueryAsync<Project>(sql, new { UserId = userId });
+
+        return result.ToList();
+    }
+
     // ============================= COMMANDS =============================
-    public async Task<bool> SoftDeleteAsync(Guid id)
+    public async Task<bool> SoftDeleteByIdAsync(Guid id)
     {
         var sql = @"UPDATE Projects
                         SET IsDeleted = 1
@@ -43,7 +55,7 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, IDbTransaction transaction)
+    public async Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";
@@ -52,31 +64,26 @@ internal class ProjectRepository : IProjectRepository
         return result > 0;
     }
 
-    public async Task<Guid> CreateAsync(Project project)
+    public async Task<bool> CreateAsync(Project project)
     {
         var sql = @"INSERT INTO Projects(Id, Name, [Key], CreatedAt, IsDeleted)
                     VALUES (@Id, @Name, @Key, @CreatedAt, @IsDeleted)";
-        project.Id = Guid.NewGuid();
-        project.CreatedAt = DateTimeOffset.UtcNow;
         var result = await _dbConnection.ExecuteAsync(sql, project);
 
-        if (result > 0)
-            return project.Id;
-        else
-            throw new Exception("Insert to projects table failed.");
+        return result > 0;
     }
 
     public async Task<bool> UpdateAsync(Project project)
     {
         var sql = @"UPDATE Projects
                     SET Name = @Name,
-                        Key = @Key
+                        [Key] = @Key
                     WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, project);
 
         return result > 0;
     }
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var sql = @"DELETE FROM Projects 
                         WHERE Id = @Id";

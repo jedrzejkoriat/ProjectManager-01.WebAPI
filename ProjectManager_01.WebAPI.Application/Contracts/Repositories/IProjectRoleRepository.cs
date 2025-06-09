@@ -5,7 +5,7 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface IProjectRoleRepository : IRepository<ProjectRole>
 {
-    Task<bool> DeleteAsync(Guid projectRoleId, IDbTransaction transaction);
-    Task<bool> DeleteByProjectIdAsync(Guid projectId, IDbTransaction transaction);
-    Task<Guid> CreateAsync(ProjectRole entity, IDbTransaction transaction);
+    Task<bool> DeleteByIdAsync(Guid projectRoleId, IDbTransaction transaction);
+    Task<bool> DeleteAllByProjectIdAsync(Guid projectId, IDbTransaction transaction);
+    Task<bool> CreateAsync(ProjectRole entity, IDbTransaction transaction);
 }

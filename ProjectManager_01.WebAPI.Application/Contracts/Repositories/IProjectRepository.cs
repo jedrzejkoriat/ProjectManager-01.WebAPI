@@ -5,6 +5,7 @@ namespace ProjectManager_01.Application.Contracts.Repositories;
 
 public interface IProjectRepository : IRepository<Project>
 {
-    Task<bool> DeleteAsync(Guid id, IDbTransaction transaction);
-    Task<bool> SoftDeleteAsync(Guid id);
+    Task<bool> DeleteByIdAsync(Guid id, IDbTransaction transaction);
+    Task<bool> SoftDeleteByIdAsync(Guid id);
+    Task<IEnumerable<Project>> GetAllByUserIdAsync(Guid userId);
 }

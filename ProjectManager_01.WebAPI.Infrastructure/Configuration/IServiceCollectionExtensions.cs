@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ProjectManager_01.Application.Contracts.Auth;
 using ProjectManager_01.Application.Contracts.Repositories;
+using ProjectManager_01.Infrastructure.Auth;
 using ProjectManager_01.Infrastructure.Repositories;
 
 namespace ProjectManager_01.Infrastructure.Configuration;
@@ -22,6 +27,23 @@ public static class IServiceCollectionExtensions
         services.AddScoped<ITicketTagRepository, TicketTagRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddJwtGenerator(this IServiceCollection services)
+    {
+        services.AddSingleton<IJwtGenerator, JwtGenerator>();
+        return services;
+    }
+
+    public static IServiceCollection AddDatabaseConnection(this IServiceCollection services, IConfiguration config)
+    {
+        var connectionString = config.GetConnectionString("DefaultConnection");
+        services.AddScoped<IDbConnection>(sp =>
+        {
+            return new SqlConnection(connectionString);
+        });
 
         return services;
     }

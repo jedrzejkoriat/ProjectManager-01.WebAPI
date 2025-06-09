@@ -35,16 +35,25 @@ internal class UserRoleRepository : IUserRoleRepository
 
     // ============================= COMMANDS =============================
 
-    public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
+    public async Task<bool> CreateDefaultAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"INSERT INTO UserRoles (UserId)
                     VALUES (@UserId)";
+        var result = await _dbConnection.ExecuteAsync(sql, new { UserId = userId }, transaction);
+
+        return result > 0;
+    }
+
+    public async Task<bool> CreateAsync(UserRole userRole, IDbTransaction transaction)
+    {
+        var sql = @"INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
         var result = await _dbConnection.ExecuteAsync(sql, userRole, transaction);
 
         return result > 0;
     }
 
-    public async Task<bool> DeleteByRoleIdAsync(Guid roleId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByRoleIdAsync(Guid roleId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE RoleId = @RoleId";
@@ -53,7 +62,7 @@ internal class UserRoleRepository : IUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteByUserIdAsync(Guid userId, IDbTransaction transaction)
+    public async Task<bool> DeleteAllByUserIdAsync(Guid userId, IDbTransaction transaction)
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE UserId = @UserId";
@@ -64,8 +73,8 @@ internal class UserRoleRepository : IUserRoleRepository
 
     public async Task<bool> CreateAsync(UserRole entity)
     {
-        var sql = @"INSERT INTO UserRoles (UserId)
-                    VALUES (@UserId)";
+        var sql = @"INSERT INTO UserRoles (UserId, RoleId)
+                    VALUES (@UserId, @RoleId)";
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
@@ -81,7 +90,7 @@ internal class UserRoleRepository : IUserRoleRepository
         return result > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid userId)
+    public async Task<bool> DeleteByIdAsync(Guid userId)
     {
         var sql = @"DELETE FROM UserRoles 
                     WHERE UserId = @UserId";
