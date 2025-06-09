@@ -69,7 +69,9 @@ Only Endpoints that have `[Authorize(Policy=Permissions)]` attribute above them 
 
     After successful Authorization, the **ProjectId** from route is passed through Controller to adequate Service. Service passes the **ProjectId** and **ResourceId** to the Validator, where it retrieves the **ProjectId** of the Project that this Resource belongs to. Then it matches **ProjectId** from route and **ProjectId** of the resource. If it doesn't match it throws the Exception and the request is stopped.
 
-   ![image](https://github.com/user-attachments/assets/e2409b12-18e6-491f-9b07-828461a4afa7)
+   ![image](https://github.com/user-attachments/assets/2631d98e-3002-410a-b9e7-1157fef98108)
+   
+   ![image](https://github.com/user-attachments/assets/e2a9f6b8-e2cd-441c-bf7d-febbd6522a23)
 
     The main goal of this step is to prevent the Parameter Tampering attacks, where attackers could try changing the **ProjectId** in route in order to use Permissions from other Projects to modify Resources or to get access to Resources that they should not have access to.
 
