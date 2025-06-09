@@ -15,6 +15,13 @@ The purpose of the ProjectManager application is to help manage projects in an o
 
 ---
 
+## Useful links
+
+### [Authorization and Authentication Document](https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI/blob/main/AUTHDOC.md) - IMPORTANT❗
+### [Database Setup](https://github.com/jedrzejkoriat/ProjectManager-02.DatabaseSetup)
+
+---
+
 ## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
