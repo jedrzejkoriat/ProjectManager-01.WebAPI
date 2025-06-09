@@ -111,13 +111,17 @@ Or manually open `appsettings.json` in any text editor and paste this with repla
 
 ```
 
-9. **Run the application.**
+9. **Open new CLI window.**
+
+10. **Run the application.**
 
 ```powershell
 dotnet run --launch-profile https
 ```
 
-10. **Run Swagger in browser.**
+11. **Open new CLI window.**
+
+12. **Run Swagger in browser.**
 
 ```powershell
 start https://localhost:7005/swagger/index.html
