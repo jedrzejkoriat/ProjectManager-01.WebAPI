@@ -28,7 +28,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         var sql = @"SELECT * FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId 
                     AND PermissionId = @PermissionId";
-        var result = await _dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { RoleId = projectRoleId, PermissionId = permissionId });
+        var result = await _dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
 
         return result;
     }
@@ -55,7 +55,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
     public async Task<bool> CreateAsync(ProjectRolePermission projectRolePermission)
     {
         var sql = @"INSERT INTO ProjectRolePermissions (ProjectRoleId, PermissionId)
-                    VALUES (@ProjectRoleId, PermissionId)";
+                    VALUES (@ProjectRoleId, @PermissionId)";
         var result = await _dbConnection.ExecuteAsync(sql, projectRolePermission);
 
         return result > 0;
