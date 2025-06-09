@@ -66,13 +66,7 @@ cd ..
 git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
 ```
 
-7. **Navigate to the project**
-
-```powershell
-cd ProjectManager-01.WebAPI\ProjectManager_01.WebAPI.API
-```
-
-8. **Set the database connection string and JWT secret key as an environment variables or in appsettings.json**
+7. **Set the database connection string and JWT secret key as an environment variables or in appsettings.json**
 
 Replace `[SERVERNAME]` with your SQL Server instance name (f.ex. `(localdb)\MSSQLLocalDB`):
 
@@ -111,7 +105,13 @@ Or manually open `appsettings.json` in any text editor and paste this with repla
 
 ```
 
-9. **Open new CLI window.**
+8. **Open new CLI window.**
+
+9. **Navigate to the project**
+
+```powershell
+cd ProjectManager-01.WebAPI\ProjectManager_01.WebAPI.API
+```
 
 10. **Run the application.**
 
