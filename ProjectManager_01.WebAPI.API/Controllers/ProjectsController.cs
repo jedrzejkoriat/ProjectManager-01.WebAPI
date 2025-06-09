@@ -30,7 +30,7 @@ public class ProjectsController : ControllerBase
     /// </summary>
     /// <returns>All Projects</returns>
     [HttpGet]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
         return Ok(await _projectService.GetAllProjectsAsync());
@@ -43,7 +43,7 @@ public class ProjectsController : ControllerBase
     /// <param name="projectId"></param>
     /// <returns>Project by Id</returns>
     [HttpGet("{projectId}")]
-    //[Authorize(Policy = Permissions.ReadProject)]
+    [Authorize(Policy = Permissions.ReadProject)]
     public async Task<ActionResult<ProjectDto>> GetProject(Guid projectId)
     {
         return Ok(await _projectService.GetProjectByIdAsync(projectId));
@@ -68,7 +68,7 @@ public class ProjectsController : ControllerBase
     /// <param name="project"></param>
     /// <returns></returns>
     [HttpPost]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> CreateProject([FromBody] ProjectCreateDto project)
     {
         await _projectService.CreateProjectAsync(project);
@@ -82,7 +82,7 @@ public class ProjectsController : ControllerBase
     /// <param name="updatedProject"></param>
     /// <returns></returns>
     [HttpPut]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> UpdateProject([FromBody] ProjectUpdateDto updatedProject)
     {
         await _projectService.UpdateProjectAsync(updatedProject);
@@ -96,7 +96,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> DeleteProject(Guid id)
     {
         await _projectService.DeleteProjectAsync(id);
@@ -110,7 +110,7 @@ public class ProjectsController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpPatch("{id}/soft-delete")]
-    //[Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<ActionResult> SoftDeleteProject(Guid id)
     {
         await _projectService.SoftDeleteProjectAsync(id);
