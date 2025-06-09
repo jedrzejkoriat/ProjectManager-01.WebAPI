@@ -25,8 +25,13 @@ The heart of this Authorization is the **Roles** table. This is pretty simple an
 - **Users** have one-to-one relationship with **UserRoles**
 - **UserRoles** have many-to-one relationship with **Roles**
 
+![image](https://github.com/user-attachments/assets/b5d2a4cf-b878-43df-b1ab-5a0d9e3a9af2)
+
 ### Explanation
 The Authorization comes out of the box in ASP.NET Core - after putting `[Authorize(Roles=Roles.X)]` attribute above the Controller or specific Endpoint, the application will require from User to have a valid JWT Bearer Token that has the **X** Role. Application won't pass the request further if this requirement is not met and will send Unauthorized response.
+
+![image](https://github.com/user-attachments/assets/7acc8b6a-738d-4397-beb9-ad0d5ba19418)
+
 
 ### Available Roles:
 - Admin
@@ -43,16 +48,28 @@ This Authorization system is more complex and is based on the **Permissions** th
 - **ProjectRoles** have one-to-many relationship with **ProjectRolePermissions** and one-to-one relationship with **Projects**
 - **ProjectRolePermissions** have many-to-one relationship with **Permissions**
 
+![image](https://github.com/user-attachments/assets/3568ed79-c530-4574-8a24-3986150f5e46)
+
 ### Explanation
 Only Endpoints that have `[Authorize(Policy=Permissions)]` attribute above them have to handle Project-Scoped Authorization. These Endpoints also require to have **ProjectId** in their route. 
 
+![image](https://github.com/user-attachments/assets/e191ca43-5026-4020-ab06-9c9ff7153ddb)
+
 1. First step of this Authorization is handled by `Application\ProjectPermissionHandler`
 
-   It retrieves the **ProjectId** from the route, and all claims with **ProjectPermission** key from JWT Token. **RequiredPermission** is passed as an argument. Then it matches the **ProjectId** and **Permission** with the claim values, that are saved by JWT Token in this format `ProjectId:Permission`. If it finds a match, then the User is Authorized and the request proceeds.
+   It retrieves the **ProjectId** from the route, and all claims with **ProjectPermission** key from JWT Token. **PermissionRequirement** is passed as an argument.
+
+   ![image](https://github.com/user-attachments/assets/c6aa14c3-343f-475d-8812-0d79b942f361)
+
+   Then it matches the **ProjectId** and **Permission** with the claim values, that are saved by JWT Token in this format `ProjectId:Permission`. If it finds a match, then the User is Authorized and the request proceeds.
+
+   ![image](https://github.com/user-attachments/assets/14a71374-8353-41bf-9d65-3d8befe7afbd)
 
 2. Second step of Project-Scoped Authorization is handled by `Application\ProjectAccessValidator`
 
     After successful Authorization, the **ProjectId** from route is passed through Controller to adequate Service. Service passes the **ProjectId** and **ResourceId** to the Validator, where it retrieves the **ProjectId** of the Project that this Resource belongs to. Then it matches **ProjectId** from route and **ProjectId** of the resource. If it doesn't match it throws the Exception and the request is stopped.
+
+   ![image](https://github.com/user-attachments/assets/e2409b12-18e6-491f-9b07-828461a4afa7)
 
     The main goal of this step is to prevent the Parameter Tampering attacks, where attackers could try changing the **ProjectId** in route in order to use Permissions from other Projects to modify Resources or to get access to Resources that they should not have access to.
 
