@@ -20,7 +20,7 @@ internal class UserRoleRepository : IUserRoleRepository
     {
         var sql = @"SELECT * FROM UserRoles 
                     WHERE UserId = @UserId";
-        var result = await _dbConnection.QueryFirstAsync<UserRole>(sql, new { UserId = userId });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<UserRole>(sql, new { UserId = userId });
 
         return result;
     }

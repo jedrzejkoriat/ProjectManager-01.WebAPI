@@ -90,9 +90,7 @@ internal class TicketRepository : ITicketRepository
                     JOIN Priorities prio ON t.PriorityId = prio.Id
                     LEFT JOIN Users a ON t.AssigneeId = a.Id
                     JOIN Users r ON t.ReporterId = r.Id
-                    WHERE t.Id = @Id
-                    AND t.IsDeleted = 0;
-";
+                    WHERE t.Id = @Id";
 
         var result = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
             sql,
@@ -125,8 +123,7 @@ internal class TicketRepository : ITicketRepository
                     LEFT JOIN Users a ON t.AssigneeId = a.Id
                     JOIN Users r ON t.ReporterId = r.Id
                     WHERE t.TicketNumber = @TicketNumber
-                    AND proj.[Key] = @ProjectKey
-                    AND t.IsDeleted = 0";
+                    AND proj.[Key] = @ProjectKey";
 
         var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
             (sql, (ticket, project, priority, assignee, reporter) =>

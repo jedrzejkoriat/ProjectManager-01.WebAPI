@@ -27,7 +27,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT * FROM Users 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
 
         return result;
     }
@@ -36,7 +36,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT DISTINCT u.*
                     FROM Users u
-                    INNER JOIN ProjectUserRole pur ON pur.UserId = u.Id
+                    INNER JOIN ProjectUserRoles pur ON pur.UserId = u.Id
                     WHERE pur.ProjectId = @ProjectId;";
         var result = await _dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
 
@@ -105,7 +105,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT * FROM Users
                     WHERE UserName = @UserName";
-        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { UserName = userName });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<User>(sql, new { UserName = userName });
 
         return result;
     }

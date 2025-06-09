@@ -27,7 +27,7 @@ internal class PriorityRepository : IPriorityRepository
     {
         var sql = @"SELECT * FROM Priorities 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Priority>(sql, new { Id = id });
 
         return result;
     }
@@ -35,8 +35,8 @@ internal class PriorityRepository : IPriorityRepository
     // ============================= COMMANDS =============================
     public async Task<bool> CreateAsync(Priority entity)
     {
-        var sql = @"INSERT INTO Priorities (Id, Name) 
-                    VALUES (@Id, @Name)";
+        var sql = @"INSERT INTO Priorities (Id, Name, Level) 
+                    VALUES (@Id, @Name, @Level)";
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
         return result > 0;
@@ -45,7 +45,8 @@ internal class PriorityRepository : IPriorityRepository
     public async Task<bool> UpdateAsync(Priority entity)
     {
         var sql = @"UPDATE Priorities 
-                    SET Name = @Name 
+                    SET Name = @Name, 
+                        Level = @Level
                     WHERE Id = @Id";
         var result = await _dbConnection.ExecuteAsync(sql, entity);
 
