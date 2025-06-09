@@ -15,13 +15,20 @@ The purpose of the ProjectManager application is to help manage projects in an o
 
 ---
 
+## Useful links
+
+### [Authorization and Authentication Document](https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI/blob/main/AUTHDOC.md) - IMPORTANT❗
+### [Database Setup](https://github.com/jedrzejkoriat/ProjectManager-02.DatabaseSetup)
+
+---
+
 ## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
 - [Git](https://git-scm.com/)
 - [MSSQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
-## How to Run
+## How to Run (PowerShell)
 
 1. **Clone the database setup repository**
 
@@ -41,51 +48,33 @@ cd ProjectManager-02.DatabaseSetup
 dotnet run
 ```
 
-4. **Provide your SQL Server name**
+4. **Follow the steps in commandline**
 
-When prompted, enter your SQL Server instance name (e.g. `(localdb)\MSSQLLocalDB`):
+- Add database server name
+- Choose whether to add initial admin
+- Choose whether to add test data
 
-```powershell
-Provide your SQL server name: [YOUR SERVER NAME]
-```
-
-5. **Choose whether to add an initial admin (recommended)**
-
-Users can only be added by an admin, so it's recommended to create one now:
-
-```powershell
-Add initial admin? (y/n): [y/n]
-```
-
-6. **Choose whether to seed test data**
-
-```powershell
-Add test data? (y/n): [y/n]
-```
-
-7. **Leave the setup directory**
+5. **Leave the setup project directory**
 
 ```powershell
 cd ..
 ```
 
-8. **Clone the main project repository**
+6. **Clone the main project repository**
 
 ```powershell
 git clone https://github.com/jedrzejkoriat/ProjectManager-01.WebAPI.git
 ```
 
-9. **Set the database connection string as an environment variable**
+7. **Set the database connection string and JWT secret key as an environment variables or in appsettings.json**
 
-Replace `[SERVERNAME]` with your SQL Server instance name:
+Replace `[SERVERNAME]` with your SQL Server instance name (f.ex. `(localdb)\MSSQLLocalDB`):
 
 ```powershell
 setx ConnectionStrings__DefaultConnection "Server=[SERVERNAME];Database=ProjectManagerDB;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=True"
 ```
 
-> ❗ If your account has elevated privileges (e.g. `sysadmin`), it will override database-level DENY permissions.
-
-10. **Set the JWT key as an environment variable**
+> ❗ If your account has elevated privileges (f. ex. `sysadmin`), it will override database-level DENY permissions.
 
 Replace `[SECRETKEY]` with your JWT secret key:
 
@@ -93,14 +82,53 @@ Replace `[SECRETKEY]` with your JWT secret key:
 setx Jwt__Key "[SECRETKEY]"
 ```
 
-11. **Run the application.**
+Or manually open `appsettings.json` in any text editor and paste this with replaced `[SERVERNAME]` and `[SECRETKEY]`:
+
+```json
+{
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=[SERVERNAME];Database=ProjectManagerDB;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=True"
+    },
+    "Jwt": {
+        "Key": "[SECRETKEY]",
+        "Issuer": "projectmanager-api",
+        "Audience": "projectmanager-clients"
+    },
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*"
+}
+
+```
+
+8. **Open new CLI window.**
+
+9. **Navigate to the project**
 
 ```powershell
-dotnet run
+cd ProjectManager-01.WebAPI\ProjectManager_01.WebAPI.API
+```
+
+10. **Run the application.**
+
+```powershell
+dotnet run --launch-profile https
+```
+
+11. **Open new CLI window.**
+
+12. **Run Swagger in browser.**
+
+```powershell
+start https://localhost:7005/swagger/index.html
 ```
 
 ---
 
 ## Database schema
 
-![image](https://github.com/user-attachments/assets/75b0f676-0969-42d5-88c1-38b26aedbcec)
+![schema](https://github.com/user-attachments/assets/96a664f6-3101-4c68-b474-cbb311a466ac)
