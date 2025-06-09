@@ -28,7 +28,7 @@ The purpose of the ProjectManager application is to help manage projects in an o
 - [Git](https://git-scm.com/)
 - [MSSQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
-## How to Run
+## How to Run (PowerShell)
 
 1. **Clone the database setup repository**
 
