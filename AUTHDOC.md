@@ -21,7 +21,7 @@ The purpose of this document is to describe how the Authorization and Authentica
 ## Global Authorization
 The heart of this Authorization is the **Roles** table. This is pretty simple and straight-forward - only one **Role** is allowed per **User**.
 
-### Database Relationship Structure
+### Database Relationship Structure ([Database Schema](#database-schema))
 - **Users** have one-to-one relationship with **UserRoles**
 - **UserRoles** have many-to-one relationship with **Roles**
 
@@ -37,7 +37,7 @@ The Authorization comes out of the box in ASP.NET Core - after putting `[Authori
 ## Project-Scoped Authorization
 This Authorization system is more complex and is based on the **Permissions** that are assigned to specific **Project**. The center of this system is **ProjectRoles**. One **User** can have multiple **ProjectRoles**, and one **ProjectRole** can have multiple **Permissions**. **ProjectRole** can have only one **Project** assigned.
 
-### Database Relationship Structure
+### Database Relationship Structure ([Database Schema](#database-schema))
 - **Users** have one-to-many relationship with **ProjectUserRoles**
 - **ProjectUserRoles** have one-to-many relationship with **ProjectRoles**
 - **ProjectRoles** have one-to-many relationship with **ProjectRolePermissions** and one-to-one relationship with **Projects**
