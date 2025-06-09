@@ -36,7 +36,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT DISTINCT u.*
                     FROM Users u
-                    INNER JOIN ProjectUserRole pur ON pur.UserId = u.Id
+                    INNER JOIN ProjectUserRoles pur ON pur.UserId = u.Id
                     WHERE pur.ProjectId = @ProjectId;";
         var result = await _dbConnection.QueryAsync<User>(sql, new { ProjectId = projectId });
 

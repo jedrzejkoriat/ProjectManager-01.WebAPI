@@ -81,6 +81,7 @@ public class UserService : IUserService
         _logger.LogInformation("Updating User called. User: {UserId}", userUpdateDto.Id);
 
         var user = _mapper.Map<User>(userUpdateDto);
+        user.PasswordHash = BcryptPasswordHasher.HashPassword(userUpdateDto.Password);
 
         // Check if operation is successful
         if (!await _userRepository.UpdateAsync(user))
@@ -100,18 +101,18 @@ public class UserService : IUserService
 
         try
         {
+            await _userRoleService.DeleteByUserIdAsync(userId, transaction);
+            await _projectUserRoleService.DeleteByUserIdAsync(userId, transaction);
+            await _commentService.DeleteByUserIdAsync(userId, transaction);
+            await _ticketService.ClearUserAssignmentAsync(userId, transaction);
+            await _ticketService.DeleteTicketByUserIdAsync(userId, transaction);
+
             // Check if operation is successful
             if (!await _userRepository.DeleteByIdAsync(userId, transaction))
             {
                 _logger.LogError("Deleting User failed. User: {UserId}", userId);
                 throw new OperationFailedException("Deleting User transaction failed.");
             }
-
-            await _userRoleService.DeleteByUserIdAsync(userId, transaction);
-            await _projectUserRoleService.DeleteByUserIdAsync(userId, transaction);
-            await _commentService.DeleteByUserIdAsync(userId, transaction);
-            await _ticketService.ClearUserAssignmentAsync(userId, transaction);
-            await _ticketService.DeleteTicketByUserIdAsync(userId, transaction);
 
             transaction.Commit();
             _logger.LogInformation("Deleting User transaction successful. User: {UserId}", userId);

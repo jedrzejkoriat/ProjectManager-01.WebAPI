@@ -26,8 +26,7 @@ internal class ProjectRepository : IProjectRepository
     public async Task<Project> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM Projects 
-                        WHERE Id = @Id
-                        AND IsDeleted = 0";
+                        WHERE Id = @Id";
         var result = await _dbConnection.QueryFirstOrDefaultAsync<Project>(sql, new { Id = id });
 
         return result;
@@ -38,8 +37,7 @@ internal class ProjectRepository : IProjectRepository
         var sql = @"SELECT DISTINCT p.*
                     FROM Projects p
                     JOIN ProjectUserRole pur ON pur.ProjectId = p.Id
-                    WHERE pur.UserId = @UserId
-                    AND p.IsDeleted = 0";
+                    WHERE pur.UserId = @UserId";
         var result = await _dbConnection.QueryAsync<Project>(sql, new { UserId = userId });
 
         return result.ToList();

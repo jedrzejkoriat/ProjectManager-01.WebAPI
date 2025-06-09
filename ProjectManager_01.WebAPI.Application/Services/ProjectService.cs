@@ -172,6 +172,6 @@ public class ProjectService : IProjectService
         var projectsList = projects.ToList();
 
         _logger.LogInformation("Getting User Projects successful. Count: {Count}", projectsList.Count);
-        return _mapper.Map<IEnumerable<ProjectDto>>(projectsList);
+        return _mapper.Map<IEnumerable<ProjectDto>>(projectsList.Where(p => !p.IsDeleted));
     }
 }

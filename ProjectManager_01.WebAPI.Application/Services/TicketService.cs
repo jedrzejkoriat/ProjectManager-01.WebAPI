@@ -204,7 +204,7 @@ public class TicketService : ITicketService
         var tickets = await _ticketRepository.GetAllByProjectIdAsync(projectId);
 
         _logger.LogInformation("Getting Tickets by project successful. Count: {Count}", tickets.Count());
-        return _mapper.Map<IEnumerable<TicketOverviewDto>>(tickets);
+        return _mapper.Map<IEnumerable<TicketOverviewDto>>(tickets.Where(t => !t.IsDeleted));
     }
 
     public async Task SoftDeleteTicketAsync(Guid ticketId, Guid projectId)
