@@ -27,7 +27,7 @@ internal class ProjectUserRoleRepository : IProjectUserRoleRepository
     {
         var sql = @"SELECT * FROM ProjectUserRoles 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<ProjectUserRole>(sql);
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<ProjectUserRole>(sql);
 
         return result;
     }

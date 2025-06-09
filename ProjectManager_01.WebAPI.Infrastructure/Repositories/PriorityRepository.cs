@@ -27,7 +27,7 @@ internal class PriorityRepository : IPriorityRepository
     {
         var sql = @"SELECT * FROM Priorities 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<Priority>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Priority>(sql, new { Id = id });
 
         return result;
     }

@@ -27,7 +27,7 @@ internal class RoleRepository : IRoleRepository
     {
         var sql = @"SELECT * FROM Roles 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<Role>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Role>(sql, new { Id = id });
 
         return result;
     }

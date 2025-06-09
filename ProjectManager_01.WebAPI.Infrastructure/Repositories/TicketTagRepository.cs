@@ -28,7 +28,7 @@ internal class TicketTagRepository : ITicketTagRepository
         var sql = @"SELECT * FROM TicketTags 
                     WHERE TicketId = @TicketId 
                     AND TagId = @TagId";
-        var result = await _dbConnection.QueryFirstAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<TicketTag>(sql, new { TicketId = ticketId, TagId = tagId });
 
         return result;
     }

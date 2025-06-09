@@ -27,7 +27,7 @@ internal class PermissionRepository : IPermissionRepository
     {
         var sql = @"SELECT * FROM Permissions 
                         WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<Permission>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Permission>(sql, new { Id = id });
 
         return result;
     }

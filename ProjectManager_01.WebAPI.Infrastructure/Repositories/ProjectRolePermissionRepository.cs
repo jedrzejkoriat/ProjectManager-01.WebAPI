@@ -28,7 +28,7 @@ internal class ProjectRolePermissionRepository : IProjectRolePermissionRepositor
         var sql = @"SELECT * FROM ProjectRolePermissions
                     WHERE ProjectRoleId = @ProjectRoleId 
                     AND PermissionId = @PermissionId";
-        var result = await _dbConnection.QueryFirstAsync<ProjectRolePermission>(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<ProjectRolePermission>(sql, new { ProjectRoleId = projectRoleId, PermissionId = permissionId });
 
         return result;
     }

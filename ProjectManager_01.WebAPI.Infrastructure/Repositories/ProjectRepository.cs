@@ -26,8 +26,9 @@ internal class ProjectRepository : IProjectRepository
     public async Task<Project> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM Projects 
-                        WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<Project>(sql, new { Id = id });
+                        WHERE Id = @Id
+                        AND IsDeleted = 0";
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Project>(sql, new { Id = id });
 
         return result;
     }

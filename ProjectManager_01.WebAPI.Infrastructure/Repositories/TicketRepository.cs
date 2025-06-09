@@ -39,7 +39,9 @@ internal class TicketRepository : ITicketRepository
         var sql = @"SELECT t.*, p.*
                     FROM Tickets t
                     JOIN Projects p ON t.ProjectId = p.Id
-                    WHERE t.ProjectId = @ProjectId";
+                    WHERE t.ProjectId = @ProjectId
+                    AND t.IsDeleted = 0
+                    AND p.IsDeleted = 0";
 
         var tickets = await _dbConnection.QueryAsync<Ticket, Project, Ticket>(
             sql,
@@ -60,7 +62,9 @@ internal class TicketRepository : ITicketRepository
         var sql = @"SELECT t.*, p.*
                     FROM Tickets t
                     JOIN Projects p ON t.ProjectId = p.Id
-                    WHERE t.ProjectId = @ProjectId";
+                    WHERE t.ProjectId = @ProjectId
+                    AND t.IsDeleted = 0
+                    AND p.IsDeleted = 0";
 
         var tickets = await _dbConnection.QueryAsync<Ticket, Project, Ticket>(
             sql,
@@ -91,8 +95,8 @@ internal class TicketRepository : ITicketRepository
                     LEFT JOIN Users a ON t.AssigneeId = a.Id
                     JOIN Users r ON t.ReporterId = r.Id
                     WHERE t.Id = @Id
-                    AND t.IsDeleted = 0;
-";
+                    AND t.IsDeleted = 0
+                    AND p.IsDeleted = 0";
 
         var result = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>(
             sql,
@@ -126,7 +130,8 @@ internal class TicketRepository : ITicketRepository
                     JOIN Users r ON t.ReporterId = r.Id
                     WHERE t.TicketNumber = @TicketNumber
                     AND proj.[Key] = @ProjectKey
-                    AND t.IsDeleted = 0";
+                    AND t.IsDeleted = 0
+                    AND p.IsDeleted = 0";
 
         var ticket = (await _dbConnection.QueryAsync<Ticket, Project, Priority, User, User, Ticket>
             (sql, (ticket, project, priority, assignee, reporter) =>

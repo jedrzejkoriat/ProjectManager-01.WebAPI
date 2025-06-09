@@ -27,7 +27,7 @@ internal class TagRepository : ITagRepository
     {
         var sql = @"SELECT * FROM Tags 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<Tag>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<Tag>(sql, new { Id = id });
 
         return result;
     }

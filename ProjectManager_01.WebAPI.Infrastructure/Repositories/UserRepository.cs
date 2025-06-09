@@ -27,7 +27,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT * FROM Users 
                     WHERE Id = @Id";
-        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { Id = id });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
 
         return result;
     }
@@ -105,7 +105,7 @@ internal class UserRepository : IUserRepository
     {
         var sql = @"SELECT * FROM Users
                     WHERE UserName = @UserName";
-        var result = await _dbConnection.QueryFirstAsync<User>(sql, new { UserName = userName });
+        var result = await _dbConnection.QueryFirstOrDefaultAsync<User>(sql, new { UserName = userName });
 
         return result;
     }

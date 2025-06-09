@@ -63,7 +63,7 @@ internal class TicketRelationRepository : ITicketRelationRepository
                     JOIN Projects tp ON t.ProjectId = tp.Id
                     WHERE tr.Id = @Id";
 
-        TicketRelation relation = null;
+        var relationDict = new Dictionary<Guid, TicketRelation>();
 
         await _dbConnection.QueryAsync<TicketRelation, Ticket, Project, Ticket, Project, TicketRelation>(
             sql,
@@ -75,14 +75,14 @@ internal class TicketRelationRepository : ITicketRelationRepository
                 rel.Source = source;
                 rel.Target = target;
 
-                relation = rel;
+                relationDict[rel.Id] = rel;
                 return rel;
             },
             new { Id = id },
             splitOn: "Id,Id,Id,Id"
         );
 
-        return relation;
+        return relationDict.Values.FirstOrDefault();
     }
 
     public async Task<IEnumerable<TicketRelation>> GetAllBySourceIdAsync(Guid ticketId)
